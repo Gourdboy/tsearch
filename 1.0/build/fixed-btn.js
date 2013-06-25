@@ -59,9 +59,7 @@ KISSY.add(function (S,O ,  TripSearch ,Template ,Slide) {
 
             if (S.UA.ie === 6) {
                 S.Event.on(window , 'scroll' , S.buffer(function (){
-                    this.overlay.get('el').css({
-                        bottom:0
-                    })
+                    this.overlay.get('el')[0].className =  this.overlay.get('el')[0].className;
                 } , 100 , this) , this);
             }
         },
