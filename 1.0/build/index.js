@@ -1,0 +1,1348 @@
+/*
+combined files : 
+
+gallery/tsearch/1.0/common
+gallery/tsearch/1.0/trip-autocomplete
+gallery/tsearch/1.0/radio-button
+gallery/tsearch/1.0/tsearch
+gallery/tsearch/1.0/index
+
+*/
+/**
+ * ���й���������
+ */
+KISSY.add('gallery/tsearch/1.0/common',function (S){
+    var Common = {
+        /**
+         * ��ȡָ�����ȵ��ַ���
+         * @param string ����ȡ���ַ���
+         * @param len ��ȡ�ĳ��ȣ���λ���ֽڡ�1�򺺺���Ϊ2���ֽ�
+         * @return {string} ���ر���ȡ���ַ���
+         */
+        subString:function (string, len) {
+            var r = /[^\x00-\xff]/g;
+            if (!string) {
+                return '';
+            }
+            if (string.replace(r, "mm").length <= len) return string;
+            var m = Math.floor(len / 2);
+            for (var i = m; i < string.length; i++) {
+                if (string.substr(0, i).replace(r, "mm").length >= len) {
+                    return string.substr(0, i);
+                }
+            }
+            return string;
+        },
+        /**
+         * ��ȡ�ַ������� ��λ�ֽ�
+         * @param string
+         * @return {*}
+         */
+        stringLen :function (string) {
+            if (!string) {
+                return '';
+            }
+            return string.replace(/[^\x00-\xff]/g, "rr").length;
+        },
+        /**
+         * ��ȡ�ַ���������ĩβ����'...'
+         * @param str  ����ȡ���ַ���
+         * @param len  ��ȡ�ĳ���
+         * @param more ʡ�Է���
+         * @return {*}
+         */
+        cutStr :function (str, len , more) {
+            more = more || '...';
+            if (Common.stringLen(str) > len) {
+                return Common.subString(str, len - 4) + more;
+            }
+            return str;
+        },
+        /**
+         * �������������Եĳ���
+         * @param obj
+         * @param attr
+         * @param len
+         */
+        buildObjCutAttr:function (obj, attr, len) {
+            obj[attr + '_sub'] = Common.cutStr(obj[attr], len);
+        },
+        /**
+         * �� '1' ת��Ϊ '01'
+         * @param n
+         * @return {*}
+         */
+        singleDateToDouble:function (n) {
+            return n.toString().length > 1 ? n.toString() : '0' + n.toString();
+        },
+        /**
+         * �� 2012-12-12 �ַ�����ʽת��Ϊ Date ����
+         * @param str
+         */
+        strToDate : function (str){
+            var arr = str.split('-');
+            return new Date(arr[0], arr[1]-1 , arr[2]);
+        },
+        /**
+         * �������ڼ�����2011-5-17��2011-05-18����Ϊһ��
+         * @param fromDate ��ʼ����
+         * @param toDate ��������
+         * @return {Number} ��������
+         */
+        getDateInterval : function (fromDate, toDate) {
+            return parseInt(Math.abs(Common.strToDate(toDate) - Common.strToDate(fromDate)) / 1000 / 60 / 60 / 24);
+        },
+        /**
+         * ����һ����������������Ҫ�����ڸ�ʽ
+         * @param n ��׼���ڻ�����
+         */
+        formatDate:function (n) {
+            var date = new Date(n),
+                formentLen = Common.singleDateToDouble;
+            var yy = date.getFullYear();
+            var mm = formentLen(date.getMonth() + 1);
+            var dd = formentLen(date.getDate());
+            var hh = formentLen(date.getHours());
+            var MM = formentLen(date.getMinutes());
+            return {
+                mmdd:mm + '-' + dd,
+                yymmdd:yy + '-' + mm + '-' + dd,
+                hhMM:hh + ':' + MM,
+                yy:yy,
+                mm:mm,
+                dd:dd,
+                hh:hh,
+                MM:MM
+            }
+        },
+        /**
+         * ��ȡָ�����ڵ�ƫ���� n=1Ϊ���� n=2Ϊ���죬֧������ǰ��...
+         * @param date
+         * @param n ƫ�Ƶ�����
+         * @return {Date}
+         */
+        setDate : function (date , n){
+            return new Date(date.getTime()+n*86400000);
+        },
+        /**
+         * ���ݺ�������ʱ��
+         * @param t
+         * @return {Object}
+         */
+        timeToDuration:function (t) {
+            t = t / 1000;
+            var h = Math.floor(t / 3600);
+            var s = Math.floor((t - h * 3600) / 60);
+            var m = t % 60;
+            return {
+                h:h,
+                s:s,
+                m:m
+            }
+        },
+        /**
+         * ��ת�Ժ���HTML�ַ����л�ԭ
+         * @param html
+         * @return {*}
+         */
+        html2text:function (html) {
+            var el = document.createElement("div");
+            el.innerHTML = html;
+            try {
+                return typeof el.innerText === "string" ? el.innerText : el.textContent;
+            } catch (e) {
+                return html;
+            }
+        }
+    };
+    return Common;
+});
+KISSY.add('gallery/tsearch/1.0/trip-autocomplete',function (S, Ac , Common) {
+    var ALIGH = {
+        node    : null,
+        points  : ['bl', 'tl'],
+        overflow: {
+            adjustX: false,
+            adjustY: true
+        }
+    };
+    return  {
+        flight : function (cfg) {
+            var default_cfg = {
+                source           : 'http://s.jipiao.trip.taobao.com/city_search.do?lines={maxResults}&q={query}',
+                resultListLocator: function (results) {
+                    results = results.result;
+                    var filtedData = [];
+                    //���ݽӿڽ����ٽ����е����ݴ���
+                    S.each(results, function (_item) {
+                        if (_item.hasAirport) {
+                            filtedData.push(_item);
+                        } else {
+                            var nearCities = _item.nearCity;
+                            S.each(nearCities, function (nearCity) {
+                                var nearCityFormat = S.mix(nearCity, {
+                                    nearCity: _item.cityName
+                                });
+                                filtedData.push(nearCityFormat);
+                            });
+                        }
+                    });
+                    return filtedData;
+                },//ָ������������������λ��
+                resultTextLocator: 'cityName',//ָ���ı�����
+                activeFirstItem  : true,
+                align            : ALIGH,
+                hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php',//��ָ����û�������Ƽ�
+                resultFormatter  : function (query, results) {//��չʾ���и�ʽ��
+                    var result = [];
+                    var tmpl = '<div class="ks-ac-item-inner"><span class="ks-ac-name">{cityname}</span><span class="ks-ac-intro">{py}</span></div>';
+                    var prevNearCity = '';
+                    //�ٽ����е���ʾ����
+                    for (var idx in results) {
+                        var _item = results[idx];
+                        if (!_item.raw.nearCity) {
+                            //�л�����δ����nearCity
+                            result.push(S.substitute(tmpl, {
+                                cityname: _item.text,
+                                py      : _item.raw.py
+                            }));
+                        } else {
+                            //�޻�����������������
+                            var html = '<div class="ks-ac-item"><div class="ks-ac-near-tip">"' + _item.raw.nearCity + '"&nbsp;û�л���</div>';
+                            var nearAirportTpl = '<div class="ks-ac-item-inner ks-ac-item-inner-sub"><span class="ks-ac-name">�ڽ�������{cityName}&nbsp;--&nbsp;����{distance}����</span></div>';
+                            var cityHtml = S.substitute(nearAirportTpl, {
+                                cityName: _item.text,
+                                distance: _item.raw.distance
+                            });
+
+                            if (_item.raw.nearCity != prevNearCity) {
+                                //�����׸򸽽��������У�����tip
+                                html += cityHtml + '</div>';
+                                prevNearCity = _item.raw.nearCity;
+                            } else {
+                                html = cityHtml;
+                            }
+                            result.push(html);
+                        }
+                    }
+                    return result;
+                }
+            };
+            cfg = S.merge(default_cfg , cfg);
+            var acInstance = new Ac(cfg);
+            var codeInputNode = acInstance.get('codeInputNode');
+            codeInputNode =  codeInputNode instanceof  S.NodeList ? codeInputNode : S.one(codeInputNode);
+            codeInputNode &&  acInstance.on('select' , function (e){
+                codeInputNode.val(e.result.raw.cityCode);
+            });
+            return acInstance;
+        },
+        iflight: function (cfg) {
+            var default_cfg = {
+                source       : 'http://ijipiao.trip.taobao.com/ie/remote/auto_complete.do?flag=4&count=10&callback={callback}&q={query}',
+                resultListLocator:'result',//ָ������������������λ��
+                resultTextLocator: 'cityName',//ָ���ı�����
+                activeFirstItem  : true,
+                align            : ALIGH ,
+                hotSource    : 'http://www.taobao.com/go/rgn/trip/international_jsonp.php'
+            };
+            cfg = S.merge(default_cfg, cfg);
+            var acInstance = new Ac(cfg);
+            var codeInputNode = acInstance.get('codeInputNode');
+            codeInputNode = codeInputNode instanceof  S.NodeList ? codeInputNode : S.one(codeInputNode);
+            codeInputNode && acInstance.on('select', function (e) {
+                codeInputNode.val(e.result.raw.cityCode);
+            });
+            return acInstance;
+        },
+        hotel  : function (cfg) {
+
+            // Ŀ�ĵ� suggest ����Ԥ����
+            function hotelCityListLocator(data) {
+                var rawResults = data.result;
+                var results = [];
+                if (S.isArray(rawResults) && rawResults.length) {
+                    S.map(rawResults, function (item, index) {
+                        var suggests = item.t.split('_');
+                        results.push({
+                            cityName: suggests[0],
+                            cityCode: item.c,
+                            py      : suggests[1]
+                        })
+                    });
+                }
+                return results;
+            }
+
+            // Ŀ�ĵ� suggest ������ʽ��
+            function hotelCityFormatter(query, results) {
+                return S.map(results, function (item) {
+                    var result = item.raw;
+                    return S.substitute('<div class="ks-ac-item-inner"><span class="ks-ac-name">{cityName}</span><span class="ks-ac-intro">{py}</span></div>', {
+                        cityName: Common.cutStr(result.cityName, 20),
+                        py      : Common.cutStr(result.py, 10)
+                    });
+                });
+            }
+            var default_cfg = {
+                activeFirstItem  : true,
+                align            : ALIGH,
+                resultListLocator: hotelCityListLocator,
+                resultFormatter  : hotelCityFormatter,
+                source           : 'http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}',
+                hotSource        : 'http://www.taobao.com/go/rgn/trip/hotelhotcityv2_jsonp.php'
+            };
+            cfg = S.merge(default_cfg, cfg);
+            var acInstance = new Ac(cfg);
+            var codeInputNode = acInstance.get('codeInputNode');
+            codeInputNode = codeInputNode instanceof  S.NodeList ? codeInputNode : S.one(codeInputNode);
+            codeInputNode && acInstance.on('select', function (e) {
+                codeInputNode.val(e.result.raw.cityCode);
+            });
+            return acInstance;
+        },
+        travel : function (cfg) {
+            var isDaily = document.domain.indexOf('daily.taobao.net') > 1,
+                _resultTmpl = '<div class="ks-ac-item-inner"><span class="ks-ac-name">{first}</span><span class="ks-ac-intro" style="color:#999;float:left;">{second}</span></div>',
+                _citycodeUrl = (isDaily ? 'http://go.daily.taobao.net/' : 'http://go.taobao.com/') + 'data/areaTrip.htm?sn=1'; //���������ӿ�
+            _dep_citycodeUrl = (isDaily ? 'http://dujia.trip.daily.taobao.net/' : 'http://dujia.trip.taobao.com/') + 'sell/ajax/get_sug_city.htm?max=10'; //���������ӿ�
+
+
+            function highLight(str, key) {
+                //return str.replace(key,'<span class="yui3-highlight">'+ key +'</span>');
+                return str;
+            }
+
+            function _acFormatter(query, results) {
+                return S.map(results, function (result) {
+                    var result = result.raw,
+                        _name = result.cityName.split('-');
+                    return S.substitute(_resultTmpl, {
+                        first : highLight(_name[0], query),
+                        second: highLight(_name[1], query) ? '&nbsp;-&nbsp;' + highLight(_name[1], query) : ''
+                    });
+                });
+            }
+
+            var default_cfg = {
+                activeFirstItem  : true,
+                align            : ALIGH,
+                resultListLocator: 'result',
+                resultTextLocator: 'cityName',
+                resultFormatter: _acFormatter,
+                source         : _dep_citycodeUrl + '&q={query}',
+                hotSource      : 'http://www.taobao.com/go/rgn/trip/dujiadephotcity_jsonp.php'
+            };
+            cfg = S.merge(default_cfg, cfg);
+            var acInstance = new Ac(cfg);
+            var codeInputNode = acInstance.get('codeInputNode');
+            codeInputNode = codeInputNode instanceof  S.NodeList ? codeInputNode : S.one(codeInputNode);
+            codeInputNode && acInstance.on('select', function (e) {
+                codeInputNode.val(e.result.raw.cityCode);
+            });
+            return acInstance;
+        },
+        city : function (cfg){
+            var default_cfg = {
+                source           : 'http://s.jipiao.trip.taobao.com/city_search.do?lines={maxResults}&q={query}',
+                resultListLocator: 'result',
+                resultTextLocator: 'cityName',//ָ���ı�����
+                activeFirstItem  : true,
+                align            : ALIGH,
+                hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php'//��ָ����û�������Ƽ�
+            };
+            cfg = S.merge(default_cfg , cfg);
+            var acInstance = new Ac(cfg);
+            var codeInputNode = acInstance.get('codeInputNode');
+            codeInputNode =  codeInputNode instanceof  S.NodeList ? codeInputNode : S.one(codeInputNode);
+            codeInputNode &&  acInstance.on('select' , function (e){
+                codeInputNode.val(e.result.raw.cityCode);
+            });
+            return acInstance;
+        }
+    };
+}, {requires: ['gallery/autocomplete/1.0/index' , './common', 'node' , 'event' , 'base']});
+/**
+ * RadioButton����
+ *
+ * @module Radiobutton
+ * @submodule
+ **/
+KISSY.add('gallery/tsearch/1.0/radio-button',function (S) {
+    /**
+     * Radiobutton
+     * @class Radiobutton
+     * @extends S.Base
+     * @uses
+     * @constructor
+     * @param {Object} ������
+     **/
+    function Radiobutton() {
+        Radiobutton.superclass.constructor.apply(this, arguments);
+        this.initializer();
+    }
+    S.extend(Radiobutton, S.Base, {
+        initializer: function () {
+            var node = this.node = this.get('node');
+            var that = this;
+            this.items = {};
+            this.radios = node.all('input[type="radio"]');
+            this.radios.each(function (_item) {
+                var item = {
+                    input: _item
+                };
+                var _item_id = _item.attr('id');
+                if (_item_id && node.one('label[for=' + _item_id + ']')) {
+                    item.label = node.one('label[for=' + _item_id + ']');
+                }
+                that.items[_item.val()] = item;
+            });
+            this.bindUI();
+            this.set('value' , this.val());
+        },
+        bindUI     : function () {
+            this.node.delegate('click', 'label', function (e) {
+                var target = S.one(e.currentTarget);
+                S.one('#' + target.attr('for')).attr('checked' , true);
+                this.set('value' , this.node.one('#' + target.attr('for')).val());
+            },  this);
+            this.on('afterValueChange' , this._syncUI , this);
+        },
+        _syncUI     : function (e) {
+            var items = this.items;
+            var next_item = items[e.newVal];
+            var prev_item = items[e.prevVal];
+            var SELECTED_CLASS = this.get('selectedClass');
+            if (prev_item) {
+                prev_item.label.removeClass(SELECTED_CLASS);
+            }
+            if (next_item) {
+                next_item.label.addClass(SELECTED_CLASS);
+            }
+        },
+        /**
+         * ��ȡ������radio��ֵ
+         *
+         * @method val
+         * @returns {*}
+         */
+        val : function (){
+            if (arguments.length < 1) {
+                return this._getValue();
+            }else{
+                return this._setValue.apply(this,arguments);
+            }
+        },
+        _getValue   : function () {
+            var checkedNode = S.one('input[type=radio][checked=checked]');
+            if (!checkedNode) {
+                return undefined;
+            }else{
+                return checkedNode.val();
+            }
+        },
+        _setValue   : function (val) {
+            var item = this.items[val];
+            if (item) {
+                item.input.attr('checked', true);
+                this.set('value' , val);
+            }
+        }
+
+    }, {
+        ATTRS:{
+            /**
+             * Required radiobutton���ڵĸ������ڵ�
+             * @attribute node
+             * @type NodeList
+             * @default null
+             **/
+            node:{
+                value:'',
+                setter: function (val){
+                    if (val instanceof S.NodeList) {
+                        return val;
+                    }else{
+                        return S.one(val);
+                    }
+                }
+            },
+            /**
+             * Required ��������name����ֵ, ���Դ�ֵȥ��ȡinput�ڵ�
+             * @attribute name
+             * @type String
+             * @default null
+             **/
+            name:{
+                value:''
+            },
+            /**
+             * ������ѡ��ʱ��ClassName
+             * @attribute selectedClass
+             * @type String
+             * @default selected
+             **/
+            selectedClass:{
+                value:'selected'
+            },
+            /**
+             * ��ǰ��checkedΪtrue��radio��ֵ
+             * @attribute value
+             * @type String
+             * @default null
+             **/
+            value : {
+                value : null
+            }
+
+        }
+    });
+    return Radiobutton;
+}, {requires: ['node' , 'event' , 'base' , 'sizzle']});
+/**
+ * @fileoverview ���޸���������
+ * @author ����<shuke.cl@taobao.com>
+ * @module tsearch
+ **/
+KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
+    var EMPTY = '';
+    var $ = Node.all;
+    var Widgets = {
+        TripAutocomplete : TripAutocomplete,
+        Calendar : Calendar ,
+        Placeholder : Placeholder,
+        Tradio : Tradio
+    };
+    /**
+     * ���޸���������
+     * @class Tsearch
+     * @constructor
+     * @extends Base
+     */
+    function Tsearch(comConfig) {
+        var self = this;
+        //���ø��๹�캯��
+        Tsearch.superclass.constructor.call(self, comConfig);
+        this.initializer();
+    }
+
+    S.extend(Tsearch, Base, /** @lends Tsearch.prototype*/{
+        initializer    : function () {
+            this.form = this.get('form');
+            if (!this.form) {
+                S.log('TSearch:û���ҵ������ڵ�,��ʼ��ʧ��');
+                return;
+            }
+            //this.get('storage') && this.setDefaultValue();
+            this.fields = this.get('fields');
+            S.each(this.fields, function (field, _id) {
+                var _node = S.one(_id);
+                if (!_node) {
+                    S.log(_id + "is not find..")
+                    return false;
+                }
+                field.node = _node;
+                if (field.val) {
+                    field.node.val(field.val);
+                }
+                this.bindWidgets(field);
+                if (field.autoSwitch) {
+                    this.setSwitchInput(_id);
+                }
+            }, this);
+            this.bindEvent();
+        },
+        bindEvent      : function () {
+            this.form.on('submit', this._doSubmit, this);
+            //�л�������
+            if (this.get('switchSearchType')) {
+                this.initRadioSwitch()
+            }
+            //�󶨱�����������
+            var swapper = this.get('swapper');
+            if (swapper) {
+                S.Event.on(swapper.trigger, 'click', function (e) {
+                    e.halt();
+                    this.swap();
+                },  this)
+            }
+        },
+        addField       : function () {
+
+        },
+        /**
+         * �ؼ����� ,�������õĶ�����ʼ������ʵ���ҽӵ���ǰ��
+         * @param field
+         */
+        bindWidgets    : function (field) {
+            var that = this;
+            S.each(field.widgets, function (widget_config, widget_name) {
+                var Widget = Widgets[widget_name];
+                if (Widget) {
+                    if(widget_name == 'TripAutocomplete'){//Autocomplete���ù���ģʽ
+                        S.each(field.widgets[widget_name] , function (v , k){
+                            field[widget_name] =  Widget[k](v);
+                        })
+                    } else {
+                        field[widget_name] = new Widget(widget_config);
+                    }
+                    if (widget_name === 'Calendar' && widget_config.finalTriggerNode && that.fields[widget_config.finalTriggerNode]) { //hack for Calendar �򷢺ͷ������ڹ���һ����������,������ʵ�����������̱�������
+                        that.fields[widget_config.finalTriggerNode][widget_name] = field[widget_name];
+                    }
+                }
+            });
+            /**
+             * ��������showMessage�����������䣬ͳһ��showTip��ʽ��ʵ������ʾ
+             * @type {*}
+             */
+            field.showTip = (function (field) {
+                if (field.TripAutocomplete) {
+                    return function (msg) {
+                        field.node[0].focus();
+                        field.TripAutocomplete.showMessage(msg);
+                    }
+                } else if (field.Calendar) {
+                    return function (msg) {
+                        field.node[0].focus();
+                        field.Calendar.currentNode = field.node;
+                        field.Calendar.set('message' , msg)
+                        field.Calendar.showMessage(msg);
+                    }
+                }
+            })(field);
+        },
+        /**
+         * ��������swapper��������ֵ
+         */
+        swap           : function () {
+            S.each(this.get('swapper').list, function (val, key) {
+                this._swapItem(key, val);
+            }, this);
+        },
+        /**
+         * ���������ֶε�ֵ
+         * @param item_a
+         * @param item_b
+         * @private
+         */
+        _swapItem      : function (item_a, item_b) {
+            var temp;
+            item_a = this.fields[item_a];
+            item_b = this.fields[item_b];
+            temp = item_a.node.val();
+            item_a.node.val(item_b.node.val());
+            item_b.node.val(temp);
+        },
+        /**
+         * ʵ���Զ��л����ܵİ���
+         * @param cur_field_id
+         */
+        setSwitchInput : function (cur_field_id) {
+            return false;//��ʱ�ر��Զ��л�
+            var fields = this.fields;
+            var cur_field = fields[cur_field_id];
+            var switchToNext = function () {
+                var next_field = fields[cur_field.autoSwitch.nextField],
+                    next_node = next_field.node;
+                if (!next_node) {
+                    S.log('û��ָ���Զ��л���Ŀ��Ԫ��');
+                    return this;
+                }
+                if (!next_field.disabled && next_field.node.val() == '') {//��ǰ���ش�������һ���ֶ�δ��
+                    next_node[0].focus()
+                }
+            };
+
+            if (cur_field.TripAutocomplete) {
+                cur_field.TripAutocomplete.on('select', switchToNext);
+            } else if (cur_field.Calendar) {
+                cur_field.Calendar.on('dateclick', function () {
+                    if (this.currentNode.attr('id') === cur_field_id.replace('#', '')) {//��ǰ����dateclick�¼�Ϊ��ǰ�������󶨵������ؼ�ʱִ���Զ��л�
+                        switchToNext();
+                    }
+                });
+            }
+            return this;
+        },
+        /**
+         * ��ʼ�����������л��¼�
+         * @return {*}
+         */
+        initRadioSwitch: function () {
+            var that = this,
+                config = this.get('switchSearchType'),
+                fields = this.fields,
+                back_container = S.one(config.back_container),
+                back_input = fields[config.back_input].node;
+            var Tradio = fields[config.trigger].Tradio;
+            var Calendar = fields[config.go_input].Calendar;
+            if (!Tradio) {
+                return this;
+            }
+            Tradio.on('afterValueChange', function (e) {
+                if (e.newVal === '0') {
+                    back_input.val('');
+                    Calendar.currentNode = back_input;
+                    Calendar._setDateInfo('');
+                }
+                this._setSearchType(e.newVal);
+            }, this);
+            //��������û��ֵʱ�л�Ϊ����
+            back_input.on('valuechange', function (e) {
+                if (e.newVal === '') {
+                    Tradio.val('0');
+                }
+            });
+            //ѡ�񷵳�����ʱ���Զ��л�Ϊ����
+            Calendar.on('dateclick', function (e) {
+                if (this.currentNode.attr('id') === config.back_input.replace('#', '')) {
+                    Tradio.val('1');
+                }
+            });
+            this._setSearchType(Tradio.val());
+        },
+        /**
+         * ���ݵ���������ֵ������������ѡ�񽻻�״̬
+         * @param val
+         * @private
+         */
+        _setSearchType : function (val) {
+            var config = this.get('switchSearchType'),
+                fields = this.fields,
+                back_container = S.one(config.back_container);
+            if (val === "1") {//��������
+                back_container.removeClass('disabled');
+                if (fields[config.go_input].autoSwitch) {
+                    fields[config.back_input].disabled = false;
+                }
+            } else {//���𵥳�
+                back_container.addClass('disabled');
+                if (fields[config.go_input].autoSwitch) {
+                    fields[config.back_input].disabled = true;
+                }
+            }
+        },
+        _doSubmit      : function (e) {
+            if (!this.validate()) {
+                e.preventDefault();
+                return false;
+            }
+            this.fire('submit', {
+                form  : this.form,
+                fields: this.fields
+            });
+            //this._storageForm();
+        },
+        /**
+         * ���ڼ���,����
+         * @param date ���� ['2011-05-14','2011-06-14']
+         * @return Array
+         */
+        _isResetDate   : function (date) {
+            date = date.split('-');
+            return new Date() > new Date(date[0], date[1] - 1, date[2]);
+        },
+        /*
+         *��ȡָ�����ڵ�
+         *@num_date ָ�����ڵ�ǰ������ 1Ϊ����,2Ϊ����,-1Ϊ����...
+         */
+        getDate        : function (num_date) {
+            function formatdate(str) {
+                str += '';
+                if (str.length == 1) {
+                    return '0' + str;
+                } else {
+                    return str;
+                }
+            }
+
+            num_date = num_date || 0;
+            var _y, _m, _d;
+            var _T = new Date();
+            _T.setDate(_T.getDate() + num_date);
+            _y = _T.getFullYear();
+            _m = formatdate(_T.getMonth() + 1);
+            _d = formatdate(_T.getDate());
+            return [_y, _m, _d].join('-');
+        },
+        validate       : function () {
+            var fields = this.fields,
+                that = this;
+            var ok = true;
+            var _id;
+            var i , j , validaters , validatersLen , validation , validationLen;
+            for(i = 0 , validaters = this.get('validation_order') , validatersLen = validaters.length; i < validatersLen ; i++ ) {
+                _id = validaters[i];
+                if (!fields[_id].validation || !ok || fields[_id].disabled) {
+                    break;
+                }
+                for(j = 0 ,  validation = fields[_id].validation  , validationLen = validation.length; j < validationLen; j++) {
+                    var rule = validation[j];
+                    if (!that._validateRule(rule, fields[_id])) {
+                        that.fire('validate', {
+                            rule : rule,
+                            field: fields[_id]
+                        });
+                        if (typeof rule.onValidateFailure === "function") {//���ûٵ�ʱ�����ص�
+                            rule.onValidateFailure.call(fields[_id], rule);
+                        } else {
+                            fields[_id].showTip && fields[_id].showTip(rule.tip);
+                        }
+                        ok = false;
+                        break;
+                    }
+                }// end for
+                if (ok == false) {
+                    break;
+                }
+            }// end for
+            return ok;
+        },
+        /**
+         * ��֤������ʵ��
+         * @param rule ��ǰ��֤�Ĺ�������
+         * @param field ��ǰ��֤���ֶ�
+         * @return {Boolean} ��֤�Ƿ�ͨ��
+         * @private
+         */
+        _validateRule  : function (rule, field) {
+            var strToDate = function (str) {
+                var arr = str.split('-');
+                return new Date(arr[0], arr[1] - 1, arr[2]);
+            };
+            switch (rule.type) {
+                case 'required' ://������У��
+                    return field.node.val() != '';
+                    break;
+                case 'dateformat' :
+                    var val = field.node.val();
+                    return val.length == 10 && /(([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)/.test(val);
+                    break;
+                case 'mindate'://����������֤:
+                    var val = field.node.val();
+                    var select_date = strToDate(val),
+                        min_date;
+                    if (typeof rule.minDate === "string") {//min_date����Ϊһ��fieldʱ��ȡ��ֵת��Ϊ����
+                        min_date = strToDate(this.fields[rule.minDate].node.val());
+                    } else {
+                        min_date = rule.minDate;
+                    }
+                    return select_date >= min_date;
+                    break;
+                case 'identical' ://�����ֶβ�����ͬ����֤ �� �򷢵������в�����ͬ
+                    var val = field.node.val();
+                    var identical_field = this.fields[rule.identicalWidth];
+                    return val != identical_field.node.val();
+                    break;
+                case 'custom' :
+                    if (typeof rule.validateFn === "function") {
+                        return rule.validateFn.call(field, rule.arg, this);
+                    }
+                    return true;
+                    break;
+                default :
+                    break;
+            }
+            return true;
+        }
+    }, {ATTRS: /** @lends Tsearch*/{
+        form            : {
+            value : '',
+            setter: function (val){
+                if (val instanceof S.NodeList) {
+                    return val;
+                }else{
+                    return S.one(val);
+                }
+            }
+        },
+        /**
+         * �����ֶ����ã�ÿһ������Ԫ����ID��Ϊkey������������֤��������
+         */
+        fields          : {
+            value: {
+                '#J_FlightDepCity': {
+                    input_node: null,
+                    widgets   : {
+                        'Placeholder'      : {
+                            inputNode: null
+                        },
+                        'TripAutocompleteV2': {
+
+                        }
+                    },
+                    validation: [
+                        {
+                            'blur': [
+                                {
+                                    'required': ''
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        validate_order  : {
+            value: []
+        },
+        swapper         : {
+            value: {
+                trigger : '#J_Pi_Search_FlightSwap',
+                children: {
+                    'from': 'to'
+                }
+            }
+        },
+        switchSearchType: {
+            value: null
+        },
+        /**
+         * ������������ʷ��¼����
+         */
+        storage         : {
+            value: false
+        },
+        /**
+         * ��֤˳������
+         */
+        validation_order: {
+            value: null
+        }
+    }});
+    return Tsearch;
+}, {requires: ['base','./trip-autocomplete' , './radio-button' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'node', 'base']});
+KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
+    var TripSearch = {
+                createFlightSearch : function (){
+                    return new Tsearch({
+                                form            : '#J_Pi_Search_jipiao_form',
+                                fields          : {
+                                    '#J_Pi_Search_FlightRadio'        : {
+                                        widgets: {
+                                            'Tradio': {
+                                                node: '#J_Pi_Search_FlightRadio',
+                                                name: 'tripType'
+                                            }
+                                        }
+                                    },
+                                    '#J_Pi_Search_jipiao_depCity'     : {
+                                        val       : '',
+                                        widgets   : {
+                                            'TripAutocomplete': {
+                                                flight: {
+                                                    inputNode: '#J_Pi_Search_jipiao_depCity',
+                                                    codeInputNode : '#J_Pi_Search_jipiao_depCity_code'
+                                                }
+                                            },
+                                            'Placeholder'    : {
+                                                inputNode: '#J_Pi_Search_jipiao_depCity'
+                                            }
+                                        },
+                                        autoSwitch: {
+                                            nextField: '#J_Pi_Search_jipiao_arrCity'
+                                        },
+                                        validation: [
+                                            {
+                                                type: 'required',
+                                                when: 'blur',
+                                                tip : '����д�򷢳���'
+                                            }
+                                        ]
+                                    },
+                                    '#J_Pi_Search_jipiao_depCity_code': {
+
+                                    },
+                                    '#J_Pi_Search_jipiao_arrCity'     : {
+                                        widgets   : {
+                                            'TripAutocomplete': {
+                                                flight: {
+                                                    inputNode : '#J_Pi_Search_jipiao_arrCity',
+                                                    codeInputNode : '#J_Pi_Search_jipiao_arrCity_code'
+                                                }
+                                            },
+                                            'Placeholder'    : {
+                                                inputNode: '#J_Pi_Search_jipiao_arrCity'
+                                            }
+                                        },
+                                        validation: [
+                                            {
+                                                type: 'required',
+                                                when: 'blur',
+                                                tip : '����д��������'
+                                            },
+                                            {
+                                                type          : 'identical',
+                                                identicalWidth: '#J_Pi_Search_jipiao_depCity',
+                                                tip           : '�򷢵������в�����ͬ'
+                                            }
+                                        ]
+                                    },
+                                    '#J_Pi_Search_jipiao_arrCity_code': {
+
+                                    },
+                                    '#J_Pi_Search_FlightDepDate'      : {
+                                        widgets   : {
+                                            'Placeholder': {
+                                                inputNode: '#J_Pi_Search_FlightDepDate'
+                                            },
+                                            'Calendar'   : {
+                                                triggerNode     : '#J_Pi_Search_FlightDepDate',
+                                                finalTriggerNode: '#J_Pi_Search_FlightArrDate',
+                                                minDate         : new Date(),
+                                                isDateInfo      : 1,
+                                                isDateIcon      : 1,
+                                                afterDays       : 364,
+                                                isKeyup         : false,
+                                                isHoliday       : 1
+                                            }
+                                        },
+                                        validation: [
+                                            {
+                                                type: 'required',
+                                                tip : '����д��������'
+                                            },
+                                            {
+                                                type: 'dateformat',
+                                                tip : '��������ȷ�����ڸ�ʽ �磺2018-01-01'
+                                            },
+                                            {
+                                                type   : 'mindate',
+                                                minDate: new Date() - 86400000,
+                                                tip    : '�������ڲ������ڽ���'
+                                            }
+                                        ],
+                                        autoSwitch: {
+                                            active   : true,
+                                            nextField: '#J_Pi_Search_FlightArrDate'
+                                        }
+                                    },
+                                    '#J_Pi_Search_FlightArrDate'      : {
+                                        disabled  : true,
+                                        widgets   : {
+                                            'Placeholder': {
+                                                inputNode: '#J_Pi_Search_FlightArrDate'
+                                            }
+                                        },
+                                        validation: [
+                                            {
+                                                type: 'required',
+                                                tip : '����д��������'
+                                            },
+                                            {
+                                                type: 'dateformat',
+                                                tip : '��������ȷ�����ڸ�ʽ �磺2018-01-01'
+                                            },
+                                            {
+                                                type   : 'mindate',
+                                                minDate: '#J_Pi_Search_FlightDepDate',
+                                                tip    : '�������ڲ������ڳ�������'
+                                            }
+                                        ]
+                                    }
+                                },
+                                /**
+                                 * ����У��˳��
+                                 */
+                                validation_order: ['#J_Pi_Search_jipiao_depCity', '#J_Pi_Search_jipiao_arrCity', '#J_Pi_Search_FlightDepDate' , '#J_Pi_Search_FlightArrDate'],
+                                /**
+                                 * �򷢵��������л�����
+                                 * @param trigger ������ťID
+                                 * @param list ��Ҫ�����������ݵ������б� ,key �� value ��Ӧ��inputNode ����ֵ�Ľ���
+                                 */
+                                swapper         : {
+                                    trigger: '#J_Pi_Search_FlightSwap',
+                                    list   : {
+                                        '#J_Pi_Search_jipiao_depCity'     : '#J_Pi_Search_jipiao_arrCity',
+                                        '#J_Pi_Search_jipiao_depCity_code': '#J_Pi_Search_jipiao_arrCity_code'
+                                    }
+                                },
+                                /**
+                                 * ��Ʊר��:�����л�����
+                                 * @param trigger ���������л���radio�ؼ���������
+                                 * @param back_container �������������ڵ�����
+                                 * @param back_input ����������
+                                 */
+                                switchSearchType: {
+                                    trigger       : '#J_Pi_Search_FlightRadio',
+                                    back_container: '#J_Pi_Search_FlightBackField',
+                                    go_input      : '#J_Pi_Search_FlightDepDate',
+                                    back_input    : '#J_Pi_Search_FlightArrDate'
+                                },
+                                /**
+                                 * ����������ʷ��¼����  Ĭ�Ϲر�
+                                 */
+                                storage         : true
+                            });
+                },
+                createIflightSearch : function (){
+                    return new Tsearch({
+                        form            : '#J_Pi_Search_ijipiao_form',
+                        fields          : {
+                            '#J_Pi_Search_IFlightRadio'        : {
+                                widgets: {
+                                    'Tradio': {
+                                        node: '#J_Pi_Search_IFlightRadio',
+                                        name: '_fmie.ie._0.t'
+                                    }
+                                }
+                            },
+                            '#J_Pi_Search_ijipiao_depCity'     : {
+                                widgets   : {
+                                    'TripAutocomplete': {
+                                        iflight : {
+                                            inputNode    : '#J_Pi_Search_ijipiao_depCity',
+                                            codeInputNode: '#J_Pi_Search_ijipiao_depCity_code',
+                                            hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php'//��ָ����û�������Ƽ�
+                                        }
+                                    },
+                                    'Placeholder'    : {
+                                        inputNode: '#J_Pi_Search_ijipiao_depCity'
+                                    }
+                                },
+                                autoSwitch: {
+                                    active   : true,
+                                    nextField: '#J_Pi_Search_ijipiao_arrCity'
+                                },
+                                validation: [
+                                    {
+                                        type: 'required',
+                                        when: 'blur',
+                                        tip : '����д�򷢳���'
+                                    }
+                                ]
+                            },
+                            '#J_Pi_Search_ijipiao_depCity_code': {
+
+                            },
+                            '#J_Pi_Search_ijipiao_arrCity'     : {
+                                widgets   : {
+                                    'TripAutocomplete': {
+                                        iflight : {
+                                            inputNode    : '#J_Pi_Search_ijipiao_arrCity',
+                                            codeInputNode: '#J_Pi_Search_ijipiao_arrCity_code'
+                                        }
+                                    },
+                                    'Placeholder'    : {
+                                        inputNode: '#J_Pi_Search_ijipiao_arrCity'
+                                    }
+                                },
+                                validation: [
+                                    {
+                                        type: 'required',
+                                        tip : '����д��������'
+                                    },
+                                    {
+                                        type          : 'identical',
+                                        identicalWidth: '#J_Pi_Search_ijipiao_depCity',
+                                        tip           : '�򷢵������в�����ͬ'
+                                    }
+                                ]
+                            },
+                            '#J_Pi_Search_ijipiao_arrCity_code': {
+
+                            },
+                            '#J_Pi_Search_IFlightDepDate'      : {
+                                widgets   : {
+                                    'Placeholder': {
+                                        inputNode: '#J_Pi_Search_IFlightDepDate'
+                                    },
+                                    'Calendar'   : {
+                                        triggerNode     : '#J_Pi_Search_IFlightDepDate',
+                                        finalTriggerNode: '#J_Pi_Search_IFlightArrDate',
+                                        minDate         : new Date(),
+                                        isDateInfo      : 1,
+                                        isDateIcon      : 1,
+                                        isKeyup         : false,
+                                        afterDays       : 364,
+                                        isHoliday       : 1
+                                    }
+                                },
+                                validation: [
+                                    {
+                                        type: 'required',
+                                        tip : '����д��������'
+                                    },
+                                    {
+                                        type: 'dateformat',
+                                        tip : '��������ȷ�����ڸ�ʽ �磺2018-01-01'
+                                    },
+                                    {
+                                        type   : 'mindate',
+                                        minDate: new Date() - 86400000,
+                                        tip    : '�������ڲ������ڽ���'
+                                    }
+                                ],
+                                autoSwitch: {
+                                    active   : true,
+                                    nextField: '#J_Pi_Search_IFlightArrDate'
+                                }
+                            },
+                            '#J_Pi_Search_IFlightArrDate'      : {
+                                disabled  : true,
+                                widgets   : {
+                                    'Placeholder': {
+                                        inputNode: '#J_Pi_Search_IFlightArrDate'
+                                    }
+                                },
+                                validation: [
+                                    {
+                                        type: 'required',
+                                        tip : '����д��������'
+                                    },
+                                    {
+                                        type: 'dateformat',
+                                        tip : '��������ȷ�����ڸ�ʽ �磺2018-01-01'
+                                    },
+                                    {
+                                        type   : 'mindate',
+                                        minDate: '#J_Pi_Search_IFlightDepDate',
+                                        tip    : '�������ڲ������ڳ�������'
+                                    }
+                                ]
+                            }
+                        },
+                        /**
+                         * ����У��˳��
+                         */
+                        validation_order: ['#J_Pi_Search_ijipiao_depCity', '#J_Pi_Search_ijipiao_arrCity', '#J_Pi_Search_IFlightDepDate' , '#J_Pi_Search_IFlightArrDate'],
+                        /**
+                         * �򷢵��������л�����
+                         * @param trigger ������ťID
+                         * @param list ��Ҫ�����������ݵ������б� ,key �� value ��Ӧ��inputNode ����ֵ�Ľ���
+                         */
+                        swapper         : {
+                            trigger: '#J_Pi_Search_IFlightSwap',
+                            list   : {
+                                '#J_Pi_Search_ijipiao_depCity'     : '#J_Pi_Search_ijipiao_arrCity',
+                                '#J_Pi_Search_ijipiao_depCity_code': '#J_Pi_Search_ijipiao_arrCity_code'
+                            }
+                        },
+                        /**
+                         * �����л�����
+                         * @param trigger ���������л���radio�ؼ���������
+                         * @param back_container �������������ڵ�����
+                         * @param back_input ����������
+                         */
+                        switchSearchType: {
+                            trigger       : '#J_Pi_Search_IFlightRadio',
+                            back_container: '#J_Pi_Search_IFlightBackField',
+                            go_input      : '#J_Pi_Search_IFlightDepDate',
+                            back_input    : '#J_Pi_Search_IFlightArrDate'
+                        },
+                        storage         : true
+
+                    });
+                },
+                createHotelSearch : function (){
+                    S.use('pi/tsearch/1.0/hotel-search', function (S , Thotelsearch) {
+                        Thotelsearch({
+                            form               : '#J_Pi_Search_HotelForm',
+                            radio              : '#J_Pi_Search_HotelLocationRadio',
+                            radioName          : '_fmd.h._0.r',
+                            HotelToCity        : '#J_Pi_Search_HotelToCity',
+                            HotelDepDate       : '#J_Pi_Search_HotelDepDate',
+                            HotelEndDate       : '#J_Pi_Search_HotelEndDate',
+                            Omni               : '#J_Pi_Search_OmniCode',
+                            HotelSearchKeywords: '#J_Pi_Search_HotelSearchKeywords'
+                        })
+                    });
+                },
+                createLodgeSearch : function() {
+                    S.use('pi/tsearch/1.0/hotel-search', function (S , Thotelsearch) {
+                        Thotelsearch({
+                            form               : '#J_Pi_Search_LodgeForm',
+                            radioName          : '_fmd.h._0.r',
+                            HotelToCity        : '#J_Pi_Search_LodgeToCity',
+                            HotelDepDate       : '#J_Pi_Search_LodgeDepDate',
+                            HotelEndDate       : '#J_Pi_Search_LodgeEndDate',
+                            Omni               : '#J_Pi_Search_LodgeOmniCode',
+                            HotelSearchKeywords: '#J_Pi_Search_LodgeSearchKeywords'
+                        })
+                    });
+                },
+                createTravelSearch : function() {
+
+                    return new Tsearch({
+                        form            : '#J_Pi_Search_dujia_form',
+                        fields          : {
+                            '#J_Pi_Search_dujia_depCity': {
+                                widgets: {
+                                    'Placeholder'    : {
+                                        inputNode: '#J_Pi_Search_dujia_depCity'
+                                    },
+                                    'TripAutocomplete': {
+                                        travel : {inputNode : '#J_Pi_Search_dujia_depCity'}
+                                    }
+                                }
+                            },
+                            '#J_Pi_Search_dujia_arrCity': {
+                                widgets   : {
+                                    'Placeholder'    : {
+                                        inputNode: '#J_Pi_Search_dujia_arrCity'
+                                    },
+                                    'TripAutocomplete': {
+                                        travel : {inputNode      : '#J_Pi_Search_dujia_arrCity'}
+                                    }
+                                },
+                                validation: [
+                                    {
+                                        type: 'required',
+                                        tip : '������Ŀ�ĵ�'
+                                    }
+                                ]
+                            }
+                        },
+                        validation_order: ['#J_Pi_Search_dujia_arrCity']
+                    })
+                },
+                createTicketSearch : function() {
+                        return new Tsearch({
+                            form            : '#J_Pi_Search_menpiao_form',
+                            fields          : {
+                                '#J_Pi_Search_menpiao_arrCity': {
+                                    widgets   : {
+                                        'Placeholder': {
+                                            inputNode: '#J_Pi_Search_menpiao_arrCity'
+                                        }
+                                    },
+                                    validation: [
+                                        {
+                                            type             : 'required',
+                                            onValidateFailure: function () {
+                                                this.node[0].focus();
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            validation_order: ['#J_Pi_Search_menpiao_arrCity']
+                        })
+                    },
+                createCarSearch : function() {
+                    return new Tsearch({
+                        form            : '#J_Pi_Search_zuche_form',
+                        fields          : {
+                            '#J_Pi_Search_zuche_arrCity': {
+                                widgets   : {
+                                    'Placeholder'    : {
+                                        inputNode: '#J_Pi_Search_zuche_arrCity'
+                                    },
+                                    'TripAutocomplete': {
+                                        city :{inputNode : '#J_Pi_Search_zuche_arrCity'}
+                                    }
+                                },
+                                validation: [
+                                    {
+                                        type: 'required',
+                                        tip : '����д�⳵����'
+                                    }
+                                ]
+                            }
+                        },
+                        validation_order: ['#J_Pi_Search_zuche_arrCity']
+                    })
+                }
+            };
+    return TripSearch;
+} , {requires : ['./tsearch' , 'node' , 'event' , 'base']});
