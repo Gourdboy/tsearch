@@ -2,6 +2,7 @@
     width: 435px;
     height:380px;
     position: static;
+    background:#fff;
 }
 
 .mod-search .search-input {
