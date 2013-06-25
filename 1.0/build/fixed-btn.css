@@ -1,19 +1,19 @@
-.mod-search {
+body .mod-search {
     width: 435px;
     height:380px;
     position: static;
     background:#fff;
 }
 
-.mod-search .search-input {
+body .mod-search .search-input {
     width: 150px;
 }
 
 
-.mod-search .search-hd {
+body .mod-search .search-hd {
     height:auto;
 }
-.mod-search .search-bd {
+body .mod-search .search-bd {
     width: 312px;
 }
 
@@ -28,15 +28,15 @@ body div.trip-search-fixed-box {
     zoom:1;
 }
 
-.trip-search-fixed-content {
+body .trip-search-fixed-content {
     border: 1px solid #ccc;
 }
 
-.trip-search-fixed-btn {
+body .trip-search-fixed-btn {
     text-align: right;
 }
 
-.trip-search-fixed-btn a , .trip-search-fixed-btn a:visited {
+body .trip-search-fixed-btn a ,body  .trip-search-fixed-btn a:visited {
     display: inline-block;
     zoom: 1;
     width: 152px;
@@ -47,6 +47,6 @@ body div.trip-search-fixed-box {
     background: url(http://img02.taobaocdn.com/tps/i2/T1m9trFotdXXb.RTLc-152-60.png) no-repeat;
     text-align:center;
 }
-.trip-search-fixed-btn-open a{
+body .trip-search-fixed-btn-open a{
     background-position: 0 100%;
 }

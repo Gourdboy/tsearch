@@ -1233,7 +1233,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                     });
                 },
                 createHotelSearch : function (){
-                    S.use('pi/tsearch/1.0/hotel-search', function (S , Thotelsearch) {
+                    S.use('gallery/tsearch/1.0/hotel-search', function (S , Thotelsearch) {
                         Thotelsearch({
                             form               : '#J_Pi_Search_HotelForm',
                             radio              : '#J_Pi_Search_HotelLocationRadio',
@@ -1247,7 +1247,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                     });
                 },
                 createLodgeSearch : function() {
-                    S.use('pi/tsearch/1.0/hotel-search', function (S , Thotelsearch) {
+                    S.use('gallery/tsearch/1.0/hotel-search', function (S , Thotelsearch) {
                         Thotelsearch({
                             form               : '#J_Pi_Search_LodgeForm',
                             radioName          : '_fmd.h._0.r',
