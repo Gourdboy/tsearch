@@ -1,13 +1,13 @@
 /**
- * ÂÃĞĞ¹«¹²º¯Êı¿â
+ * æ—…è¡Œå…¬å…±å‡½æ•°åº“
  */
 KISSY.add(function (S){
     var Common = {
         /**
-         * ½ØÈ¡Ö¸¶¨³¤¶ÈµÄ×Ö·û´®
-         * @param string ±»½ØÈ¡µÄ×Ö·û´®
-         * @param len ½ØÈ¡µÄ³¤¶È£¬µ¥Î»£º×Ö½Ú¡£1¸öºººº×ÖÎª2¸ö×Ö½Ú
-         * @return {string} ·µ»Ø±»½ØÈ¡µÄ×Ö·û´®
+         * æˆªå–æŒ‡å®šé•¿åº¦çš„å­—ç¬¦ä¸²
+         * @param string è¢«æˆªå–çš„å­—ç¬¦ä¸²
+         * @param len æˆªå–çš„é•¿åº¦ï¼Œå•ä½ï¼šå­—èŠ‚ã€‚1ä¸ªæ±‰æ±‰å­—ä¸º2ä¸ªå­—èŠ‚
+         * @return {string} è¿”å›è¢«æˆªå–çš„å­—ç¬¦ä¸²
          */
         subString:function (string, len) {
             var r = /[^\x00-\xff]/g;
@@ -24,7 +24,7 @@ KISSY.add(function (S){
             return string;
         },
         /**
-         * »ñÈ¡×Ö·û´®³¤¶È µ¥Î»×Ö½Ú
+         * è·å–å­—ç¬¦ä¸²é•¿åº¦ å•ä½å­—èŠ‚
          * @param string
          * @return {*}
          */
@@ -35,10 +35,10 @@ KISSY.add(function (S){
             return string.replace(/[^\x00-\xff]/g, "rr").length;
         },
         /**
-         * ½ØÈ¡×Ö·û´®£¬²¢ÔÚÄ©Î²¼ÓÉÏ'...'
-         * @param str  ±»½ØÈ¡µÄ×Ö·û´®
-         * @param len  ½ØÈ¡µÄ³¤¶È
-         * @param more Ê¡ÂÔ·ûºÅ
+         * æˆªå–å­—ç¬¦ä¸²ï¼Œå¹¶åœ¨æœ«å°¾åŠ ä¸Š'...'
+         * @param str  è¢«æˆªå–çš„å­—ç¬¦ä¸²
+         * @param len  æˆªå–çš„é•¿åº¦
+         * @param more çœç•¥ç¬¦å·
          * @return {*}
          */
         cutStr :function (str, len , more) {
@@ -49,7 +49,7 @@ KISSY.add(function (S){
             return str;
         },
         /**
-         * ´¦Àí¶ÔÏóµÄÊôĞÔµÄ³¤¶È
+         * å¤„ç†å¯¹è±¡çš„å±æ€§çš„é•¿åº¦
          * @param obj
          * @param attr
          * @param len
@@ -58,7 +58,7 @@ KISSY.add(function (S){
             obj[attr + '_sub'] = Common.cutStr(obj[attr], len);
         },
         /**
-         * °Ñ '1' ×ª»¯Îª '01'
+         * æŠŠ '1' è½¬åŒ–ä¸º '01'
          * @param n
          * @return {*}
          */
@@ -66,7 +66,7 @@ KISSY.add(function (S){
             return n.toString().length > 1 ? n.toString() : '0' + n.toString();
         },
         /**
-         * ½« 2012-12-12 ×Ö·û´®¸ñÊ½×ª»»Îª Date ¶ÔÏó
+         * å°† 2012-12-12 å­—ç¬¦ä¸²æ ¼å¼è½¬æ¢ä¸º Date å¯¹è±¡
          * @param str
          */
         strToDate : function (str){
@@ -74,17 +74,17 @@ KISSY.add(function (S){
             return new Date(arr[0], arr[1]-1 , arr[2]);
         },
         /**
-         * ¼ÆËãÈÕÆÚ¼ä¸ô£¬2011-5-17ÖÁ2011-05-18¼ä¸ôÎªÒ»Ìì
-         * @param fromDate ¿ªÊ¼ÈÕÆÚ
-         * @param toDate ½áÊøÈÕÆÚ
-         * @return {Number} ¼ä¸ôÌìÊı
+         * è®¡ç®—æ—¥æœŸé—´éš”ï¼Œ2011-5-17è‡³2011-05-18é—´éš”ä¸ºä¸€å¤©
+         * @param fromDate å¼€å§‹æ—¥æœŸ
+         * @param toDate ç»“æŸæ—¥æœŸ
+         * @return {Number} é—´éš”å¤©æ•°
          */
         getDateInterval : function (fromDate, toDate) {
             return parseInt(Math.abs(Common.strToDate(toDate) - Common.strToDate(fromDate)) / 1000 / 60 / 60 / 24);
         },
         /**
-         * ·µ»ØÒ»¸ö¶ÔÏó°üÀ¨¸÷ÖÖĞèÒªµÄÈÕÆÚ¸ñÊ½
-         * @param n ±ê×¼ÈÕÆÚ»òºÁÃë
+         * è¿”å›ä¸€ä¸ªå¯¹è±¡åŒ…æ‹¬å„ç§éœ€è¦çš„æ—¥æœŸæ ¼å¼
+         * @param n æ ‡å‡†æ—¥æœŸæˆ–æ¯«ç§’
          */
         formatDate:function (n) {
             var date = new Date(n),
@@ -106,16 +106,16 @@ KISSY.add(function (S){
             }
         },
         /**
-         * »ñÈ¡Ö¸¶¨ÈÕÆÚµÄÆ«ÒÆÁ¿ n=1ÎªÃ÷Ìì n=2ÎªºóÌì£¬Ö§³Ö×òÌìÇ°Ìì...
+         * è·å–æŒ‡å®šæ—¥æœŸçš„åç§»é‡ n=1ä¸ºæ˜å¤© n=2ä¸ºåå¤©ï¼Œæ”¯æŒæ˜¨å¤©å‰å¤©...
          * @param date
-         * @param n Æ«ÒÆµÄÌìÊı
+         * @param n åç§»çš„å¤©æ•°
          * @return {Date}
          */
         setDate : function (date , n){
             return new Date(date.getTime()+n*86400000);
         },
         /**
-         * ¸ù¾İºÁÃë¼ÆËãÊ±³¤
+         * æ ¹æ®æ¯«ç§’è®¡ç®—æ—¶é•¿
          * @param t
          * @return {Object}
          */
@@ -131,7 +131,7 @@ KISSY.add(function (S){
             }
         },
         /**
-         * ½«×ªÒÔºóµÄHTML×Ö·û½øĞĞ»¹Ô­
+         * å°†è½¬ä»¥åçš„HTMLå­—ç¬¦è¿›è¡Œè¿˜åŸ
          * @param html
          * @return {*}
          */

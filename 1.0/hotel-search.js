@@ -35,7 +35,7 @@ KISSY.add(function (S , Tsearch ,Common) {
             validation: [
                 {
                     type: 'required',
-                    tip : 'ÇëÌîÈë×¡³ÇÊĞ'
+                    tip : 'è¯·å¡«å…¥ä½åŸå¸‚'
                 }
             ]
         };
@@ -50,20 +50,20 @@ KISSY.add(function (S , Tsearch ,Common) {
             validation: [
                 {
                     type: 'required',
-                    tip : 'ÇëÌîĞ´ÀëµêÈÕÆÚ'
+                    tip : 'è¯·å¡«å†™ç¦»åº—æ—¥æœŸ'
                 },
                 {
                     type: 'dateformat',
-                    tip : 'ÇëÊäÈëÕıÈ·µÄÈÕÆÚ¸ñÊ½ Èç£º2018-01-01'
+                    tip : 'è¯·è¾“å…¥æ­£ç¡®çš„æ—¥æœŸæ ¼å¼ å¦‚ï¼š2018-01-01'
                 },
                 {
                     type   : 'mindate',
                     minDate: config.HotelDepDate,
-                    tip    : 'ÀëµêÈÕÆÚ²»ÄÜÔçÓÚÈë×¡ÈÕÆÚ£¬ÇëÖØĞÂÑ¡Ôñ'
+                    tip    : 'ç¦»åº—æ—¥æœŸä¸èƒ½æ—©äºå…¥ä½æ—¥æœŸï¼Œè¯·é‡æ–°é€‰æ‹©'
                 },
                 {
                     type      : 'custom',
-                    tip       : '¾ÆµêÔ¤¶©Ê±¼ä²»ÄÜ³¬¹ı28Ìì£¬ÇëÖØĞÂÑ¡Ôñ',
+                    tip       : 'é…’åº—é¢„è®¢æ—¶é—´ä¸èƒ½è¶…è¿‡28å¤©ï¼Œè¯·é‡æ–°é€‰æ‹©',
                     validateFn: function (arg, that) {
                         return Common.getDateInterval(that.fields[config.HotelDepDate].node.val(), this.node.val()) <= 28
                     }
@@ -92,16 +92,16 @@ KISSY.add(function (S , Tsearch ,Common) {
             validation: [
                 {
                     type: 'required',
-                    tip : 'ÇëÌîÈë×¡ÈÕÆÚ'
+                    tip : 'è¯·å¡«å…¥ä½æ—¥æœŸ'
                 },
                 {
                     type: 'dateformat',
-                    tip : 'ÇëÊäÈëÕıÈ·µÄÈÕÆÚ¸ñÊ½ Èç£º2018-01-01'
+                    tip : 'è¯·è¾“å…¥æ­£ç¡®çš„æ—¥æœŸæ ¼å¼ å¦‚ï¼š2018-01-01'
                 },
                 {
                     type   : 'mindate',
                     minDate: new Date() - 86400000,
-                    tip    : 'Èë×¡ÈÕÆÚ²»ÄÜÔçÓÚ½ñÌì'
+                    tip    : 'å…¥ä½æ—¥æœŸä¸èƒ½æ—©äºä»Šå¤©'
                 }
             ],
             autoSwitch: {
@@ -119,11 +119,11 @@ KISSY.add(function (S , Tsearch ,Common) {
             'form'            : config.form,
             'fields'          : fields,
             /**
-             * ±íµ¥Ğ£ÑéË³Ğò
+             * è¡¨å•æ ¡éªŒé¡ºåº
              */
             'validation_order': [config.HotelToCity, config.HotelDepDate, config.HotelEndDate]
         });
-        //¾ÆµêÓĞradioÊ±£¬°ó¶¨ÇĞ»»
+        //é…’åº—æœ‰radioæ—¶ï¼Œç»‘å®šåˆ‡æ¢
         var endDateField = hotelSearch.fields[config.HotelEndDate];
         if (endDateField.Calendar) {//hack for calendar
             endDateField.Calendar.currentNode = endDateField.node;
@@ -138,10 +138,10 @@ KISSY.add(function (S , Tsearch ,Common) {
                 Autocomplete = field.TripAutocomplete;
             Tradio.on('afterValueChange', function (e) {
                 field.node.val('');
-                if (e.newVal === '0') {//¹úÄÚ
+                if (e.newVal === '0') {//å›½å†…
                     Autocomplete.set('source', DESTINATION_SOURCE.cn);
                     Autocomplete.set('hotSource', DESTINATION_SOURCE.cnHot);
-                } else {//º£Íâ
+                } else {//æµ·å¤–
                     Autocomplete.set('source', DESTINATION_SOURCE.oversea);
                     Autocomplete.set('hotSource', DESTINATION_SOURCE.overseaHot);
                 }

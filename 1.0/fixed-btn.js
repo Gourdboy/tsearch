@@ -15,10 +15,10 @@ KISSY.add(function (S,O ,  TripSearch ,Template ,Slide) {
         },
         renderUI    : function () {
             this.overlay = new O({
-                width : MIN_WIDTH, //ÅäÖÃ¸ßºÍ¿í
+                width : MIN_WIDTH, //é…ç½®é«˜å’Œå®½
                 height: MIN_HEIGHT
             });
-            this.overlay.set('content', '<div class="J_Pi_Search_TripSearchFixedBtn trip-search-fixed-btn"><a href="http://trip.taobao.com">¶¨ÖÆÎÒµÄÂÃĞĞ</a></div><div class="J_Pi_Search_TripSearchFixedContent trip-search-fixed-content"></div>');
+            this.overlay.set('content', '<div class="J_Pi_Search_TripSearchFixedBtn trip-search-fixed-btn"><a href="http://trip.taobao.com">å®šåˆ¶æˆ‘çš„æ—…è¡Œ</a></div><div class="J_Pi_Search_TripSearchFixedContent trip-search-fixed-content"></div>');
             this.overlay.render();
             this.overlay.show();
             var el = this.overlay.get('el');
@@ -65,11 +65,11 @@ KISSY.add(function (S,O ,  TripSearch ,Template ,Slide) {
         },
         createSearch: function () {
             this.contentNode.html(Template.searchTemplate);
-            this.slide = new Slide('J_Pi_Search_SearchModule', { // Ö±½ÓÖ¸¶¨id£¬Ò²¿ÉÒÔÖ¸¶¨Ñ¡ÔñÆ÷£¬±ÈÈç£º"#id .className"
+            this.slide = new Slide('J_Pi_Search_SearchModule', { // ç›´æ¥æŒ‡å®šidï¼Œä¹Ÿå¯ä»¥æŒ‡å®šé€‰æ‹©å™¨ï¼Œæ¯”å¦‚ï¼š"#id .className"
                 navClass    : 'J_Pi_Search_SearchTabNav',
                 contentClass: 'search-bd',
                 pannelClass : 'J_Pi_Search_TabPannel',
-                eventype    : 'click' //Í¨¹ıµã»÷Ò³Ç©À´ÇĞ»»Tab
+                eventype    : 'click' //é€šè¿‡ç‚¹å‡»é¡µç­¾æ¥åˆ‡æ¢Tab
             });
             var NavMap = [
                 'createFlightSearch',

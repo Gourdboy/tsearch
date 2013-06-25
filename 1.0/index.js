@@ -32,7 +32,7 @@ KISSY.add(function (S , Tsearch){
                                             {
                                                 type: 'required',
                                                 when: 'blur',
-                                                tip : 'ÇëÌîĞ´³ö·¢³ÇÊĞ'
+                                                tip : 'è¯·å¡«å†™å‡ºå‘åŸå¸‚'
                                             }
                                         ]
                                     },
@@ -55,12 +55,12 @@ KISSY.add(function (S , Tsearch){
                                             {
                                                 type: 'required',
                                                 when: 'blur',
-                                                tip : 'ÇëÌîĞ´µ½´ï³ÇÊĞ'
+                                                tip : 'è¯·å¡«å†™åˆ°è¾¾åŸå¸‚'
                                             },
                                             {
                                                 type          : 'identical',
                                                 identicalWidth: '#J_Pi_Search_jipiao_depCity',
-                                                tip           : '³ö·¢µ½´ï³ÇÊĞ²»ÄÜÏàÍ¬'
+                                                tip           : 'å‡ºå‘åˆ°è¾¾åŸå¸‚ä¸èƒ½ç›¸åŒ'
                                             }
                                         ]
                                     },
@@ -77,16 +77,16 @@ KISSY.add(function (S , Tsearch){
                                         validation: [
                                             {
                                                 type: 'required',
-                                                tip : 'ÇëÌîĞ´·µ³ÌÈÕÆÚ'
+                                                tip : 'è¯·å¡«å†™è¿”ç¨‹æ—¥æœŸ'
                                             },
                                             {
                                                 type: 'dateformat',
-                                                tip : 'ÇëÊäÈëÕıÈ·µÄÈÕÆÚ¸ñÊ½ Èç£º2018-01-01'
+                                                tip : 'è¯·è¾“å…¥æ­£ç¡®çš„æ—¥æœŸæ ¼å¼ å¦‚ï¼š2018-01-01'
                                             },
                                             {
                                                 type   : 'mindate',
                                                 minDate: '#J_Pi_Search_FlightDepDate',
-                                                tip    : '·µ³ÌÈÕÆÚ²»ÄÜÔçÓÚ³ö·¢ÈÕÆÚ'
+                                                tip    : 'è¿”ç¨‹æ—¥æœŸä¸èƒ½æ—©äºå‡ºå‘æ—¥æœŸ'
                                             }
                                         ]
                                     },
@@ -109,16 +109,16 @@ KISSY.add(function (S , Tsearch){
                                         validation: [
                                             {
                                                 type: 'required',
-                                                tip : 'ÇëÌîĞ´³ö·¢ÈÕÆÚ'
+                                                tip : 'è¯·å¡«å†™å‡ºå‘æ—¥æœŸ'
                                             },
                                             {
                                                 type: 'dateformat',
-                                                tip : 'ÇëÊäÈëÕıÈ·µÄÈÕÆÚ¸ñÊ½ Èç£º2018-01-01'
+                                                tip : 'è¯·è¾“å…¥æ­£ç¡®çš„æ—¥æœŸæ ¼å¼ å¦‚ï¼š2018-01-01'
                                             },
                                             {
                                                 type   : 'mindate',
                                                 minDate: new Date() - 86400000,
-                                                tip    : '³ö·¢ÈÕÆÚ²»ÄÜÔçÓÚ½ñÌì'
+                                                tip    : 'å‡ºå‘æ—¥æœŸä¸èƒ½æ—©äºä»Šå¤©'
                                             }
                                         ],
                                         autoSwitch: {
@@ -128,13 +128,13 @@ KISSY.add(function (S , Tsearch){
                                     }
                                 },
                                 /**
-                                 * ±íµ¥Ğ£ÑéË³Ğò
+                                 * è¡¨å•æ ¡éªŒé¡ºåº
                                  */
                                 validation_order: ['#J_Pi_Search_jipiao_depCity', '#J_Pi_Search_jipiao_arrCity', '#J_Pi_Search_FlightDepDate' , '#J_Pi_Search_FlightArrDate'],
                                 /**
-                                 * ³ö·¢µ½´ï³ÇÊĞÇĞ»»ÅäÖÃ
-                                 * @param trigger ½»»»°´Å¥ID
-                                 * @param list ĞèÒª½»»»Êı¾İÄÚÈİµÄÈİÆ÷ÁĞ±í ,key ºÍ value ¶ÔÓ¦µÄinputNode ½øĞĞÖµµÄ½»»»
+                                 * å‡ºå‘åˆ°è¾¾åŸå¸‚åˆ‡æ¢é…ç½®
+                                 * @param trigger äº¤æ¢æŒ‰é’®ID
+                                 * @param list éœ€è¦äº¤æ¢æ•°æ®å†…å®¹çš„å®¹å™¨åˆ—è¡¨ ,key å’Œ value å¯¹åº”çš„inputNode è¿›è¡Œå€¼çš„äº¤æ¢
                                  */
                                 swapper         : {
                                     trigger: '#J_Pi_Search_FlightSwap',
@@ -144,10 +144,10 @@ KISSY.add(function (S , Tsearch){
                                     }
                                 },
                                 /**
-                                 * »úÆ±×¨ÓÃ:Íù·µÇĞ»»ÅäÖÃ
-                                 * @param trigger ´¥·¢Íù·µÇĞ»»µÄradio¿Ø¼şËùÔÚÈİÆ÷
-                                 * @param back_container ·µ³ÌÊäÈë¿òËùÔÚµÄÈİÆ÷
-                                 * @param back_input ·µ³ÌÊäÈë¿ò
+                                 * æœºç¥¨ä¸“ç”¨:å¾€è¿”åˆ‡æ¢é…ç½®
+                                 * @param trigger è§¦å‘å¾€è¿”åˆ‡æ¢çš„radioæ§ä»¶æ‰€åœ¨å®¹å™¨
+                                 * @param back_container è¿”ç¨‹è¾“å…¥æ¡†æ‰€åœ¨çš„å®¹å™¨
+                                 * @param back_input è¿”ç¨‹è¾“å…¥æ¡†
                                  */
                                 switchSearchType: {
                                     trigger       : '#J_Pi_Search_FlightRadio',
@@ -156,7 +156,7 @@ KISSY.add(function (S , Tsearch){
                                     back_input    : '#J_Pi_Search_FlightArrDate'
                                 },
                                 /**
-                                 * ±£´æËÑË÷ÀúÊ·¼ÇÂ¼¿ª¹Ø  Ä¬ÈÏ¹Ø±Õ
+                                 * ä¿å­˜æœç´¢å†å²è®°å½•å¼€å…³  é»˜è®¤å…³é—­
                                  */
                                 storage         : true
                             });
@@ -179,7 +179,7 @@ KISSY.add(function (S , Tsearch){
                                         iflight : {
                                             inputNode    : '#J_Pi_Search_ijipiao_depCity',
                                             codeInputNode: '#J_Pi_Search_ijipiao_depCity_code',
-                                            hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php'//²»Ö¸¶¨¼°Ã»ÓĞÈÈÃÅÍÆ¼ö
+                                            hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php'//ä¸æŒ‡å®šåŠæ²¡æœ‰çƒ­é—¨æ¨è
                                         }
                                     },
                                     'Placeholder'    : {
@@ -194,7 +194,7 @@ KISSY.add(function (S , Tsearch){
                                     {
                                         type: 'required',
                                         when: 'blur',
-                                        tip : 'ÇëÌîĞ´³ö·¢³ÇÊĞ'
+                                        tip : 'è¯·å¡«å†™å‡ºå‘åŸå¸‚'
                                     }
                                 ]
                             },
@@ -216,12 +216,12 @@ KISSY.add(function (S , Tsearch){
                                 validation: [
                                     {
                                         type: 'required',
-                                        tip : 'ÇëÌîĞ´µ½´ï³ÇÊĞ'
+                                        tip : 'è¯·å¡«å†™åˆ°è¾¾åŸå¸‚'
                                     },
                                     {
                                         type          : 'identical',
                                         identicalWidth: '#J_Pi_Search_ijipiao_depCity',
-                                        tip           : '³ö·¢µ½´ï³ÇÊĞ²»ÄÜÏàÍ¬'
+                                        tip           : 'å‡ºå‘åˆ°è¾¾åŸå¸‚ä¸èƒ½ç›¸åŒ'
                                     }
                                 ]
                             },
@@ -238,16 +238,16 @@ KISSY.add(function (S , Tsearch){
                                 validation: [
                                     {
                                         type: 'required',
-                                        tip : 'ÇëÌîĞ´·µ³ÌÈÕÆÚ'
+                                        tip : 'è¯·å¡«å†™è¿”ç¨‹æ—¥æœŸ'
                                     },
                                     {
                                         type: 'dateformat',
-                                        tip : 'ÇëÊäÈëÕıÈ·µÄÈÕÆÚ¸ñÊ½ Èç£º2018-01-01'
+                                        tip : 'è¯·è¾“å…¥æ­£ç¡®çš„æ—¥æœŸæ ¼å¼ å¦‚ï¼š2018-01-01'
                                     },
                                     {
                                         type   : 'mindate',
                                         minDate: '#J_Pi_Search_IFlightDepDate',
-                                        tip    : '·µ³ÌÈÕÆÚ²»ÄÜÔçÓÚ³ö·¢ÈÕÆÚ'
+                                        tip    : 'è¿”ç¨‹æ—¥æœŸä¸èƒ½æ—©äºå‡ºå‘æ—¥æœŸ'
                                     }
                                 ]
                             },
@@ -270,16 +270,16 @@ KISSY.add(function (S , Tsearch){
                                 validation: [
                                     {
                                         type: 'required',
-                                        tip : 'ÇëÌîĞ´³ö·¢ÈÕÆÚ'
+                                        tip : 'è¯·å¡«å†™å‡ºå‘æ—¥æœŸ'
                                     },
                                     {
                                         type: 'dateformat',
-                                        tip : 'ÇëÊäÈëÕıÈ·µÄÈÕÆÚ¸ñÊ½ Èç£º2018-01-01'
+                                        tip : 'è¯·è¾“å…¥æ­£ç¡®çš„æ—¥æœŸæ ¼å¼ å¦‚ï¼š2018-01-01'
                                     },
                                     {
                                         type   : 'mindate',
                                         minDate: new Date() - 86400000,
-                                        tip    : '³ö·¢ÈÕÆÚ²»ÄÜÔçÓÚ½ñÌì'
+                                        tip    : 'å‡ºå‘æ—¥æœŸä¸èƒ½æ—©äºä»Šå¤©'
                                     }
                                 ],
                                 autoSwitch: {
@@ -289,13 +289,13 @@ KISSY.add(function (S , Tsearch){
                             }
                         },
                         /**
-                         * ±íµ¥Ğ£ÑéË³Ğò
+                         * è¡¨å•æ ¡éªŒé¡ºåº
                          */
                         validation_order: ['#J_Pi_Search_ijipiao_depCity', '#J_Pi_Search_ijipiao_arrCity', '#J_Pi_Search_IFlightDepDate' , '#J_Pi_Search_IFlightArrDate'],
                         /**
-                         * ³ö·¢µ½´ï³ÇÊĞÇĞ»»ÅäÖÃ
-                         * @param trigger ½»»»°´Å¥ID
-                         * @param list ĞèÒª½»»»Êı¾İÄÚÈİµÄÈİÆ÷ÁĞ±í ,key ºÍ value ¶ÔÓ¦µÄinputNode ½øĞĞÖµµÄ½»»»
+                         * å‡ºå‘åˆ°è¾¾åŸå¸‚åˆ‡æ¢é…ç½®
+                         * @param trigger äº¤æ¢æŒ‰é’®ID
+                         * @param list éœ€è¦äº¤æ¢æ•°æ®å†…å®¹çš„å®¹å™¨åˆ—è¡¨ ,key å’Œ value å¯¹åº”çš„inputNode è¿›è¡Œå€¼çš„äº¤æ¢
                          */
                         swapper         : {
                             trigger: '#J_Pi_Search_IFlightSwap',
@@ -305,10 +305,10 @@ KISSY.add(function (S , Tsearch){
                             }
                         },
                         /**
-                         * Íù·µÇĞ»»ÅäÖÃ
-                         * @param trigger ´¥·¢Íù·µÇĞ»»µÄradio¿Ø¼şËùÔÚÈİÆ÷
-                         * @param back_container ·µ³ÌÊäÈë¿òËùÔÚµÄÈİÆ÷
-                         * @param back_input ·µ³ÌÊäÈë¿ò
+                         * å¾€è¿”åˆ‡æ¢é…ç½®
+                         * @param trigger è§¦å‘å¾€è¿”åˆ‡æ¢çš„radioæ§ä»¶æ‰€åœ¨å®¹å™¨
+                         * @param back_container è¿”ç¨‹è¾“å…¥æ¡†æ‰€åœ¨çš„å®¹å™¨
+                         * @param back_input è¿”ç¨‹è¾“å…¥æ¡†
                          */
                         switchSearchType: {
                             trigger       : '#J_Pi_Search_IFlightRadio',
@@ -374,7 +374,7 @@ KISSY.add(function (S , Tsearch){
                                 validation: [
                                     {
                                         type: 'required',
-                                        tip : 'ÇëÊäÈëÄ¿µÄµØ'
+                                        tip : 'è¯·è¾“å…¥ç›®çš„åœ°'
                                     }
                                 ]
                             }
@@ -421,7 +421,7 @@ KISSY.add(function (S , Tsearch){
                                 validation: [
                                     {
                                         type: 'required',
-                                        tip : 'ÇëÌîĞ´×â³µ³ÇÊĞ'
+                                        tip : 'è¯·å¡«å†™ç§Ÿè½¦åŸå¸‚'
                                     }
                                 ]
                             }

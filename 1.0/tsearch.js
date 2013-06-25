@@ -1,6 +1,6 @@
 /**
- * @fileoverview ÇëĞŞ¸Ä×é¼şÃèÊö
- * @author Êæ¿Ë<shuke.cl@taobao.com>
+ * @fileoverview è¯·ä¿®æ”¹ç»„ä»¶æè¿°
+ * @author èˆ’å…‹<shuke.cl@taobao.com>
  * @module tsearch
  **/
 KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
@@ -11,14 +11,14 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
         Tradio : Tradio
     };
     /**
-     * ÇëĞŞ¸Ä×é¼şÃèÊö
+     * è¯·ä¿®æ”¹ç»„ä»¶æè¿°
      * @class Tsearch
      * @constructor
      * @extends Base
      */
     function Tsearch(comConfig) {
         var self = this;
-        //µ÷ÓÃ¸¸Àà¹¹Ôìº¯Êı
+        //è°ƒç”¨çˆ¶ç±»æ„é€ å‡½æ•°
         Tsearch.superclass.constructor.call(self, comConfig);
         this.initializer();
     }
@@ -27,7 +27,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
         initializer    : function () {
             this.form = this.get('form');
             if (!this.form) {
-                S.log('TSearch:Ã»ÓĞÕÒµ½±íµ¥½Úµã,³õÊ¼»¯Ê§°Ü');
+                S.log('TSearch:æ²¡æœ‰æ‰¾åˆ°è¡¨å•èŠ‚ç‚¹,åˆå§‹åŒ–å¤±è´¥');
                 return;
             }
             //this.get('storage') && this.setDefaultValue();
@@ -51,11 +51,11 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
         },
         bindEvent      : function () {
             this.form.on('submit', this._doSubmit, this);
-            //ÇĞ»»Íù·µ³Ì
+            //åˆ‡æ¢å¾€è¿”ç¨‹
             if (this.get('switchSearchType')) {
                 this.initRadioSwitch()
             }
-            //°ó¶¨±íµ¥½»»»²Ù×÷
+            //ç»‘å®šè¡¨å•äº¤æ¢æ“ä½œ
             var swapper = this.get('swapper');
             if (swapper) {
                 S.Event.on(swapper.trigger, 'click', function (e) {
@@ -68,7 +68,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
 
         },
         /**
-         * ¿Ø¼ş°ó¶¨ ,½«ËùÅäÖÃµÄ¶ÔÏó³õÊ¼»¯²¢°ÑÊµÀı¹Ò½Óµ½µ±Ç°Ïî
+         * æ§ä»¶ç»‘å®š ,å°†æ‰€é…ç½®çš„å¯¹è±¡åˆå§‹åŒ–å¹¶æŠŠå®ä¾‹æŒ‚æ¥åˆ°å½“å‰é¡¹
          * @param field
          */
         bindWidgets    : function (field) {
@@ -76,20 +76,20 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             S.each(field.widgets, function (widget_config, widget_name) {
                 var Widget = Widgets[widget_name];
                 if (Widget) {
-                    if(widget_name == 'TripAutocomplete'){//Autocomplete²ÉÓÃ¹¤³§Ä£Ê½
+                    if(widget_name == 'TripAutocomplete'){//Autocompleteé‡‡ç”¨å·¥å‚æ¨¡å¼
                         S.each(field.widgets[widget_name] , function (v , k){
                             field[widget_name] =  Widget[k](v);
                         })
                     } else {
                         field[widget_name] = new Widget(widget_config);
                     }
-                    if (widget_name === 'Calendar' && widget_config.finalTriggerNode && that.fields[widget_config.finalTriggerNode]) { //hack for Calendar ³ö·¢ºÍ·µ³ÌÈÕÆÚ¹²ÓÃÒ»¸öÈÕÀú×é¼ş,½«×é¼şÊµÁ¦¹²Ïí¸ø·µ³Ì±íµ¥¶ÔÏó
+                    if (widget_name === 'Calendar' && widget_config.finalTriggerNode && that.fields[widget_config.finalTriggerNode]) { //hack for Calendar å‡ºå‘å’Œè¿”ç¨‹æ—¥æœŸå…±ç”¨ä¸€ä¸ªæ—¥å†ç»„ä»¶,å°†ç»„ä»¶å®åŠ›å…±äº«ç»™è¿”ç¨‹è¡¨å•å¯¹è±¡
                         that.fields[widget_config.finalTriggerNode][widget_name] = field[widget_name];
                     }
                 }
             });
             /**
-             * °Ñ×é¼şµÄshowMessage·½·¨½øĞĞÊÊÅä£¬Í³Ò»ÓÃshowTip·½Ê½ÏÖÊµ´íÎóÌáÊ¾
+             * æŠŠç»„ä»¶çš„showMessageæ–¹æ³•è¿›è¡Œé€‚é…ï¼Œç»Ÿä¸€ç”¨showTipæ–¹å¼ç°å®é”™è¯¯æç¤º
              * @type {*}
              */
             field.showTip = (function (field) {
@@ -109,7 +109,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             })(field);
         },
         /**
-         * ½»»»ËùÓĞswapperÅäÖÃÀïµÄÖµ
+         * äº¤æ¢æ‰€æœ‰swapperé…ç½®é‡Œçš„å€¼
          */
         swap           : function () {
             S.each(this.get('swapper').list, function (val, key) {
@@ -117,7 +117,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             }, this);
         },
         /**
-         * ½»»»Á½¸ö×Ö¶ÎµÄÖµ
+         * äº¤æ¢ä¸¤ä¸ªå­—æ®µçš„å€¼
          * @param item_a
          * @param item_b
          * @private
@@ -131,21 +131,21 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             item_b.node.val(temp);
         },
         /**
-         * ÊµÏÖ×Ô¶¯ÇĞ»»¹¦ÄÜµÄ°ó¶¨
+         * å®ç°è‡ªåŠ¨åˆ‡æ¢åŠŸèƒ½çš„ç»‘å®š
          * @param cur_field_id
          */
         setSwitchInput : function (cur_field_id) {
-            return false;//ÁÙÊ±¹Ø±Õ×Ô¶¯ÇĞ»»
+            return false;//ä¸´æ—¶å…³é—­è‡ªåŠ¨åˆ‡æ¢
             var fields = this.fields;
             var cur_field = fields[cur_field_id];
             var switchToNext = function () {
                 var next_field = fields[cur_field.autoSwitch.nextField],
                     next_node = next_field.node;
                 if (!next_node) {
-                    S.log('Ã»ÓĞÖ¸¶¨×Ô¶¯ÇĞ»»µÄÄ¿±êÔªËØ');
+                    S.log('æ²¡æœ‰æŒ‡å®šè‡ªåŠ¨åˆ‡æ¢çš„ç›®æ ‡å…ƒç´ ');
                     return this;
                 }
-                if (!next_field.disabled && next_field.node.val() == '') {//µ±Ç°¿ª¹Ø´ò¿ªÇÒÏÂÒ»¸ö×Ö¶ÎÎ´Ìî
+                if (!next_field.disabled && next_field.node.val() == '') {//å½“å‰å¼€å…³æ‰“å¼€ä¸”ä¸‹ä¸€ä¸ªå­—æ®µæœªå¡«
                     next_node[0].focus()
                 }
             };
@@ -154,7 +154,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                 cur_field.TripAutocomplete.on('select', switchToNext);
             } else if (cur_field.Calendar) {
                 cur_field.Calendar.on('dateclick', function () {
-                    if (this.currentNode.attr('id') === cur_field_id.replace('#', '')) {//µ±Ç°´¥·¢dateclickÊÂ¼şÎªµ±Ç°ÊäÈë¿ò°ó¶¨µÄÈÕÀú¿Ø¼şÊ±Ö´ĞĞ×Ô¶¯ÇĞ»»
+                    if (this.currentNode.attr('id') === cur_field_id.replace('#', '')) {//å½“å‰è§¦å‘dateclickäº‹ä»¶ä¸ºå½“å‰è¾“å…¥æ¡†ç»‘å®šçš„æ—¥å†æ§ä»¶æ—¶æ‰§è¡Œè‡ªåŠ¨åˆ‡æ¢
                         switchToNext();
                     }
                 });
@@ -162,7 +162,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             return this;
         },
         /**
-         * ³õÊ¼»¯µ¥³ÌÍù·µÇĞ»»ÊÂ¼ş
+         * åˆå§‹åŒ–å•ç¨‹å¾€è¿”åˆ‡æ¢äº‹ä»¶
          * @return {*}
          */
         initRadioSwitch: function () {
@@ -184,13 +184,13 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                 }
                 this._setSearchType(e.newVal);
             }, this);
-            //·µ³ÌÈÕÆÚÃ»ÓĞÖµÊ±ÇĞ»»Îªµ¥³Ì
+            //è¿”ç¨‹æ—¥æœŸæ²¡æœ‰å€¼æ—¶åˆ‡æ¢ä¸ºå•ç¨‹
             back_input.on('valuechange', function (e) {
                 if (e.newVal === '') {
                     Tradio.val('0');
                 }
             });
-            //Ñ¡Ôñ·µ³ÌÈÕÆÚÊ±£¬×Ô¶¯ÇĞ»»ÎªÍù·µ
+            //é€‰æ‹©è¿”ç¨‹æ—¥æœŸæ—¶ï¼Œè‡ªåŠ¨åˆ‡æ¢ä¸ºå¾€è¿”
             Calendar.on('dateclick', function (e) {
                 if (this.currentNode.attr('id') === config.back_input.replace('#', '')) {
                     Tradio.val('1');
@@ -199,7 +199,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             this._setSearchType(Tradio.val());
         },
         /**
-         * ¸ù¾İµ¥³ÌÍù·µµÄÖµÖÃÍù·µµÄÈÕÀúÑ¡Ôñ½»»¥×´Ì¬
+         * æ ¹æ®å•ç¨‹å¾€è¿”çš„å€¼ç½®å¾€è¿”çš„æ—¥å†é€‰æ‹©äº¤äº’çŠ¶æ€
          * @param val
          * @private
          */
@@ -207,12 +207,12 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             var config = this.get('switchSearchType'),
                 fields = this.fields,
                 back_container = S.one(config.back_container);
-            if (val === "1") {//¿ªÆôÍù·µ
+            if (val === "1") {//å¼€å¯å¾€è¿”
                 back_container.removeClass('disabled');
                 if (fields[config.go_input].autoSwitch) {
                     fields[config.back_input].disabled = false;
                 }
-            } else {//¿ªÆôµ¥³Ì
+            } else {//å¼€å¯å•ç¨‹
                 back_container.addClass('disabled');
                 if (fields[config.go_input].autoSwitch) {
                     fields[config.back_input].disabled = true;
@@ -231,8 +231,8 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             //this._storageForm();
         },
         /**
-         * ÈÕÆÚ¼ì²é,·µ»Ø
-         * @param date ÈÕÆÚ ['2011-05-14','2011-06-14']
+         * æ—¥æœŸæ£€æŸ¥,è¿”å›
+         * @param date æ—¥æœŸ ['2011-05-14','2011-06-14']
          * @return Array
          */
         _isResetDate   : function (date) {
@@ -240,8 +240,8 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             return new Date() > new Date(date[0], date[1] - 1, date[2]);
         },
         /*
-         *»ñÈ¡Ö¸¶¨ÈÕÆÚµÄ
-         *@num_date Ö¸¶¨ÈÕÆÚµÄÇ°ºóÌìÊı 1ÎªÃ÷Ìì,2ÎªºóÌì,-1Îª×òÌì...
+         *è·å–æŒ‡å®šæ—¥æœŸçš„
+         *@num_date æŒ‡å®šæ—¥æœŸçš„å‰åå¤©æ•° 1ä¸ºæ˜å¤©,2ä¸ºåå¤©,-1ä¸ºæ˜¨å¤©...
          */
         getDate        : function (num_date) {
             function formatdate(str) {
@@ -280,7 +280,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                             rule : rule,
                             field: fields[_id]
                         });
-                        if (typeof rule.onValidateFailure === "function") {//ÉèÖÃ»ÙµôÊ±´¦Àí»Øµ÷
+                        if (typeof rule.onValidateFailure === "function") {//è®¾ç½®æ¯æ‰æ—¶å¤„ç†å›è°ƒ
                             rule.onValidateFailure.call(fields[_id], rule);
                         } else {
                             fields[_id].showTip && fields[_id].showTip(rule.tip);
@@ -296,10 +296,10 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             return ok;
         },
         /**
-         * ÑéÖ¤¹æÔòµÄÊµÏÖ
-         * @param rule µ±Ç°ÑéÖ¤µÄ¹æÔòÀàĞÍ
-         * @param field µ±Ç°ÑéÖ¤µÄ×Ö¶Î
-         * @return {Boolean} ÑéÖ¤ÊÇ·ñÍ¨¹ı
+         * éªŒè¯è§„åˆ™çš„å®ç°
+         * @param rule å½“å‰éªŒè¯çš„è§„åˆ™ç±»å‹
+         * @param field å½“å‰éªŒè¯çš„å­—æ®µ
+         * @return {Boolean} éªŒè¯æ˜¯å¦é€šè¿‡
          * @private
          */
         _validateRule  : function (rule, field) {
@@ -308,25 +308,25 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                 return new Date(arr[0], arr[1] - 1, arr[2]);
             };
             switch (rule.type) {
-                case 'required' ://±ØÌîÏîĞ£Ñé
+                case 'required' ://å¿…å¡«é¡¹æ ¡éªŒ
                     return field.node.val() != '';
                     break;
                 case 'dateformat' :
                     var val = field.node.val();
                     return val.length == 10 && /(([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)/.test(val);
                     break;
-                case 'mindate'://×îÔçÈÕÆÚÑéÖ¤:
+                case 'mindate'://æœ€æ—©æ—¥æœŸéªŒè¯:
                     var val = field.node.val();
                     var select_date = strToDate(val),
                         min_date;
-                    if (typeof rule.minDate === "string") {//min_dateÅäÖÃÎªÒ»¸öfieldÊ±£¬È¡ÆäÖµ×ª»¯ÎªÈÕÆÚ
+                    if (typeof rule.minDate === "string") {//min_dateé…ç½®ä¸ºä¸€ä¸ªfieldæ—¶ï¼Œå–å…¶å€¼è½¬åŒ–ä¸ºæ—¥æœŸ
                         min_date = strToDate(this.fields[rule.minDate].node.val());
                     } else {
                         min_date = rule.minDate;
                     }
                     return select_date >= min_date;
                     break;
-                case 'identical' ://Á½¸ö×Ö¶Î²»ÄÜÏàÍ¬µÄÑéÖ¤ £º ³ö·¢µ½´ï³ÇÊĞ²»ÄÜÏàÍ¬
+                case 'identical' ://ä¸¤ä¸ªå­—æ®µä¸èƒ½ç›¸åŒçš„éªŒè¯ ï¼š å‡ºå‘åˆ°è¾¾åŸå¸‚ä¸èƒ½ç›¸åŒ
                     var val = field.node.val();
                     var identical_field = this.fields[rule.identicalWidth];
                     return val != identical_field.node.val();
@@ -354,7 +354,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             }
         },
         /**
-         * ±íµ¥×Ö¶ÎÅäÖÃ£¬Ã¿Ò»¸öÊäÈëÔªËØÒÔID×÷Îªkey½øĞĞ×é¼ş£¬ÑéÖ¤ÏîµÄÅäÖÃ
+         * è¡¨å•å­—æ®µé…ç½®ï¼Œæ¯ä¸€ä¸ªè¾“å…¥å…ƒç´ ä»¥IDä½œä¸ºkeyè¿›è¡Œç»„ä»¶ï¼ŒéªŒè¯é¡¹çš„é…ç½®
          */
         fields          : {
             value: {
@@ -395,13 +395,13 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             value: null
         },
         /**
-         * ±£´æËÑË÷µÄÀúÊ·¼ÇÂ¼¿ª¹Ø
+         * ä¿å­˜æœç´¢çš„å†å²è®°å½•å¼€å…³
          */
         storage         : {
             value: false
         },
         /**
-         * ÑéÖ¤Ë³ĞòÅäÖÃ
+         * éªŒè¯é¡ºåºé…ç½®
          */
         validation_order: {
             value: null

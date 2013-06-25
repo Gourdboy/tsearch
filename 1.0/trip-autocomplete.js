@@ -14,7 +14,7 @@ KISSY.add(function (S, Ac , Common) {
                 resultListLocator: function (results) {
                     results = results.result;
                     var filtedData = [];
-                    //¸ù¾İ½Ó¿Ú½øĞĞÁÙ½ü³ÇÊĞµÄÊı¾İ´¦Àí
+                    //æ ¹æ®æ¥å£è¿›è¡Œä¸´è¿‘åŸå¸‚çš„æ•°æ®å¤„ç†
                     S.each(results, function (_item) {
                         if (_item.hasAirport) {
                             filtedData.push(_item);
@@ -29,35 +29,35 @@ KISSY.add(function (S, Ac , Common) {
                         }
                     });
                     return filtedData;
-                },//Ö¸¶¨·µ»ØÊı¾İÀïµÄÊı×éÎ»ÖÃ
-                resultTextLocator: 'cityName',//Ö¸¶¨ÎÄ±¾ÄÚÈİ
+                },//æŒ‡å®šè¿”å›æ•°æ®é‡Œçš„æ•°ç»„ä½ç½®
+                resultTextLocator: 'cityName',//æŒ‡å®šæ–‡æœ¬å†…å®¹
                 activeFirstItem  : true,
                 align            : ALIGH,
-                hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php',//²»Ö¸¶¨¼°Ã»ÓĞÈÈÃÅÍÆ¼ö
-                resultFormatter  : function (query, results) {//¶ÔÕ¹Ê¾½øĞĞ¸ñÊ½»¯
+                hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php',//ä¸æŒ‡å®šåŠæ²¡æœ‰çƒ­é—¨æ¨è
+                resultFormatter  : function (query, results) {//å¯¹å±•ç¤ºè¿›è¡Œæ ¼å¼åŒ–
                     var result = [];
                     var tmpl = '<div class="ks-ac-item-inner"><span class="ks-ac-name">{cityname}</span><span class="ks-ac-intro">{py}</span></div>';
                     var prevNearCity = '';
-                    //ÁÙ½ü³ÇÊĞµÄÏÔÊ¾´¦Àí
+                    //ä¸´è¿‘åŸå¸‚çš„æ˜¾ç¤ºå¤„ç†
                     for (var idx in results) {
                         var _item = results[idx];
                         if (!_item.raw.nearCity) {
-                            //ÓĞ»ú³¡£¬Î´ÉèÖÃnearCity
+                            //æœ‰æœºåœºï¼Œæœªè®¾ç½®nearCity
                             result.push(S.substitute(tmpl, {
                                 cityname: _item.text,
                                 py      : _item.raw.py
                             }));
                         } else {
-                            //ÎŞ»ú³¡£¬´¦Àí¸½½ü³ÇÊĞ
-                            var html = '<div class="ks-ac-item"><div class="ks-ac-near-tip">"' + _item.raw.nearCity + '"&nbsp;Ã»ÓĞ»ú³¡</div>';
-                            var nearAirportTpl = '<div class="ks-ac-item-inner ks-ac-item-inner-sub"><span class="ks-ac-name">ÁÚ½ü»ú³¡£º{cityName}&nbsp;--&nbsp;¾àÀë{distance}¹«Àï</span></div>';
+                            //æ— æœºåœºï¼Œå¤„ç†é™„è¿‘åŸå¸‚
+                            var html = '<div class="ks-ac-item"><div class="ks-ac-near-tip">"' + _item.raw.nearCity + '"&nbsp;æ²¡æœ‰æœºåœº</div>';
+                            var nearAirportTpl = '<div class="ks-ac-item-inner ks-ac-item-inner-sub"><span class="ks-ac-name">é‚»è¿‘æœºåœºï¼š{cityName}&nbsp;--&nbsp;è·ç¦»{distance}å…¬é‡Œ</span></div>';
                             var cityHtml = S.substitute(nearAirportTpl, {
                                 cityName: _item.text,
                                 distance: _item.raw.distance
                             });
 
                             if (_item.raw.nearCity != prevNearCity) {
-                                //¶ÔÓÚÊ×¸ö¸½½ü»ú³¡³ÇÊĞ£¬¼ÓÈëtip
+                                //å¯¹äºé¦–ä¸ªé™„è¿‘æœºåœºåŸå¸‚ï¼ŒåŠ å…¥tip
                                 html += cityHtml + '</div>';
                                 prevNearCity = _item.raw.nearCity;
                             } else {
@@ -81,8 +81,8 @@ KISSY.add(function (S, Ac , Common) {
         iflight: function (cfg) {
             var default_cfg = {
                 source       : 'http://ijipiao.trip.taobao.com/ie/remote/auto_complete.do?flag=4&count=10&callback={callback}&q={query}',
-                resultListLocator:'result',//Ö¸¶¨·µ»ØÊı¾İÀïµÄÊı×éÎ»ÖÃ
-                resultTextLocator: 'cityName',//Ö¸¶¨ÎÄ±¾ÄÚÈİ
+                resultListLocator:'result',//æŒ‡å®šè¿”å›æ•°æ®é‡Œçš„æ•°ç»„ä½ç½®
+                resultTextLocator: 'cityName',//æŒ‡å®šæ–‡æœ¬å†…å®¹
                 activeFirstItem  : true,
                 align            : ALIGH ,
                 hotSource    : 'http://www.taobao.com/go/rgn/trip/international_jsonp.php'
@@ -98,7 +98,7 @@ KISSY.add(function (S, Ac , Common) {
         },
         hotel  : function (cfg) {
 
-            // Ä¿µÄµØ suggest ½á¹ûÔ¤´¦Àí
+            // ç›®çš„åœ° suggest ç»“æœé¢„å¤„ç†
             function hotelCityListLocator(data) {
                 var rawResults = data.result;
                 var results = [];
@@ -115,7 +115,7 @@ KISSY.add(function (S, Ac , Common) {
                 return results;
             }
 
-            // Ä¿µÄµØ suggest ½á¹û¸ñÊ½»¯
+            // ç›®çš„åœ° suggest ç»“æœæ ¼å¼åŒ–
             function hotelCityFormatter(query, results) {
                 return S.map(results, function (item) {
                     var result = item.raw;
@@ -145,8 +145,8 @@ KISSY.add(function (S, Ac , Common) {
         travel : function (cfg) {
             var isDaily = document.domain.indexOf('daily.taobao.net') > 1,
                 _resultTmpl = '<div class="ks-ac-item-inner"><span class="ks-ac-name">{first}</span><span class="ks-ac-intro" style="color:#999;float:left;">{second}</span></div>',
-                _citycodeUrl = (isDaily ? 'http://go.daily.taobao.net/' : 'http://go.taobao.com/') + 'data/areaTrip.htm?sn=1'; //³ÇÊĞÁªÏë½Ó¿Ú
-            _dep_citycodeUrl = (isDaily ? 'http://dujia.trip.daily.taobao.net/' : 'http://dujia.trip.taobao.com/') + 'sell/ajax/get_sug_city.htm?max=10'; //³ÇÊĞÁªÏë½Ó¿Ú
+                _citycodeUrl = (isDaily ? 'http://go.daily.taobao.net/' : 'http://go.taobao.com/') + 'data/areaTrip.htm?sn=1'; //åŸå¸‚è”æƒ³æ¥å£
+            _dep_citycodeUrl = (isDaily ? 'http://dujia.trip.daily.taobao.net/' : 'http://dujia.trip.taobao.com/') + 'sell/ajax/get_sug_city.htm?max=10'; //åŸå¸‚è”æƒ³æ¥å£
 
 
             function highLight(str, key) {
@@ -187,10 +187,10 @@ KISSY.add(function (S, Ac , Common) {
             var default_cfg = {
                 source           : 'http://s.jipiao.trip.taobao.com/city_search.do?lines={maxResults}&q={query}',
                 resultListLocator: 'result',
-                resultTextLocator: 'cityName',//Ö¸¶¨ÎÄ±¾ÄÚÈİ
+                resultTextLocator: 'cityName',//æŒ‡å®šæ–‡æœ¬å†…å®¹
                 activeFirstItem  : true,
                 align            : ALIGH,
-                hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php'//²»Ö¸¶¨¼°Ã»ÓĞÈÈÃÅÍÆ¼ö
+                hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php'//ä¸æŒ‡å®šåŠæ²¡æœ‰çƒ­é—¨æ¨è
             };
             cfg = S.merge(default_cfg , cfg);
             var acInstance = new Ac(cfg);

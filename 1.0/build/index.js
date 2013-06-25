@@ -9,15 +9,15 @@ gallery/tsearch/1.0/index
 
 */
 /**
- * ���й���������
+ * 旅行公共函数库
  */
 KISSY.add('gallery/tsearch/1.0/common',function (S){
     var Common = {
         /**
-         * ��ȡָ�����ȵ��ַ���
-         * @param string ����ȡ���ַ���
-         * @param len ��ȡ�ĳ��ȣ���λ���ֽڡ�1�򺺺���Ϊ2���ֽ�
-         * @return {string} ���ر���ȡ���ַ���
+         * 截取指定长度的字符串
+         * @param string 被截取的字符串
+         * @param len 截取的长度，单位：字节。1个汉汉字为2个字节
+         * @return {string} 返回被截取的字符串
          */
         subString:function (string, len) {
             var r = /[^\x00-\xff]/g;
@@ -34,7 +34,7 @@ KISSY.add('gallery/tsearch/1.0/common',function (S){
             return string;
         },
         /**
-         * ��ȡ�ַ������� ��λ�ֽ�
+         * 获取字符串长度 单位字节
          * @param string
          * @return {*}
          */
@@ -45,10 +45,10 @@ KISSY.add('gallery/tsearch/1.0/common',function (S){
             return string.replace(/[^\x00-\xff]/g, "rr").length;
         },
         /**
-         * ��ȡ�ַ���������ĩβ����'...'
-         * @param str  ����ȡ���ַ���
-         * @param len  ��ȡ�ĳ���
-         * @param more ʡ�Է���
+         * 截取字符串，并在末尾加上'...'
+         * @param str  被截取的字符串
+         * @param len  截取的长度
+         * @param more 省略符号
          * @return {*}
          */
         cutStr :function (str, len , more) {
@@ -59,7 +59,7 @@ KISSY.add('gallery/tsearch/1.0/common',function (S){
             return str;
         },
         /**
-         * �������������Եĳ���
+         * 处理对象的属性的长度
          * @param obj
          * @param attr
          * @param len
@@ -68,7 +68,7 @@ KISSY.add('gallery/tsearch/1.0/common',function (S){
             obj[attr + '_sub'] = Common.cutStr(obj[attr], len);
         },
         /**
-         * �� '1' ת��Ϊ '01'
+         * 把 '1' 转化为 '01'
          * @param n
          * @return {*}
          */
@@ -76,7 +76,7 @@ KISSY.add('gallery/tsearch/1.0/common',function (S){
             return n.toString().length > 1 ? n.toString() : '0' + n.toString();
         },
         /**
-         * �� 2012-12-12 �ַ�����ʽת��Ϊ Date ����
+         * 将 2012-12-12 字符串格式转换为 Date 对象
          * @param str
          */
         strToDate : function (str){
@@ -84,17 +84,17 @@ KISSY.add('gallery/tsearch/1.0/common',function (S){
             return new Date(arr[0], arr[1]-1 , arr[2]);
         },
         /**
-         * �������ڼ�����2011-5-17��2011-05-18����Ϊһ��
-         * @param fromDate ��ʼ����
-         * @param toDate ��������
-         * @return {Number} ��������
+         * 计算日期间隔，2011-5-17至2011-05-18间隔为一天
+         * @param fromDate 开始日期
+         * @param toDate 结束日期
+         * @return {Number} 间隔天数
          */
         getDateInterval : function (fromDate, toDate) {
             return parseInt(Math.abs(Common.strToDate(toDate) - Common.strToDate(fromDate)) / 1000 / 60 / 60 / 24);
         },
         /**
-         * ����һ����������������Ҫ�����ڸ�ʽ
-         * @param n ��׼���ڻ�����
+         * 返回一个对象包括各种需要的日期格式
+         * @param n 标准日期或毫秒
          */
         formatDate:function (n) {
             var date = new Date(n),
@@ -116,16 +116,16 @@ KISSY.add('gallery/tsearch/1.0/common',function (S){
             }
         },
         /**
-         * ��ȡָ�����ڵ�ƫ���� n=1Ϊ���� n=2Ϊ���죬֧������ǰ��...
+         * 获取指定日期的偏移量 n=1为明天 n=2为后天，支持昨天前天...
          * @param date
-         * @param n ƫ�Ƶ�����
+         * @param n 偏移的天数
          * @return {Date}
          */
         setDate : function (date , n){
             return new Date(date.getTime()+n*86400000);
         },
         /**
-         * ���ݺ�������ʱ��
+         * 根据毫秒计算时长
          * @param t
          * @return {Object}
          */
@@ -141,7 +141,7 @@ KISSY.add('gallery/tsearch/1.0/common',function (S){
             }
         },
         /**
-         * ��ת�Ժ���HTML�ַ����л�ԭ
+         * 将转以后的HTML字符进行还原
          * @param html
          * @return {*}
          */
@@ -173,7 +173,7 @@ KISSY.add('gallery/tsearch/1.0/trip-autocomplete',function (S, Ac , Common) {
                 resultListLocator: function (results) {
                     results = results.result;
                     var filtedData = [];
-                    //���ݽӿڽ����ٽ����е����ݴ���
+                    //根据接口进行临近城市的数据处理
                     S.each(results, function (_item) {
                         if (_item.hasAirport) {
                             filtedData.push(_item);
@@ -188,35 +188,35 @@ KISSY.add('gallery/tsearch/1.0/trip-autocomplete',function (S, Ac , Common) {
                         }
                     });
                     return filtedData;
-                },//ָ������������������λ��
-                resultTextLocator: 'cityName',//ָ���ı�����
+                },//指定返回数据里的数组位置
+                resultTextLocator: 'cityName',//指定文本内容
                 activeFirstItem  : true,
                 align            : ALIGH,
-                hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php',//��ָ����û�������Ƽ�
-                resultFormatter  : function (query, results) {//��չʾ���и�ʽ��
+                hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php',//不指定及没有热门推荐
+                resultFormatter  : function (query, results) {//对展示进行格式化
                     var result = [];
                     var tmpl = '<div class="ks-ac-item-inner"><span class="ks-ac-name">{cityname}</span><span class="ks-ac-intro">{py}</span></div>';
                     var prevNearCity = '';
-                    //�ٽ����е���ʾ����
+                    //临近城市的显示处理
                     for (var idx in results) {
                         var _item = results[idx];
                         if (!_item.raw.nearCity) {
-                            //�л�����δ����nearCity
+                            //有机场，未设置nearCity
                             result.push(S.substitute(tmpl, {
                                 cityname: _item.text,
                                 py      : _item.raw.py
                             }));
                         } else {
-                            //�޻�����������������
-                            var html = '<div class="ks-ac-item"><div class="ks-ac-near-tip">"' + _item.raw.nearCity + '"&nbsp;û�л���</div>';
-                            var nearAirportTpl = '<div class="ks-ac-item-inner ks-ac-item-inner-sub"><span class="ks-ac-name">�ڽ�������{cityName}&nbsp;--&nbsp;����{distance}����</span></div>';
+                            //无机场，处理附近城市
+                            var html = '<div class="ks-ac-item"><div class="ks-ac-near-tip">"' + _item.raw.nearCity + '"&nbsp;没有机场</div>';
+                            var nearAirportTpl = '<div class="ks-ac-item-inner ks-ac-item-inner-sub"><span class="ks-ac-name">邻近机场：{cityName}&nbsp;--&nbsp;距离{distance}公里</span></div>';
                             var cityHtml = S.substitute(nearAirportTpl, {
                                 cityName: _item.text,
                                 distance: _item.raw.distance
                             });
 
                             if (_item.raw.nearCity != prevNearCity) {
-                                //�����׸򸽽��������У�����tip
+                                //对于首个附近机场城市，加入tip
                                 html += cityHtml + '</div>';
                                 prevNearCity = _item.raw.nearCity;
                             } else {
@@ -240,8 +240,8 @@ KISSY.add('gallery/tsearch/1.0/trip-autocomplete',function (S, Ac , Common) {
         iflight: function (cfg) {
             var default_cfg = {
                 source       : 'http://ijipiao.trip.taobao.com/ie/remote/auto_complete.do?flag=4&count=10&callback={callback}&q={query}',
-                resultListLocator:'result',//ָ������������������λ��
-                resultTextLocator: 'cityName',//ָ���ı�����
+                resultListLocator:'result',//指定返回数据里的数组位置
+                resultTextLocator: 'cityName',//指定文本内容
                 activeFirstItem  : true,
                 align            : ALIGH ,
                 hotSource    : 'http://www.taobao.com/go/rgn/trip/international_jsonp.php'
@@ -257,7 +257,7 @@ KISSY.add('gallery/tsearch/1.0/trip-autocomplete',function (S, Ac , Common) {
         },
         hotel  : function (cfg) {
 
-            // Ŀ�ĵ� suggest ����Ԥ����
+            // 目的地 suggest 结果预处理
             function hotelCityListLocator(data) {
                 var rawResults = data.result;
                 var results = [];
@@ -274,7 +274,7 @@ KISSY.add('gallery/tsearch/1.0/trip-autocomplete',function (S, Ac , Common) {
                 return results;
             }
 
-            // Ŀ�ĵ� suggest ������ʽ��
+            // 目的地 suggest 结果格式化
             function hotelCityFormatter(query, results) {
                 return S.map(results, function (item) {
                     var result = item.raw;
@@ -304,8 +304,8 @@ KISSY.add('gallery/tsearch/1.0/trip-autocomplete',function (S, Ac , Common) {
         travel : function (cfg) {
             var isDaily = document.domain.indexOf('daily.taobao.net') > 1,
                 _resultTmpl = '<div class="ks-ac-item-inner"><span class="ks-ac-name">{first}</span><span class="ks-ac-intro" style="color:#999;float:left;">{second}</span></div>',
-                _citycodeUrl = (isDaily ? 'http://go.daily.taobao.net/' : 'http://go.taobao.com/') + 'data/areaTrip.htm?sn=1'; //���������ӿ�
-            _dep_citycodeUrl = (isDaily ? 'http://dujia.trip.daily.taobao.net/' : 'http://dujia.trip.taobao.com/') + 'sell/ajax/get_sug_city.htm?max=10'; //���������ӿ�
+                _citycodeUrl = (isDaily ? 'http://go.daily.taobao.net/' : 'http://go.taobao.com/') + 'data/areaTrip.htm?sn=1'; //城市联想接口
+            _dep_citycodeUrl = (isDaily ? 'http://dujia.trip.daily.taobao.net/' : 'http://dujia.trip.taobao.com/') + 'sell/ajax/get_sug_city.htm?max=10'; //城市联想接口
 
 
             function highLight(str, key) {
@@ -346,10 +346,10 @@ KISSY.add('gallery/tsearch/1.0/trip-autocomplete',function (S, Ac , Common) {
             var default_cfg = {
                 source           : 'http://s.jipiao.trip.taobao.com/city_search.do?lines={maxResults}&q={query}',
                 resultListLocator: 'result',
-                resultTextLocator: 'cityName',//ָ���ı�����
+                resultTextLocator: 'cityName',//指定文本内容
                 activeFirstItem  : true,
                 align            : ALIGH,
-                hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php'//��ָ����û�������Ƽ�
+                hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php'//不指定及没有热门推荐
             };
             cfg = S.merge(default_cfg , cfg);
             var acInstance = new Ac(cfg);
@@ -363,7 +363,7 @@ KISSY.add('gallery/tsearch/1.0/trip-autocomplete',function (S, Ac , Common) {
     };
 }, {requires: ['gallery/autocomplete/1.1/index' , './common', 'node' , 'event' , 'base']});
 /**
- * RadioButton����
+ * RadioButton组件
  *
  * @module Radiobutton
  * @submodule
@@ -375,7 +375,7 @@ KISSY.add('gallery/tsearch/1.0/radio-button',function (S) {
      * @extends S.Base
      * @uses
      * @constructor
-     * @param {Object} ������
+     * @param {Object} 配置项
      **/
     function Radiobutton() {
         Radiobutton.superclass.constructor.apply(this, arguments);
@@ -421,7 +421,7 @@ KISSY.add('gallery/tsearch/1.0/radio-button',function (S) {
             }
         },
         /**
-         * ��ȡ������radio��ֵ
+         * 获取和设置radio的值
          *
          * @method val
          * @returns {*}
@@ -452,7 +452,7 @@ KISSY.add('gallery/tsearch/1.0/radio-button',function (S) {
     }, {
         ATTRS:{
             /**
-             * Required radiobutton���ڵĸ������ڵ�
+             * Required radiobutton所在的父容器节点
              * @attribute node
              * @type NodeList
              * @default null
@@ -468,7 +468,7 @@ KISSY.add('gallery/tsearch/1.0/radio-button',function (S) {
                 }
             },
             /**
-             * Required ��������name����ֵ, ���Դ�ֵȥ��ȡinput�ڵ�
+             * Required 输入框的name属性值, 将以此值去获取input节点
              * @attribute name
              * @type String
              * @default null
@@ -477,7 +477,7 @@ KISSY.add('gallery/tsearch/1.0/radio-button',function (S) {
                 value:''
             },
             /**
-             * ������ѡ��ʱ��ClassName
+             * 输入框选中时的ClassName
              * @attribute selectedClass
              * @type String
              * @default selected
@@ -486,7 +486,7 @@ KISSY.add('gallery/tsearch/1.0/radio-button',function (S) {
                 value:'selected'
             },
             /**
-             * ��ǰ��checkedΪtrue��radio��ֵ
+             * 当前的checked为true的radio的值
              * @attribute value
              * @type String
              * @default null
@@ -500,8 +500,8 @@ KISSY.add('gallery/tsearch/1.0/radio-button',function (S) {
     return Radiobutton;
 }, {requires: ['node' , 'event' , 'base' , 'sizzle']});
 /**
- * @fileoverview ���޸���������
- * @author ����<shuke.cl@taobao.com>
+ * @fileoverview 请修改组件描述
+ * @author 舒克<shuke.cl@taobao.com>
  * @module tsearch
  **/
 KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
@@ -512,14 +512,14 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
         Tradio : Tradio
     };
     /**
-     * ���޸���������
+     * 请修改组件描述
      * @class Tsearch
      * @constructor
      * @extends Base
      */
     function Tsearch(comConfig) {
         var self = this;
-        //���ø��๹�캯��
+        //调用父类构造函数
         Tsearch.superclass.constructor.call(self, comConfig);
         this.initializer();
     }
@@ -528,7 +528,7 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
         initializer    : function () {
             this.form = this.get('form');
             if (!this.form) {
-                S.log('TSearch:û���ҵ������ڵ�,��ʼ��ʧ��');
+                S.log('TSearch:没有找到表单节点,初始化失败');
                 return;
             }
             //this.get('storage') && this.setDefaultValue();
@@ -552,11 +552,11 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
         },
         bindEvent      : function () {
             this.form.on('submit', this._doSubmit, this);
-            //�л�������
+            //切换往返程
             if (this.get('switchSearchType')) {
                 this.initRadioSwitch()
             }
-            //�󶨱�����������
+            //绑定表单交换操作
             var swapper = this.get('swapper');
             if (swapper) {
                 S.Event.on(swapper.trigger, 'click', function (e) {
@@ -569,7 +569,7 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
 
         },
         /**
-         * �ؼ����� ,�������õĶ�����ʼ������ʵ���ҽӵ���ǰ��
+         * 控件绑定 ,将所配置的对象初始化并把实例挂接到当前项
          * @param field
          */
         bindWidgets    : function (field) {
@@ -577,20 +577,20 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
             S.each(field.widgets, function (widget_config, widget_name) {
                 var Widget = Widgets[widget_name];
                 if (Widget) {
-                    if(widget_name == 'TripAutocomplete'){//Autocomplete���ù���ģʽ
+                    if(widget_name == 'TripAutocomplete'){//Autocomplete采用工厂模式
                         S.each(field.widgets[widget_name] , function (v , k){
                             field[widget_name] =  Widget[k](v);
                         })
                     } else {
                         field[widget_name] = new Widget(widget_config);
                     }
-                    if (widget_name === 'Calendar' && widget_config.finalTriggerNode && that.fields[widget_config.finalTriggerNode]) { //hack for Calendar �򷢺ͷ������ڹ���һ����������,������ʵ�����������̱�������
+                    if (widget_name === 'Calendar' && widget_config.finalTriggerNode && that.fields[widget_config.finalTriggerNode]) { //hack for Calendar 出发和返程日期共用一个日历组件,将组件实力共享给返程表单对象
                         that.fields[widget_config.finalTriggerNode][widget_name] = field[widget_name];
                     }
                 }
             });
             /**
-             * ��������showMessage�����������䣬ͳһ��showTip��ʽ��ʵ������ʾ
+             * 把组件的showMessage方法进行适配，统一用showTip方式现实错误提示
              * @type {*}
              */
             field.showTip = (function (field) {
@@ -610,7 +610,7 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
             })(field);
         },
         /**
-         * ��������swapper��������ֵ
+         * 交换所有swapper配置里的值
          */
         swap           : function () {
             S.each(this.get('swapper').list, function (val, key) {
@@ -618,7 +618,7 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
             }, this);
         },
         /**
-         * ���������ֶε�ֵ
+         * 交换两个字段的值
          * @param item_a
          * @param item_b
          * @private
@@ -632,21 +632,21 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
             item_b.node.val(temp);
         },
         /**
-         * ʵ���Զ��л����ܵİ���
+         * 实现自动切换功能的绑定
          * @param cur_field_id
          */
         setSwitchInput : function (cur_field_id) {
-            return false;//��ʱ�ر��Զ��л�
+            return false;//临时关闭自动切换
             var fields = this.fields;
             var cur_field = fields[cur_field_id];
             var switchToNext = function () {
                 var next_field = fields[cur_field.autoSwitch.nextField],
                     next_node = next_field.node;
                 if (!next_node) {
-                    S.log('û��ָ���Զ��л���Ŀ��Ԫ��');
+                    S.log('没有指定自动切换的目标元素');
                     return this;
                 }
-                if (!next_field.disabled && next_field.node.val() == '') {//��ǰ���ش�������һ���ֶ�δ��
+                if (!next_field.disabled && next_field.node.val() == '') {//当前开关打开且下一个字段未填
                     next_node[0].focus()
                 }
             };
@@ -655,7 +655,7 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
                 cur_field.TripAutocomplete.on('select', switchToNext);
             } else if (cur_field.Calendar) {
                 cur_field.Calendar.on('dateclick', function () {
-                    if (this.currentNode.attr('id') === cur_field_id.replace('#', '')) {//��ǰ����dateclick�¼�Ϊ��ǰ�������󶨵������ؼ�ʱִ���Զ��л�
+                    if (this.currentNode.attr('id') === cur_field_id.replace('#', '')) {//当前触发dateclick事件为当前输入框绑定的日历控件时执行自动切换
                         switchToNext();
                     }
                 });
@@ -663,7 +663,7 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
             return this;
         },
         /**
-         * ��ʼ�����������л��¼�
+         * 初始化单程往返切换事件
          * @return {*}
          */
         initRadioSwitch: function () {
@@ -685,13 +685,13 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
                 }
                 this._setSearchType(e.newVal);
             }, this);
-            //��������û��ֵʱ�л�Ϊ����
+            //返程日期没有值时切换为单程
             back_input.on('valuechange', function (e) {
                 if (e.newVal === '') {
                     Tradio.val('0');
                 }
             });
-            //ѡ�񷵳�����ʱ���Զ��л�Ϊ����
+            //选择返程日期时，自动切换为往返
             Calendar.on('dateclick', function (e) {
                 if (this.currentNode.attr('id') === config.back_input.replace('#', '')) {
                     Tradio.val('1');
@@ -700,7 +700,7 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
             this._setSearchType(Tradio.val());
         },
         /**
-         * ���ݵ���������ֵ������������ѡ�񽻻�״̬
+         * 根据单程往返的值置往返的日历选择交互状态
          * @param val
          * @private
          */
@@ -708,12 +708,12 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
             var config = this.get('switchSearchType'),
                 fields = this.fields,
                 back_container = S.one(config.back_container);
-            if (val === "1") {//��������
+            if (val === "1") {//开启往返
                 back_container.removeClass('disabled');
                 if (fields[config.go_input].autoSwitch) {
                     fields[config.back_input].disabled = false;
                 }
-            } else {//���𵥳�
+            } else {//开启单程
                 back_container.addClass('disabled');
                 if (fields[config.go_input].autoSwitch) {
                     fields[config.back_input].disabled = true;
@@ -732,8 +732,8 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
             //this._storageForm();
         },
         /**
-         * ���ڼ���,����
-         * @param date ���� ['2011-05-14','2011-06-14']
+         * 日期检查,返回
+         * @param date 日期 ['2011-05-14','2011-06-14']
          * @return Array
          */
         _isResetDate   : function (date) {
@@ -741,8 +741,8 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
             return new Date() > new Date(date[0], date[1] - 1, date[2]);
         },
         /*
-         *��ȡָ�����ڵ�
-         *@num_date ָ�����ڵ�ǰ������ 1Ϊ����,2Ϊ����,-1Ϊ����...
+         *获取指定日期的
+         *@num_date 指定日期的前后天数 1为明天,2为后天,-1为昨天...
          */
         getDate        : function (num_date) {
             function formatdate(str) {
@@ -781,7 +781,7 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
                             rule : rule,
                             field: fields[_id]
                         });
-                        if (typeof rule.onValidateFailure === "function") {//���ûٵ�ʱ�����ص�
+                        if (typeof rule.onValidateFailure === "function") {//设置毁掉时处理回调
                             rule.onValidateFailure.call(fields[_id], rule);
                         } else {
                             fields[_id].showTip && fields[_id].showTip(rule.tip);
@@ -797,10 +797,10 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
             return ok;
         },
         /**
-         * ��֤������ʵ��
-         * @param rule ��ǰ��֤�Ĺ�������
-         * @param field ��ǰ��֤���ֶ�
-         * @return {Boolean} ��֤�Ƿ�ͨ��
+         * 验证规则的实现
+         * @param rule 当前验证的规则类型
+         * @param field 当前验证的字段
+         * @return {Boolean} 验证是否通过
          * @private
          */
         _validateRule  : function (rule, field) {
@@ -809,25 +809,25 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
                 return new Date(arr[0], arr[1] - 1, arr[2]);
             };
             switch (rule.type) {
-                case 'required' ://������У��
+                case 'required' ://必填项校验
                     return field.node.val() != '';
                     break;
                 case 'dateformat' :
                     var val = field.node.val();
                     return val.length == 10 && /(([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)/.test(val);
                     break;
-                case 'mindate'://����������֤:
+                case 'mindate'://最早日期验证:
                     var val = field.node.val();
                     var select_date = strToDate(val),
                         min_date;
-                    if (typeof rule.minDate === "string") {//min_date����Ϊһ��fieldʱ��ȡ��ֵת��Ϊ����
+                    if (typeof rule.minDate === "string") {//min_date配置为一个field时，取其值转化为日期
                         min_date = strToDate(this.fields[rule.minDate].node.val());
                     } else {
                         min_date = rule.minDate;
                     }
                     return select_date >= min_date;
                     break;
-                case 'identical' ://�����ֶβ�����ͬ����֤ �� �򷢵������в�����ͬ
+                case 'identical' ://两个字段不能相同的验证 ： 出发到达城市不能相同
                     var val = field.node.val();
                     var identical_field = this.fields[rule.identicalWidth];
                     return val != identical_field.node.val();
@@ -855,7 +855,7 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
             }
         },
         /**
-         * �����ֶ����ã�ÿһ������Ԫ����ID��Ϊkey������������֤��������
+         * 表单字段配置，每一个输入元素以ID作为key进行组件，验证项的配置
          */
         fields          : {
             value: {
@@ -896,13 +896,13 @@ KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Trad
             value: null
         },
         /**
-         * ������������ʷ��¼����
+         * 保存搜索的历史记录开关
          */
         storage         : {
             value: false
         },
         /**
-         * ��֤˳������
+         * 验证顺序配置
          */
         validation_order: {
             value: null
@@ -944,7 +944,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                             {
                                                 type: 'required',
                                                 when: 'blur',
-                                                tip : '����д�򷢳���'
+                                                tip : '请填写出发城市'
                                             }
                                         ]
                                     },
@@ -967,12 +967,12 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                             {
                                                 type: 'required',
                                                 when: 'blur',
-                                                tip : '����д��������'
+                                                tip : '请填写到达城市'
                                             },
                                             {
                                                 type          : 'identical',
                                                 identicalWidth: '#J_Pi_Search_jipiao_depCity',
-                                                tip           : '�򷢵������в�����ͬ'
+                                                tip           : '出发到达城市不能相同'
                                             }
                                         ]
                                     },
@@ -989,16 +989,16 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                         validation: [
                                             {
                                                 type: 'required',
-                                                tip : '����д��������'
+                                                tip : '请填写返程日期'
                                             },
                                             {
                                                 type: 'dateformat',
-                                                tip : '��������ȷ�����ڸ�ʽ �磺2018-01-01'
+                                                tip : '请输入正确的日期格式 如：2018-01-01'
                                             },
                                             {
                                                 type   : 'mindate',
                                                 minDate: '#J_Pi_Search_FlightDepDate',
-                                                tip    : '�������ڲ������ڳ�������'
+                                                tip    : '返程日期不能早于出发日期'
                                             }
                                         ]
                                     },
@@ -1021,16 +1021,16 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                         validation: [
                                             {
                                                 type: 'required',
-                                                tip : '����д��������'
+                                                tip : '请填写出发日期'
                                             },
                                             {
                                                 type: 'dateformat',
-                                                tip : '��������ȷ�����ڸ�ʽ �磺2018-01-01'
+                                                tip : '请输入正确的日期格式 如：2018-01-01'
                                             },
                                             {
                                                 type   : 'mindate',
                                                 minDate: new Date() - 86400000,
-                                                tip    : '�������ڲ������ڽ���'
+                                                tip    : '出发日期不能早于今天'
                                             }
                                         ],
                                         autoSwitch: {
@@ -1040,13 +1040,13 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                     }
                                 },
                                 /**
-                                 * ����У��˳��
+                                 * 表单校验顺序
                                  */
                                 validation_order: ['#J_Pi_Search_jipiao_depCity', '#J_Pi_Search_jipiao_arrCity', '#J_Pi_Search_FlightDepDate' , '#J_Pi_Search_FlightArrDate'],
                                 /**
-                                 * �򷢵��������л�����
-                                 * @param trigger ������ťID
-                                 * @param list ��Ҫ�����������ݵ������б� ,key �� value ��Ӧ��inputNode ����ֵ�Ľ���
+                                 * 出发到达城市切换配置
+                                 * @param trigger 交换按钮ID
+                                 * @param list 需要交换数据内容的容器列表 ,key 和 value 对应的inputNode 进行值的交换
                                  */
                                 swapper         : {
                                     trigger: '#J_Pi_Search_FlightSwap',
@@ -1056,10 +1056,10 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                     }
                                 },
                                 /**
-                                 * ��Ʊר��:�����л�����
-                                 * @param trigger ���������л���radio�ؼ���������
-                                 * @param back_container �������������ڵ�����
-                                 * @param back_input ����������
+                                 * 机票专用:往返切换配置
+                                 * @param trigger 触发往返切换的radio控件所在容器
+                                 * @param back_container 返程输入框所在的容器
+                                 * @param back_input 返程输入框
                                  */
                                 switchSearchType: {
                                     trigger       : '#J_Pi_Search_FlightRadio',
@@ -1068,7 +1068,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                     back_input    : '#J_Pi_Search_FlightArrDate'
                                 },
                                 /**
-                                 * ����������ʷ��¼����  Ĭ�Ϲر�
+                                 * 保存搜索历史记录开关  默认关闭
                                  */
                                 storage         : true
                             });
@@ -1091,7 +1091,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                         iflight : {
                                             inputNode    : '#J_Pi_Search_ijipiao_depCity',
                                             codeInputNode: '#J_Pi_Search_ijipiao_depCity_code',
-                                            hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php'//��ָ����û�������Ƽ�
+                                            hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php'//不指定及没有热门推荐
                                         }
                                     },
                                     'Placeholder'    : {
@@ -1106,7 +1106,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                     {
                                         type: 'required',
                                         when: 'blur',
-                                        tip : '����д�򷢳���'
+                                        tip : '请填写出发城市'
                                     }
                                 ]
                             },
@@ -1128,12 +1128,12 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                 validation: [
                                     {
                                         type: 'required',
-                                        tip : '����д��������'
+                                        tip : '请填写到达城市'
                                     },
                                     {
                                         type          : 'identical',
                                         identicalWidth: '#J_Pi_Search_ijipiao_depCity',
-                                        tip           : '�򷢵������в�����ͬ'
+                                        tip           : '出发到达城市不能相同'
                                     }
                                 ]
                             },
@@ -1150,16 +1150,16 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                 validation: [
                                     {
                                         type: 'required',
-                                        tip : '����д��������'
+                                        tip : '请填写返程日期'
                                     },
                                     {
                                         type: 'dateformat',
-                                        tip : '��������ȷ�����ڸ�ʽ �磺2018-01-01'
+                                        tip : '请输入正确的日期格式 如：2018-01-01'
                                     },
                                     {
                                         type   : 'mindate',
                                         minDate: '#J_Pi_Search_IFlightDepDate',
-                                        tip    : '�������ڲ������ڳ�������'
+                                        tip    : '返程日期不能早于出发日期'
                                     }
                                 ]
                             },
@@ -1182,16 +1182,16 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                 validation: [
                                     {
                                         type: 'required',
-                                        tip : '����д��������'
+                                        tip : '请填写出发日期'
                                     },
                                     {
                                         type: 'dateformat',
-                                        tip : '��������ȷ�����ڸ�ʽ �磺2018-01-01'
+                                        tip : '请输入正确的日期格式 如：2018-01-01'
                                     },
                                     {
                                         type   : 'mindate',
                                         minDate: new Date() - 86400000,
-                                        tip    : '�������ڲ������ڽ���'
+                                        tip    : '出发日期不能早于今天'
                                     }
                                 ],
                                 autoSwitch: {
@@ -1201,13 +1201,13 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                             }
                         },
                         /**
-                         * ����У��˳��
+                         * 表单校验顺序
                          */
                         validation_order: ['#J_Pi_Search_ijipiao_depCity', '#J_Pi_Search_ijipiao_arrCity', '#J_Pi_Search_IFlightDepDate' , '#J_Pi_Search_IFlightArrDate'],
                         /**
-                         * �򷢵��������л�����
-                         * @param trigger ������ťID
-                         * @param list ��Ҫ�����������ݵ������б� ,key �� value ��Ӧ��inputNode ����ֵ�Ľ���
+                         * 出发到达城市切换配置
+                         * @param trigger 交换按钮ID
+                         * @param list 需要交换数据内容的容器列表 ,key 和 value 对应的inputNode 进行值的交换
                          */
                         swapper         : {
                             trigger: '#J_Pi_Search_IFlightSwap',
@@ -1217,10 +1217,10 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                             }
                         },
                         /**
-                         * �����л�����
-                         * @param trigger ���������л���radio�ؼ���������
-                         * @param back_container �������������ڵ�����
-                         * @param back_input ����������
+                         * 往返切换配置
+                         * @param trigger 触发往返切换的radio控件所在容器
+                         * @param back_container 返程输入框所在的容器
+                         * @param back_input 返程输入框
                          */
                         switchSearchType: {
                             trigger       : '#J_Pi_Search_IFlightRadio',
@@ -1286,7 +1286,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                 validation: [
                                     {
                                         type: 'required',
-                                        tip : '������Ŀ�ĵ�'
+                                        tip : '请输入目的地'
                                     }
                                 ]
                             }
@@ -1333,7 +1333,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                 validation: [
                                     {
                                         type: 'required',
-                                        tip : '����д�⳵����'
+                                        tip : '请填写租车城市'
                                     }
                                 ]
                             }

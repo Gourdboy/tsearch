@@ -1,5 +1,5 @@
 /**
- * RadioButton×é¼ş
+ * RadioButtonç»„ä»¶
  *
  * @module Radiobutton
  * @submodule
@@ -11,7 +11,7 @@ KISSY.add(function (S) {
      * @extends S.Base
      * @uses
      * @constructor
-     * @param {Object} ÅäÖÃÏî
+     * @param {Object} é…ç½®é¡¹
      **/
     function Radiobutton() {
         Radiobutton.superclass.constructor.apply(this, arguments);
@@ -57,7 +57,7 @@ KISSY.add(function (S) {
             }
         },
         /**
-         * »ñÈ¡ºÍÉèÖÃradioµÄÖµ
+         * è·å–å’Œè®¾ç½®radioçš„å€¼
          *
          * @method val
          * @returns {*}
@@ -88,7 +88,7 @@ KISSY.add(function (S) {
     }, {
         ATTRS:{
             /**
-             * Required radiobuttonËùÔÚµÄ¸¸ÈİÆ÷½Úµã
+             * Required radiobuttonæ‰€åœ¨çš„çˆ¶å®¹å™¨èŠ‚ç‚¹
              * @attribute node
              * @type NodeList
              * @default null
@@ -104,7 +104,7 @@ KISSY.add(function (S) {
                 }
             },
             /**
-             * Required ÊäÈë¿òµÄnameÊôĞÔÖµ, ½«ÒÔ´ËÖµÈ¥»ñÈ¡input½Úµã
+             * Required è¾“å…¥æ¡†çš„nameå±æ€§å€¼, å°†ä»¥æ­¤å€¼å»è·å–inputèŠ‚ç‚¹
              * @attribute name
              * @type String
              * @default null
@@ -113,7 +113,7 @@ KISSY.add(function (S) {
                 value:''
             },
             /**
-             * ÊäÈë¿òÑ¡ÖĞÊ±µÄClassName
+             * è¾“å…¥æ¡†é€‰ä¸­æ—¶çš„ClassName
              * @attribute selectedClass
              * @type String
              * @default selected
@@ -122,7 +122,7 @@ KISSY.add(function (S) {
                 value:'selected'
             },
             /**
-             * µ±Ç°µÄcheckedÎªtrueµÄradioµÄÖµ
+             * å½“å‰çš„checkedä¸ºtrueçš„radioçš„å€¼
              * @attribute value
              * @type String
              * @default null
