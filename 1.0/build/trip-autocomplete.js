@@ -202,4 +202,4 @@ KISSY.add(function (S, Ac , Common) {
             return acInstance;
         }
     };
-}, {requires: ['gallery/autocomplete/1.0/index' , './common', 'node' , 'event' , 'base']});
+}, {requires: ['gallery/autocomplete/1.1/index' , './common', 'node' , 'event' , 'base']});

@@ -1,6 +1,6 @@
 KISSY.add(function (S,O ,  TripSearch ,Template ,Slide) {
-    var WIDTH = 435;
-    var HEIGHT = 350;
+    var WIDTH = 437;
+    var HEIGHT = 380;
     var MIN_WIDTH = 152;
     var MIN_HEIGHT = 30;
     var FixedSearch = function () {
@@ -90,6 +90,7 @@ KISSY.add(function (S,O ,  TripSearch ,Template ,Slide) {
                 }
             });
             TripSearch[NavMap[ this.get('tabIndex')]].call(this);
+            NavMap[ this.get('tabIndex')] = '';
             this.slide.go(this.get('tabIndex'));
         },
         show        : function () {

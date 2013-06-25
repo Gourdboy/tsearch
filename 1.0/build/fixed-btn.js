@@ -1,6 +1,6 @@
 KISSY.add(function (S,O ,  TripSearch ,Template ,Slide) {
-    var WIDTH = 435;
-    var HEIGHT = 250;
+    var WIDTH = 437;
+    var HEIGHT = 380;
     var MIN_WIDTH = 152;
     var MIN_HEIGHT = 30;
     var FixedSearch = function () {
@@ -50,11 +50,20 @@ KISSY.add(function (S,O ,  TripSearch ,Template ,Slide) {
                     this.set('visible', true);
                 }
             }, this);
+
             S.Event.on(window , 'scroll' , S.buffer(function (){
-                this.get('el').css({
-                    bottom:0
-                })
-            } , 100 , this));
+                if (this.get('visible')) {
+                    this.set('visible', false);
+                }
+            } , 300 , this) , this);
+
+            if (S.UA.ie === 6) {
+                S.Event.on(window , 'scroll' , S.buffer(function (){
+                    this.overlay.get('el').css({
+                        bottom:0
+                    })
+                } , 100 , this) , this);
+            }
         },
         createSearch: function () {
             this.contentNode.html(Template.searchTemplate);
@@ -81,6 +90,7 @@ KISSY.add(function (S,O ,  TripSearch ,Template ,Slide) {
                 }
             });
             TripSearch[NavMap[ this.get('tabIndex')]].call(this);
+            NavMap[ this.get('tabIndex')] = '';
             this.slide.go(this.get('tabIndex'));
         },
         show        : function () {

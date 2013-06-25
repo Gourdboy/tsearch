@@ -361,7 +361,7 @@ KISSY.add('gallery/tsearch/1.0/trip-autocomplete',function (S, Ac , Common) {
             return acInstance;
         }
     };
-}, {requires: ['gallery/autocomplete/1.0/index' , './common', 'node' , 'event' , 'base']});
+}, {requires: ['gallery/autocomplete/1.1/index' , './common', 'node' , 'event' , 'base']});
 /**
  * RadioButton����
  *
@@ -505,8 +505,6 @@ KISSY.add('gallery/tsearch/1.0/radio-button',function (S) {
  * @module tsearch
  **/
 KISSY.add('gallery/tsearch/1.0/tsearch',function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
-    var EMPTY = '';
-    var $ = Node.all;
     var Widgets = {
         TripAutocomplete : TripAutocomplete,
         Calendar : Calendar ,
@@ -936,7 +934,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                                 }
                                             },
                                             'Placeholder'    : {
-                                                inputNode: '#J_Pi_Search_jipiao_depCity'
+                                                node: '#J_Pi_Search_jipiao_depCity'
                                             }
                                         },
                                         autoSwitch: {
@@ -962,7 +960,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                                 }
                                             },
                                             'Placeholder'    : {
-                                                inputNode: '#J_Pi_Search_jipiao_arrCity'
+                                                node: '#J_Pi_Search_jipiao_arrCity'
                                             }
                                         },
                                         validation: [
@@ -981,10 +979,33 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                     '#J_Pi_Search_jipiao_arrCity_code': {
 
                                     },
+                                    '#J_Pi_Search_FlightArrDate'      : {
+                                        disabled  : true,
+                                        widgets   : {
+                                            'Placeholder': {
+                                                node: '#J_Pi_Search_FlightArrDate'
+                                            }
+                                        },
+                                        validation: [
+                                            {
+                                                type: 'required',
+                                                tip : '����д��������'
+                                            },
+                                            {
+                                                type: 'dateformat',
+                                                tip : '��������ȷ�����ڸ�ʽ �磺2018-01-01'
+                                            },
+                                            {
+                                                type   : 'mindate',
+                                                minDate: '#J_Pi_Search_FlightDepDate',
+                                                tip    : '�������ڲ������ڳ�������'
+                                            }
+                                        ]
+                                    },
                                     '#J_Pi_Search_FlightDepDate'      : {
                                         widgets   : {
                                             'Placeholder': {
-                                                inputNode: '#J_Pi_Search_FlightDepDate'
+                                                node: '#J_Pi_Search_FlightDepDate'
                                             },
                                             'Calendar'   : {
                                                 triggerNode     : '#J_Pi_Search_FlightDepDate',
@@ -1016,29 +1037,6 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                             active   : true,
                                             nextField: '#J_Pi_Search_FlightArrDate'
                                         }
-                                    },
-                                    '#J_Pi_Search_FlightArrDate'      : {
-                                        disabled  : true,
-                                        widgets   : {
-                                            'Placeholder': {
-                                                inputNode: '#J_Pi_Search_FlightArrDate'
-                                            }
-                                        },
-                                        validation: [
-                                            {
-                                                type: 'required',
-                                                tip : '����д��������'
-                                            },
-                                            {
-                                                type: 'dateformat',
-                                                tip : '��������ȷ�����ڸ�ʽ �磺2018-01-01'
-                                            },
-                                            {
-                                                type   : 'mindate',
-                                                minDate: '#J_Pi_Search_FlightDepDate',
-                                                tip    : '�������ڲ������ڳ�������'
-                                            }
-                                        ]
                                     }
                                 },
                                 /**
@@ -1097,7 +1095,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                         }
                                     },
                                     'Placeholder'    : {
-                                        inputNode: '#J_Pi_Search_ijipiao_depCity'
+                                        node: '#J_Pi_Search_ijipiao_depCity'
                                     }
                                 },
                                 autoSwitch: {
@@ -1124,7 +1122,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                         }
                                     },
                                     'Placeholder'    : {
-                                        inputNode: '#J_Pi_Search_ijipiao_arrCity'
+                                        node: '#J_Pi_Search_ijipiao_arrCity'
                                     }
                                 },
                                 validation: [
@@ -1142,10 +1140,33 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                             '#J_Pi_Search_ijipiao_arrCity_code': {
 
                             },
+                            '#J_Pi_Search_IFlightArrDate'      : {
+                                disabled  : true,
+                                widgets   : {
+                                    'Placeholder': {
+                                        node: '#J_Pi_Search_IFlightArrDate'
+                                    }
+                                },
+                                validation: [
+                                    {
+                                        type: 'required',
+                                        tip : '����д��������'
+                                    },
+                                    {
+                                        type: 'dateformat',
+                                        tip : '��������ȷ�����ڸ�ʽ �磺2018-01-01'
+                                    },
+                                    {
+                                        type   : 'mindate',
+                                        minDate: '#J_Pi_Search_IFlightDepDate',
+                                        tip    : '�������ڲ������ڳ�������'
+                                    }
+                                ]
+                            },
                             '#J_Pi_Search_IFlightDepDate'      : {
                                 widgets   : {
                                     'Placeholder': {
-                                        inputNode: '#J_Pi_Search_IFlightDepDate'
+                                        node: '#J_Pi_Search_IFlightDepDate'
                                     },
                                     'Calendar'   : {
                                         triggerNode     : '#J_Pi_Search_IFlightDepDate',
@@ -1177,29 +1198,6 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                     active   : true,
                                     nextField: '#J_Pi_Search_IFlightArrDate'
                                 }
-                            },
-                            '#J_Pi_Search_IFlightArrDate'      : {
-                                disabled  : true,
-                                widgets   : {
-                                    'Placeholder': {
-                                        inputNode: '#J_Pi_Search_IFlightArrDate'
-                                    }
-                                },
-                                validation: [
-                                    {
-                                        type: 'required',
-                                        tip : '����д��������'
-                                    },
-                                    {
-                                        type: 'dateformat',
-                                        tip : '��������ȷ�����ڸ�ʽ �磺2018-01-01'
-                                    },
-                                    {
-                                        type   : 'mindate',
-                                        minDate: '#J_Pi_Search_IFlightDepDate',
-                                        tip    : '�������ڲ������ڳ�������'
-                                    }
-                                ]
                             }
                         },
                         /**
@@ -1269,7 +1267,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                             '#J_Pi_Search_dujia_depCity': {
                                 widgets: {
                                     'Placeholder'    : {
-                                        inputNode: '#J_Pi_Search_dujia_depCity'
+                                        node: '#J_Pi_Search_dujia_depCity'
                                     },
                                     'TripAutocomplete': {
                                         travel : {inputNode : '#J_Pi_Search_dujia_depCity'}
@@ -1279,7 +1277,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                             '#J_Pi_Search_dujia_arrCity': {
                                 widgets   : {
                                     'Placeholder'    : {
-                                        inputNode: '#J_Pi_Search_dujia_arrCity'
+                                        node: '#J_Pi_Search_dujia_arrCity'
                                     },
                                     'TripAutocomplete': {
                                         travel : {inputNode      : '#J_Pi_Search_dujia_arrCity'}
@@ -1303,7 +1301,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                                 '#J_Pi_Search_menpiao_arrCity': {
                                     widgets   : {
                                         'Placeholder': {
-                                            inputNode: '#J_Pi_Search_menpiao_arrCity'
+                                            node: '#J_Pi_Search_menpiao_arrCity'
                                         }
                                     },
                                     validation: [
@@ -1326,7 +1324,7 @@ KISSY.add('gallery/tsearch/1.0/index',function (S , Tsearch){
                             '#J_Pi_Search_zuche_arrCity': {
                                 widgets   : {
                                     'Placeholder'    : {
-                                        inputNode: '#J_Pi_Search_zuche_arrCity'
+                                        node : '#J_Pi_Search_zuche_arrCity'
                                     },
                                     'TripAutocomplete': {
                                         city :{inputNode : '#J_Pi_Search_zuche_arrCity'}

@@ -29,7 +29,7 @@ KISSY.add(function (S , Tsearch ,Common) {
                     }
                 },
                 'Placeholder'    : {
-                    inputNode: config.HotelToCity
+                    node: config.HotelToCity
                 }
             },
             validation: [
@@ -40,11 +40,41 @@ KISSY.add(function (S , Tsearch ,Common) {
             ]
         };
         fields[config.Omni] = {};
+        fields[config.HotelEndDate] = {
+            val       : defaultEndDate,
+            widgets   : {
+                'Placeholder': {
+                    node : config.HotelEndDate
+                }
+            },
+            validation: [
+                {
+                    type: 'required',
+                    tip : '请填写离店日期'
+                },
+                {
+                    type: 'dateformat',
+                    tip : '请输入正确的日期格式 如：2018-01-01'
+                },
+                {
+                    type   : 'mindate',
+                    minDate: config.HotelDepDate,
+                    tip    : '离店日期不能早于入住日期，请重新选择'
+                },
+                {
+                    type      : 'custom',
+                    tip       : '酒店预订时间不能超过28天，请重新选择',
+                    validateFn: function (arg, that) {
+                        return Common.getDateInterval(that.fields[config.HotelDepDate].node.val(), this.node.val()) <= 28
+                    }
+                }
+            ]
+        };
         fields[config.HotelDepDate] = {
             val       : defaultInDate,
             widgets   : {
                 'Placeholder': {
-                    inputNode: config.HotelDepDate
+                    node: config.HotelDepDate
                 },
                 'Calendar'   : {
                     triggerNode     : config.HotelDepDate,
@@ -78,40 +108,10 @@ KISSY.add(function (S , Tsearch ,Common) {
                 nextField: config.HotelEndDate
             }
         };
-        fields[config.HotelEndDate] = {
-            val       : defaultEndDate,
-            widgets   : {
-                'Placeholder': {
-                    inputNode: config.HotelEndDate
-                }
-            },
-            validation: [
-                {
-                    type: 'required',
-                    tip : '请填写离店日期'
-                },
-                {
-                    type: 'dateformat',
-                    tip : '请输入正确的日期格式 如：2018-01-01'
-                },
-                {
-                    type   : 'mindate',
-                    minDate: config.HotelDepDate,
-                    tip    : '离店日期不能早于入住日期，请重新选择'
-                },
-                {
-                    type      : 'custom',
-                    tip       : '酒店预订时间不能超过28天，请重新选择',
-                    validateFn: function (arg, that) {
-                        return Common.getDateInterval(that.fields[config.HotelDepDate].node.val(), this.node.val()) <= 28
-                    }
-                }
-            ]
-        };
         fields[config.HotelSearchKeywords] = {
             widgets: {
-                'TPlaceholder': {
-                    inputNode: config.HotelSearchKeywords
+                'Placeholder': {
+                    node: config.HotelSearchKeywords
                 }
             }
         };

@@ -4,8 +4,6 @@
  * @module tsearch
  **/
 KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
-    var EMPTY = '';
-    var $ = Node.all;
     var Widgets = {
         TripAutocomplete : TripAutocomplete,
         Calendar : Calendar ,

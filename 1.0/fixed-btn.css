@@ -1,5 +1,6 @@
 .mod-search {
     width: 435px;
+    height:380px;
     position: static;
 }
 
@@ -7,6 +8,10 @@
     width: 150px;
 }
 
+
+.mod-search .search-hd {
+    height:auto;
+}
 .mod-search .search-bd {
     width: 312px;
 }
@@ -18,6 +23,8 @@ body .trip-search-fixed-box {
     right: 140px;
     left: auto;
     top: auto;
+    overflow: hidden;
+    zoom:1;
 }
 
 .trip-search-fixed-content {
