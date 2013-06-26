@@ -47,6 +47,6 @@ body .trip-search-fixed-btn a ,body  .trip-search-fixed-btn a:visited {
     background: url(http://img02.taobaocdn.com/tps/i2/T1m9trFotdXXb.RTLc-152-60.png) no-repeat;
     text-align:center;
 }
-body .trip-search-fixed-btn-open a{
+body .trip-search-fixed-btn-open a,body .trip-search-fixed-btn-open a:visited{
     background-position: 0 100%;
 }
