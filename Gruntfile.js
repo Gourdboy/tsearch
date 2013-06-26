@@ -27,12 +27,12 @@ module.exports = function(grunt) {
             main: {
                 files: [
                     {
-                        src: "<%= pkg.version %>/index.js",
-                        dest: "<%= pkg.version %>/build/index.js"
+                        src: "<%= pkg.version %>/fixed-btn.js",
+                        dest: "<%= pkg.version %>/build/fixed-btn.js"
                     },
                     {
-                        src: "<%= pkg.version %>/index-aria.js",
-                        dest: "<%= pkg.version %>/build/index-aria.js"
+                        src: "<%= pkg.version %>/index.js",
+                        dest: "<%= pkg.version %>/build/index.js"
                     }
                 ]
             }
