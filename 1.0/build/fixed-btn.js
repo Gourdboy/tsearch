@@ -1354,8 +1354,8 @@ KISSY.add('gallery/tsearch/1.0/template',function (S){
 KISSY.add('gallery/tsearch/1.0/fixed-btn',function (S,O ,  TripSearch ,Template ,Slide) {
     var WIDTH = 437;
     var HEIGHT = 380;
-    var MIN_WIDTH = 152;
-    var MIN_HEIGHT = 30;
+    var MIN_WIDTH = 235;
+    var MIN_HEIGHT = 66;
     var FixedSearch = function () {
         FixedSearch.superclass.constructor.apply(this, arguments);
         this.initializer();
