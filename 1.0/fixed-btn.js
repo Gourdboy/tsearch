@@ -3,6 +3,7 @@ KISSY.add(function (S,O ,  TripSearch ,Template ,Slide) {
     var HEIGHT = 380;
     var MIN_WIDTH = 152;
     var MIN_HEIGHT = 30;
+    var BTN_TEXT = '搜索更多商品';
     var FixedSearch = function () {
         FixedSearch.superclass.constructor.apply(this, arguments);
         this.initializer();
@@ -18,7 +19,7 @@ KISSY.add(function (S,O ,  TripSearch ,Template ,Slide) {
                 width : MIN_WIDTH, //配置高和宽
                 height: MIN_HEIGHT
             });
-            this.overlay.set('content', '<div class="J_Pi_Search_TripSearchFixedBtn trip-search-fixed-btn"><a href="http://trip.taobao.com">定制我的旅行</a></div><div class="J_Pi_Search_TripSearchFixedContent trip-search-fixed-content"></div>');
+            this.overlay.set('content', '<div class="J_Pi_Search_TripSearchFixedBtn trip-search-fixed-btn"><a href="http://trip.taobao.com">' + BTN_TEXT + '</a></div><div class="J_Pi_Search_TripSearchFixedContent trip-search-fixed-content"></div>');
             this.overlay.render();
             this.overlay.show();
             var el = this.overlay.get('el');

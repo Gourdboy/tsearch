@@ -38,7 +38,9 @@ body .trip-search-fixed-btn {
 
 body .trip-search-fixed-btn a ,body  .trip-search-fixed-btn a:visited {
     display: inline-block;
-    zoom: 1;
+    font-weight: bold;
+    color:#404040;
+    zoom:1;
     width: 152px;
     height: 30px;
     line-height: 30px;
