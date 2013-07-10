@@ -67,30 +67,7 @@ KISSY.add(function (S , Tsearch){
                                     '#J_Pi_Search_jipiao_arrCity_code': {
 
                                     },
-                                    '#J_Pi_Search_FlightArrDate'      : {
-                                        disabled  : true,
-                                        widgets   : {
-                                            'Placeholder': {
-                                                node: '#J_Pi_Search_FlightArrDate'
-                                            }
-                                        },
-                                        validation: [
-                                            {
-                                                type: 'required',
-                                                tip : '请填写返程日期'
-                                            },
-                                            {
-                                                type: 'dateformat',
-                                                tip : '请输入正确的日期格式 如：2018-01-01'
-                                            },
-                                            {
-                                                type   : 'mindate',
-                                                minDate: '#J_Pi_Search_FlightDepDate',
-                                                tip    : '返程日期不能早于出发日期'
-                                            }
-                                        ]
-                                    },
-                                    '#J_Pi_Search_FlightDepDate'      : {
+                                    '#J_Pi_Search_FlightDepDate': {
                                         widgets   : {
                                             'Placeholder': {
                                                 node: '#J_Pi_Search_FlightDepDate'
@@ -125,6 +102,29 @@ KISSY.add(function (S , Tsearch){
                                             active   : true,
                                             nextField: '#J_Pi_Search_FlightArrDate'
                                         }
+                                    },
+                                    '#J_Pi_Search_FlightArrDate'      : {
+                                        disabled  : true,
+                                        widgets   : {
+                                            'Placeholder': {
+                                                node: '#J_Pi_Search_FlightArrDate'
+                                            }
+                                        },
+                                        validation: [
+                                            {
+                                                type: 'required',
+                                                tip : '请填写返程日期'
+                                            },
+                                            {
+                                                type: 'dateformat',
+                                                tip : '请输入正确的日期格式 如：2018-01-01'
+                                            },
+                                            {
+                                                type   : 'mindate',
+                                                minDate: '#J_Pi_Search_FlightDepDate',
+                                                tip    : '返程日期不能早于出发日期'
+                                            }
+                                        ]
                                     }
                                 },
                                 /**

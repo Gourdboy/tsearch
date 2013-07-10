@@ -101,8 +101,8 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                 } else if (field.Calendar) {
                     return function (msg) {
                         field.node[0].focus();
-                        field.Calendar.currentNode = field.node;
-                        field.Calendar.set('message' , msg)
+                        //field.Calendar.currentNode = field.node;
+                        field.Calendar.set('message' , msg);
                         field.Calendar.showMessage(msg);
                     }
                 }

@@ -17,7 +17,8 @@ KISSY.add(function (S,O ,  TripSearch ,Template ,Slide) {
         renderUI    : function () {
             this.overlay = new O({
                 width : MIN_WIDTH, //配置高和宽
-                height: MIN_HEIGHT
+                height: MIN_HEIGHT,
+                zIndex : this.get('zIndex')
             });
             this.overlay.set('content', '<div class="J_Pi_Search_TripSearchFixedBtn trip-search-fixed-btn"><a href="http://trip.taobao.com">' + BTN_TEXT + '</a></div><div class="J_Pi_Search_TripSearchFixedContent trip-search-fixed-content"></div>');
             this.overlay.render();
@@ -104,6 +105,9 @@ KISSY.add(function (S,O ,  TripSearch ,Template ,Slide) {
         }
     }, {
         ATTRS: {
+            zIndex: {
+                value : 10000
+            },
             tabIndex: {
                 value: 0
             },
