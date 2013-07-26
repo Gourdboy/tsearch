@@ -1,4 +1,4 @@
-KISSY.add(function (S , Tsearch){
+KISSY.add(function (S , Tsearch , Thotelsearch){
     var TripSearch = {
                 createFlightSearch : function (){
                     return new Tsearch({
@@ -321,7 +321,6 @@ KISSY.add(function (S , Tsearch){
                     });
                 },
                 createHotelSearch : function (){
-                    S.use('gallery/tsearch/1.0/hotel-search', function (S , Thotelsearch) {
                         Thotelsearch({
                             form               : '#J_Pi_Search_HotelForm',
                             radio              : '#J_Pi_Search_HotelLocationRadio',
@@ -331,11 +330,9 @@ KISSY.add(function (S , Tsearch){
                             HotelEndDate       : '#J_Pi_Search_HotelEndDate',
                             Omni               : '#J_Pi_Search_OmniCode',
                             HotelSearchKeywords: '#J_Pi_Search_HotelSearchKeywords'
-                        })
-                    });
+                        });
                 },
                 createLodgeSearch : function() {
-                    S.use('gallery/tsearch/1.0/hotel-search', function (S , Thotelsearch) {
                         Thotelsearch({
                             form               : '#J_Pi_Search_LodgeForm',
                             radioName          : '_fmd.h._0.r',
@@ -344,8 +341,7 @@ KISSY.add(function (S , Tsearch){
                             HotelEndDate       : '#J_Pi_Search_LodgeEndDate',
                             Omni               : '#J_Pi_Search_LodgeOmniCode',
                             HotelSearchKeywords: '#J_Pi_Search_LodgeSearchKeywords'
-                        })
-                    });
+                        });
                 },
                 createTravelSearch : function() {
 
@@ -431,4 +427,4 @@ KISSY.add(function (S , Tsearch){
                 }
             };
     return TripSearch;
-} , {requires : ['./tsearch' , 'node' , 'event' , 'base']});
+} , {requires : ['./tsearch' , './hotel-search' , 'node' , 'event' , 'base']});

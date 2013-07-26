@@ -130,6 +130,7 @@ KISSY.add(function (S, Ac , Common) {
                 align            : ALIGH,
                 resultListLocator: hotelCityListLocator,
                 resultFormatter  : hotelCityFormatter,
+                resultTextLocator : 'cityName',
                 source           : 'http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}',
                 hotSource        : 'http://www.taobao.com/go/rgn/trip/hotelhotcityv2_jsonp.php'
             };

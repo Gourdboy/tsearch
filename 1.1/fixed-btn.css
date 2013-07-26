@@ -4,9 +4,6 @@ body .mod-search {
     position: static;
     background:#fff;
 }
-.hidden{
-    display:none;
-}
 
 body .mod-search .search-input {
     width: 150px;
