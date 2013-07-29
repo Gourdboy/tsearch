@@ -54,6 +54,9 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                             node: '.J_ArrCity'
                                         }
                                     },
+                                    autoSwitch: {
+                                        nextField: '.J_DepDate'
+                                    },
                                     validation: [
                                         {
                                             type: 'required',
@@ -161,7 +164,7 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                             /**
                              * 保存搜索历史记录开关  默认关闭
                              */
-                            storage         : true
+                            storage         : false
                         });
             },
             createIflightSearch : function (){

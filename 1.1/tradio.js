@@ -39,8 +39,9 @@ KISSY.add(function (S) {
         bindUI     : function () {
             this.node.delegate('click', 'label', function (e) {
                 var target = S.one(e.currentTarget);
-                S.one('#' + target.attr('for')).attr('checked' , true);
-                this.set('value' , this.node.one('#' + target.attr('for')).val());
+                var radioInput =  target.one('input[type=radio]');
+                radioInput.prop('checked' , true);
+                this.set('value' , radioInput.val());
             },  this);
             this.on('afterValueChange' , this._syncUI , this);
         },
@@ -70,12 +71,15 @@ KISSY.add(function (S) {
             }
         },
         _getValue   : function () {
-            var checkedNode = S.one('input[type=radio][checked=checked]');
-            if (!checkedNode) {
-                return undefined;
-            }else{
-                return checkedNode.val();
-            }
+            var val = undefined;
+
+            this.node.all('input[type=radio]').each(function (node){
+                if (node.prop('checked') === true) {
+                    val = node.val();
+                    return false;
+                }
+            });
+            return val;
         },
         _setValue   : function (val) {
             var item = this.items[val];

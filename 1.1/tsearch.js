@@ -3,7 +3,7 @@
  * @author 舒克<shuke.cl@taobao.com>
  * @module tsearch
  **/
-KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
+KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder , LocalStorage , Common) {
     var Widgets = {
         TripAutocomplete: TripAutocomplete,
         Calendar        : Calendar,
@@ -30,7 +30,6 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                 S.log('TSearch:没有找到表单节点,初始化失败');
                 return;
             }
-            //this.get('storage') && this.setDefaultValue();
             this.fields = this.get('fields');
             S.each(this.fields, function (field, _id) {
                 var _node = this.form.one(_id);
@@ -48,6 +47,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                 }
             }, this);
             this.bindEvent();
+            this.get('storage') && this._restoreStorageValue();
         },
         bindEvent      : function () {
             this.form.on('submit', this._doSubmit, this);
@@ -59,9 +59,9 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             var swapper = this.get('swapper');
             if (swapper) {
                 S.Event.on(swapper.trigger, 'click', function (e) {
-                    e.halt();
+                    e.preventDefault();
                     this.swap();
-                },  this)
+                },  this);
             }
         },
         addField       : function () {
@@ -229,7 +229,78 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                 form  : this.form,
                 fields: this.fields
             });
-            //this._storageForm();
+            this.get('storage') && this._storageForm();
+        },
+        /**
+         * 存储搜索数据岛本地
+         * @private
+         */
+        _storageForm: function () {
+            var fields = this.get('fields'),
+                storageArr = [],
+                itemStr = '';
+            S.each(fields , function (field , key) {
+                var node = field.node;
+                var attr = '';
+                var val  = '';
+                if (node.hasAttr('type')) {//是输入框
+                    attr = node.attr('type');
+                    val = node.val();
+                    if (attr == 'text' || attr == 'hidden') {//文本框
+                        if (node.val() != '' && !node.attr('disabled')) {
+                            itemStr = key + ':' + val;
+                            storageArr.push(itemStr);
+                        }
+                    }
+                }else if(key.indexOf('J_Radio') > -1){//是radio
+                    itemStr = key + ':' + field['Tradio'].val();
+                    storageArr.push(itemStr);
+                }
+            });
+            //保存到本地
+            if (this.form.hasAttr('id')) {//必须依赖form的id
+                var storage = new LocalStorage();
+                storage.setItem(this.form.attr('id'), storageArr.join(','));
+            }
+        },
+        /**
+         * 还原本地数据
+         * @private
+         */
+        _restoreStorageValue : function (){
+            var storage = new LocalStorage();
+            var fields = this.get('fields');
+            var defaultValue = '';
+            if (this.form.hasAttr('id') && storage.getItem(this.form.attr('id'))) {
+                defaultValue = storage.getItem(this.form.attr('id'));
+            }
+            S.each(defaultValue.split(','),function (item , i){
+                var field ;
+                item = item.split(':');
+                var dateVal=item[1];
+                if (field = fields[item[0]]) {
+                    if (item[0].indexOf('J_Radio') > -1) {
+                        field.Tradio && field.Tradio.val(item[1]);
+                    }else{
+                        if (item[0].indexOf('J_DepDate') > -1) {//出发日期
+                            dateVal = item[1];
+                            if (this._isResetDate(item[1])) {
+                                dateVal = this.getDate(1);
+                            }
+
+                        }else if(item[0].indexOf('J_EndDate') > -1){
+                            dateVal = item[1];
+                            if (this._isResetDate(item[1])) {
+                                dateVal = this.getDate(2);
+                            }
+
+                        }
+                        field.node.val(dateVal);
+                    }
+                }
+
+
+            },this);
         },
         /**
          * 日期检查,返回
@@ -238,7 +309,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
          */
         _isResetDate   : function (date) {
             date = date.split('-');
-            return new Date() > new Date(date[0], date[1] - 1, date[2]);
+            return this.get('time') > new Date(date[0], date[1] - 1, date[2]);
         },
         /*
          *获取指定日期的
@@ -256,7 +327,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
 
             num_date = num_date || 0;
             var _y, _m, _d;
-            var _T = new Date();
+            var _T = this.get('time');
             _T.setDate(_T.getDate() + num_date);
             _y = _T.getFullYear();
             _m = formatdate(_T.getMonth() + 1);
@@ -406,7 +477,10 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
          */
         validation_order: {
             value: null
+        },
+        time : {
+            value : new Date()
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './radio-button' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
