@@ -5,10 +5,10 @@
  **/
 KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
     var Widgets = {
-        TripAutocomplete : TripAutocomplete,
-        Calendar : Calendar ,
-        Placeholder : Placeholder,
-        Tradio : Tradio
+        TripAutocomplete: TripAutocomplete,
+        Calendar        : Calendar,
+        Placeholder     : Placeholder,
+        Tradio          : Tradio
     };
     /**
      * 请修改组件描述
@@ -35,7 +35,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             S.each(this.fields, function (field, _id) {
                 var _node = this.form.one(_id);
                 if (!_node) {
-                    S.log(_id + "is not find..")
+                    S.log(_id + "is not find..");
                     return false;
                 }
                 field.node = _node;
@@ -135,7 +135,6 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
          * @param cur_field_id
          */
         setSwitchInput : function (cur_field_id) {
-            return false;//临时关闭自动切换
             var fields = this.fields;
             var cur_field = fields[cur_field_id];
             var switchToNext = function () {
@@ -146,7 +145,9 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                     return this;
                 }
                 if (!next_field.disabled && next_field.node.val() == '') {//当前开关打开且下一个字段未填
-                    next_node[0].focus()
+                    setTimeout(function (){
+                        next_node[0].focus()
+                    },200);
                 }
             };
 
@@ -154,7 +155,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                 cur_field.TripAutocomplete.on('select', switchToNext);
             } else if (cur_field.Calendar) {
                 cur_field.Calendar.on('dateclick', function () {
-                    if (this.currentNode.attr('id') === cur_field_id.replace('#', '')) {//当前触发dateclick事件为当前输入框绑定的日历控件时执行自动切换
+                    if (this.currentNode.hasClass(cur_field_id.replace('.', ''))) {//当前触发dateclick事件为当前输入框绑定的日历控件时执行自动切换
                         switchToNext();
                     }
                 });
@@ -169,7 +170,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             var that = this,
                 config = this.get('switchSearchType'),
                 fields = this.fields,
-                back_container = S.one(config.back_container),
+                back_container = this.form.one(config.back_container),
                 back_input = fields[config.back_input].node;
             var Tradio = fields[config.trigger].Tradio;
             var Calendar = fields[config.go_input].Calendar;
@@ -192,7 +193,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             });
             //选择返程日期时，自动切换为往返
             Calendar.on('dateclick', function (e) {
-                if (this.currentNode.attr('id') === config.back_input.replace('#', '')) {
+                if (this.currentNode.hasClass('J_EndDate')) {
                     Tradio.val('1');
                 }
             });
@@ -206,7 +207,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
         _setSearchType : function (val) {
             var config = this.get('switchSearchType'),
                 fields = this.fields,
-                back_container = S.one(config.back_container);
+                back_container = this.form.one(config.back_container);
             if (val === "1") {//开启往返
                 back_container.removeClass('disabled');
                 if (fields[config.go_input].autoSwitch) {

@@ -57,27 +57,27 @@
         <!--flight search start-->
         <form method="get" target="_blank"
               action="http://s.jipiao.trip.taobao.com/flight_search_result.htm"
-              class="search-form J_FlightForm">
+              class="search-form" id="J_FlightForm">
             <a href="javascript:void(0)" target="_self" class="search-trade J_Swap">互换出发到达城市</a>
             <fieldset>
                 <div class="search-field">
                     <label class="search-item-intro search-tit">出发城市：</label>
                     <div class="search-inputarea">
-                        <input type="text" class="search-input J_jipiao_depCity"  name="depCityName"  placeholder="城市名" value="" />
-                        <input name="depCity" type="hidden"  class="J_jipiao_depCity_code"/>
+                        <input type="text" class="search-input J_DepCity"  name="depCityName"  placeholder="城市名" value="" />
+                        <input name="depCity" type="hidden"  class="J_DepCityCode"/>
                     </div>
                 </div>
                 <div class="search-field">
                     <label class="search-item-intro search-tit">到达城市：</label>
                     <div class="search-inputarea">
-                        <input type="text" class="search-input J_jipiao_arrCity" name="arrCityName" placeholder="城市名" value=""/>
-                        <input name="arrCity" type="hidden"  class="J_jipiao_arrCity_code"/>
+                        <input type="text" class="search-input J_ArrCity" name="arrCityName" placeholder="城市名" value=""/>
+                        <input name="arrCity" type="hidden"  class="J_ArrCityCode"/>
                     </div>
                 </div>
                 <div class="search-field">
                     <label class="search-item-intro search-tit">航程类型：</label>
                     <div class="search-inputarea">
-                        <div class="search-radio J_FlightRadio" >
+                        <div class="search-radio J_Radio" >
                             <label for="J_jipiao_FlightTypeRadio_1"  class="flight-type-radio first-label">
                                 <input type="radio" name="tripType" id="J_jipiao_FlightTypeRadio_1" class="J_type_radio" value="0" checked="checked"/>单程
                             </label>
@@ -92,18 +92,18 @@
 
                     <div class="search-inputarea">
                         <input type="text"
-                               class="search-input J_FlightDepDate J_DateInput J_depDate"
+                               class="search-input J_DepDate"
                                name="depDate"
                                placeholder="yyyy-mm-dd" value=""
                                autocomplete="off"/>
                     </div>
                 </div>
-                <div class="search-field disabled" id="J_FlightBackField">
+                <div class="search-field disabled J_EndField">
                     <label class="search-item-intro search-tit">返程日期：</label>
 
                     <div class="search-inputarea">
                         <input type="text"
-                               class="search-input J_FlightArrDate J_DateInput J_endDate"
+                               class="search-input J_EndDate"
                                name="arrDate"
                                placeholder="yyyy-mm-dd" value=""
                                autocomplete="off"/>
@@ -526,42 +526,21 @@
         srcPath = "../../../";
     }
 
+    srcPath = "../../../";
     S.config({
         packages: [
             {
                 name                  : "pi",
                 path                  : srcPath,
-                charset               : "gbk",
+                charset               : "utf-8",
                 ignorePackageNameInUri: true
             }
         ]
     });
-    S.use('pi/tsearch/1.0/index , gallery/slide/1.1/index', function (S, TripSearch, Slide) {
-        var slide = new Slide('J_Pi_Search_SearchModule', { // 直接指定id，也可以指定选择器，比如："#id .className"
-            navClass    : 'J_Pi_Search_SearchTabNav',
-            contentClass: 'search-bd',
-            pannelClass : 'J_Pi_Search_TabPannel',
-            eventype    : 'click' //通过点击页签来切换Tab
+    S.use('pi/tsearch/1.1/index', function (S, TripSearch, Slide) {
+        TripSearch.createFlightSearch({
+            node : S.one('#J_FlightForm')
         });
-        var NavMap = [
-            'createFlightSearch',
-            'createIflightSearch',
-            'createHotelSearch',
-            'createLodgeSearch',
-            'createTicketSearch',
-            'createTravelSearch',
-            'createCarSearch'
-        ];
-        slide.on('switch', function (e) {
-            var methodName = NavMap[e.index];
-            if (methodName != '') {
-                TripSearch[methodName].call(this);
-                NavMap[e.index] = '';
-            }
-        });
-        TripSearch[NavMap[this.get('tabIndex')]].call(this);
-        NavMap[ this.get('tabIndex')] = '';
-        slide.go(this.get('tabIndex'));
     })
 </script>
 <div style="height:10000px;"></div>

@@ -1,11 +1,11 @@
-KISSY.add(function (S , Tsearch){
+KISSY.add(function (S , Tsearch , Thotelsearch){
     function initTabSearch(wapperId){
 
     };
     var TripSearch = {
-            createFlightSearch : function (){
+            createFlightSearch : function (cfg){
                 return new Tsearch({
-                            form            : '.J_FlightForm',
+                            form            : cfg.node ,
                             fields          : {
                                 '.J_Radio'        : {
                                     widgets: {
@@ -133,7 +133,7 @@ KISSY.add(function (S , Tsearch){
                             /**
                              * 表单校验顺序
                              */
-                            validation_order: ['.J_DepCity', '.J_ArrCity', '.J_DepDate' , '.J_ArrDate'],
+                            validation_order: ['.J_DepCity', '.J_ArrCity', '.J_DepDate' , '.J_EndDate'],
                             /**
                              * 出发到达城市切换配置
                              * @param trigger 交换按钮ID
@@ -324,7 +324,6 @@ KISSY.add(function (S , Tsearch){
                 });
             },
             createHotelSearch : function (){
-                S.use('gallery/tsearch/1.0/hotel-search', function (S , Thotelsearch) {
                     Thotelsearch({
                         form               : '#J_Pi_Search_HotelForm',
                         radio              : '#J_Pi_Search_HotelLocationRadio',
@@ -334,11 +333,9 @@ KISSY.add(function (S , Tsearch){
                         HotelEndDate       : '#J_Pi_Search_HotelEndDate',
                         Omni               : '#J_Pi_Search_OmniCode',
                         HotelSearchKeywords: '#J_Pi_Search_HotelSearchKeywords'
-                    })
                 });
             },
             createLodgeSearch : function() {
-                S.use('gallery/tsearch/1.0/hotel-search', function (S , Thotelsearch) {
                     Thotelsearch({
                         form               : '#J_Pi_Search_LodgeForm',
                         radioName          : '_fmd.h._0.r',
@@ -347,7 +344,6 @@ KISSY.add(function (S , Tsearch){
                         HotelEndDate       : '#J_Pi_Search_LodgeEndDate',
                         Omni               : '#J_Pi_Search_LodgeOmniCode',
                         HotelSearchKeywords: '#J_Pi_Search_LodgeSearchKeywords'
-                    })
                 });
             },
             createTravelSearch : function() {
@@ -431,8 +427,8 @@ KISSY.add(function (S , Tsearch){
                     },
                     validation_order: ['#J_Pi_Search_zuche_arrCity']
                 })
-            },
+            }
 
     };
     return TripSearch;
-} , {requires : ['./tsearch' , 'node' , 'event' , 'base']});
+} , {requires : ['./tsearch' , './hotel-search' , 'node' , 'event' , 'base']});

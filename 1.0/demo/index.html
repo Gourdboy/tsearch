@@ -450,12 +450,14 @@
             });
         }
     S.use('gallery/slide/1.1/index,gallery/tsearch/1.0/index', function (S, Slide , TripSearch){
+        var defaultIndex = 0;
         var slide = new Slide('J_Pi_Search_SearchModule', { // 直接指定id，也可以指定选择器，比如："#id .className"
             navClass    : 'J_Pi_Search_SearchTabNav',
             contentClass: 'search-bd',
             pannelClass : 'J_Pi_Search_TabPannel',
             eventype    : 'click' //通过点击页签来切换Tab
         });
+
         var NavMap = [
             'createFlightSearch',
             'createIflightSearch',
@@ -472,9 +474,9 @@
                 NavMap[e.index] = '';
             }
         });
-        TripSearch[NavMap[0]].call(this);
-        NavMap[0] = '';
-        slide.go(0);
+        TripSearch[NavMap[defaultIndex]].call(this);
+        NavMap[defaultIndex] = '';
+        slide.go(defaultIndex);
     })
 </script>
 <div style="height:10000px;"></div>
