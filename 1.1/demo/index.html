@@ -53,7 +53,7 @@
     </div>
 </div>
 <div class="search-bd">
-    <div class="search-item swing-slice J_TabPannel">
+    <div class="search-item swing-slice J_TabPannel hidden">
         <!--flight search start-->
         <form method="get" target="_blank"
               action="http://s.jipiao.trip.taobao.com/flight_search_result.htm"
@@ -119,39 +119,39 @@
         </form>
         <!--flight search end-->
     </div>
-    <div class="search-item swing-slice J_TabPannel hidden">
+    <div class="search-item swing-slice J_TabPannel">
         <!--iflight search start-->
         <form method="get" target="_blank"
               action="http://s.ijipiao.trip.taobao.com/ie/flight_search.htm"
-              class="search-form search-jipiao" id="J_ijipiao_form">
+              class="search-form search-jipiao" id="J_IFlightForm">
             <a href="javascript:void(0)" target="_self" class="search-trade"
-               id="J_IFlightSwap">互换出发到达城市</a>
+               id="J_Swap">互换出发到达城市</a>
             <fieldset>
                 <div class="search-field">
                     <label class="search-item-intro search-tit">出发城市：</label>
 
                     <div class="search-inputarea">
-                        <input type="text" class="search-input J_ijipiao_depCity"
+                        <input type="text" class="search-input J_DepCity"
                                name="_fmie.ie._0.st"
                                placeholder="城市名" value=""/>
                         <input name="_fmie.ie._0.s" type="hidden"
-                               class="J_ijipiao_depCity_code"/>
+                               class="J_DepCityCode"/>
                     </div>
                 </div>
                 <div class="search-field">
                     <label class="search-item-intro search-tit">到达城市：</label>
                     <div class="search-inputarea">
-                        <input type="text" class="search-input J_ijipiao_arrCity"
+                        <input type="text" class="search-input J_ArrCity"
                                name="_fmie.ie._0.en"
                                placeholder="城市名" value=""/>
                         <input name="_fmie.ie._0.e" type="hidden"
-                               class="J_ijipiao_arrCity_code"/>
+                               class="J_ArrCityCode"/>
                     </div>
                 </div>
                 <div class="search-field">
                     <label class="search-item-intro search-tit">航程类型：</label>
                     <div class="search-inputarea">
-                        <div class="search-radio J_FlightRadio">
+                        <div class="search-radio J_Radio">
                             <label class="flight-type-radio first-label">
                                 <input type="radio" name="_fmie.ie._0.t" class="J_type_radio" value="0"/>单程
                             </label>
@@ -166,16 +166,16 @@
 
                     <div class="search-inputarea">
                         <input type="text"
-                               class="search-input J_IFlightDepDate  J_DateInput"
+                               class="search-input J_DepDate"
                                name="_fmie.ie._0.sta"
                                placeholder="yyyy-mm-dd" value=""
                                autocomplete="off"/>
                     </div>
                 </div>
-                <div class="search-field">
+                <div class="search-field J_EndField">
                     <label class="search-item-intro search-tit">返程日期：</label>
                     <div class="search-inputarea">
-                        <input type="text" class="search-input J_FlightArrDate J_DateInput J_endDate" name="_fmie.ie._0.end" placeholder="yyyy-mm-dd" value="" autocomplete="off"/>
+                        <input type="text" class="search-input J_EndDate" name="_fmie.ie._0.end" placeholder="yyyy-mm-dd" value="" autocomplete="off"/>
                     </div>
                 </div>
                 <div class="search-submitarea">
@@ -538,9 +538,16 @@
         ]
     });
     S.use('pi/tsearch/1.1/index', function (S, TripSearch, Slide) {
-        TripSearch.createFlightSearch({
+        /*TripSearch.createFlightSearch({
             node : S.one('#J_FlightForm')
+        });*/
+        TripSearch.createIflightSearch({
+            node : '#J_IFlightForm'
         });
+
+        /*TripSearch.createHotelSearch({
+            node : '#J_HotelForm'
+        });*/
     })
 </script>
 <div style="height:10000px;"></div>

@@ -22,15 +22,12 @@ KISSY.add(function (S) {
             var node = this.node = this.get('node');
             var that = this;
             this.items = {};
-            this.radios = node.all('input[type="radio"]');
+            this.radios = node.all('input');
             this.radios.each(function (_item) {
                 var item = {
                     input: _item
                 };
-                var _item_id = _item.attr('id');
-                if (_item_id && node.one('label[for=' + _item_id + ']')) {
-                    item.label = node.one('label[for=' + _item_id + ']');
-                }
+                item.label = _item.parent('label');
                 that.items[_item.val()] = item;
             });
             this.bindUI();
@@ -39,7 +36,7 @@ KISSY.add(function (S) {
         bindUI     : function () {
             this.node.delegate('click', 'label', function (e) {
                 var target = S.one(e.currentTarget);
-                var radioInput =  target.one('input[type=radio]');
+                var radioInput =  target.one('input');
                 radioInput.prop('checked' , true);
                 this.set('value' , radioInput.val());
             },  this);
@@ -71,15 +68,8 @@ KISSY.add(function (S) {
             }
         },
         _getValue   : function () {
-            var val = undefined;
-
-            this.node.all('input[type=radio]').each(function (node){
-                if (node.prop('checked') === true) {
-                    val = node.val();
-                    return false;
-                }
-            });
-            return val;
+            var checkedNode = this.node.one('input:checked');
+            return checkedNode ? checkedNode.val() : undefined;
         },
         _setValue   : function (val) {
             var item = this.items[val];

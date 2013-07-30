@@ -75,38 +75,43 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder , 
             var that = this;
             S.each(field.widgets, function (widget_config, widget_name) {
                 var Widget = Widgets[widget_name];
+                var finalTriggerSelector = '';
                 if (Widget) {
                     if(widget_name == 'TripAutocomplete'){//Autocomplete采用工厂模式
                         S.each(field.widgets[widget_name] , function (v , k){
+                            v.inputNode = (v.inputNode && that.form.one(v.inputNode));
+                            v.codeInputNode = (v.codeInputNode && that.form.one(v.codeInputNode));
                             field[widget_name] =  Widget[k](v);
-                        })
+                        });
+                        field.showTip = function (msg) {
+                            field.node[0].focus();
+                            field.TripAutocomplete.showMessage(msg);
+                        }
                     } else {
+                        widget_config.node && (widget_config.node = that.form.one(widget_config.node));
+                        widget_config.triggerNode && (widget_config.triggerNode = that.form.one(widget_config.triggerNode));
+                        finalTriggerSelector = widget_config.finalTriggerNode
+                        widget_config.finalTriggerNode && (widget_config.finalTriggerNode = that.form.one(widget_config.finalTriggerNode));
                         field[widget_name] = new Widget(widget_config);
                     }
-                    if (widget_name === 'Calendar' && widget_config.finalTriggerNode && that.fields[widget_config.finalTriggerNode]) { //hack for Calendar 出发和返程日期共用一个日历组件,将组件实力共享给返程表单对象
-                        that.fields[widget_config.finalTriggerNode][widget_name] = field[widget_name];
+                    if (widget_name === 'Calendar'){
+                        field.showTip = function (msg) {
+                            field.node[0].focus();
+                            field.Calendar.set('message' , msg);
+                            field.Calendar.showMessage(msg);
+                        };
+                        var finalFiled = that.fields[finalTriggerSelector];
+                        if(widget_config.finalTriggerNode && finalFiled) { //hack for Calendar 出发和返程日期共用一个日历组件,将组件实力共享给返程表单对象
+                            finalFiled[widget_name] = field[widget_name];
+                            finalFiled.showTip = function (msg) {
+                                finalFiled.node[0].focus();
+                                finalFiled.Calendar.set('message' , msg);
+                                finalFiled.Calendar.showMessage(msg);
+                            };
+                        }
                     }
                 }
             });
-            /**
-             * 把组件的showMessage方法进行适配，统一用showTip方式现实错误提示
-             * @type {*}
-             */
-            field.showTip = (function (field) {
-                if (field.TripAutocomplete) {
-                    return function (msg) {
-                        field.node[0].focus();
-                        field.TripAutocomplete.showMessage(msg);
-                    }
-                } else if (field.Calendar) {
-                    return function (msg) {
-                        field.node[0].focus();
-                        //field.Calendar.currentNode = field.node;
-                        field.Calendar.set('message' , msg);
-                        field.Calendar.showMessage(msg);
-                    }
-                }
-            })(field);
         },
         /**
          * 交换所有swapper配置里的值
