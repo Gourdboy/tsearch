@@ -3,8 +3,9 @@ combined files :
 
 gallery/tsearch/1.1/common
 gallery/tsearch/1.1/trip-autocomplete
-gallery/tsearch/1.1/radio-button
+gallery/tsearch/1.1/tradio
 gallery/tsearch/1.1/tsearch
+gallery/tsearch/1.1/hotel-search
 gallery/tsearch/1.1/index
 gallery/tsearch/1.1/template
 gallery/tsearch/1.1/fixed-btn
@@ -291,6 +292,7 @@ KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
                 align            : ALIGH,
                 resultListLocator: hotelCityListLocator,
                 resultFormatter  : hotelCityFormatter,
+                resultTextLocator: 'cityName',//指定文本内容
                 source           : 'http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}',
                 hotSource        : 'http://www.taobao.com/go/rgn/trip/hotelhotcityv2_jsonp.php'
             };
@@ -370,7 +372,7 @@ KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
  * @module Radiobutton
  * @submodule
  **/
-KISSY.add('gallery/tsearch/1.1/radio-button',function (S) {
+KISSY.add('gallery/tsearch/1.1/tradio',function (S) {
     /**
      * Radiobutton
      * @class Radiobutton
@@ -388,15 +390,12 @@ KISSY.add('gallery/tsearch/1.1/radio-button',function (S) {
             var node = this.node = this.get('node');
             var that = this;
             this.items = {};
-            this.radios = node.all('input[type="radio"]');
+            this.radios = node.all('input');
             this.radios.each(function (_item) {
                 var item = {
                     input: _item
                 };
-                var _item_id = _item.attr('id');
-                if (_item_id && node.one('label[for=' + _item_id + ']')) {
-                    item.label = node.one('label[for=' + _item_id + ']');
-                }
+                item.label = _item.parent('label');
                 that.items[_item.val()] = item;
             });
             this.bindUI();
@@ -405,8 +404,9 @@ KISSY.add('gallery/tsearch/1.1/radio-button',function (S) {
         bindUI     : function () {
             this.node.delegate('click', 'label', function (e) {
                 var target = S.one(e.currentTarget);
-                S.one('#' + target.attr('for')).attr('checked' , true);
-                this.set('value' , this.node.one('#' + target.attr('for')).val());
+                var radioInput =  target.one('input');
+                radioInput.prop('checked' , true);
+                this.set('value' , radioInput.val());
             },  this);
             this.on('afterValueChange' , this._syncUI , this);
         },
@@ -436,12 +436,8 @@ KISSY.add('gallery/tsearch/1.1/radio-button',function (S) {
             }
         },
         _getValue   : function () {
-            var checkedNode = S.one('input[type=radio][checked=checked]');
-            if (!checkedNode) {
-                return undefined;
-            }else{
-                return checkedNode.val();
-            }
+            var checkedNode = this.node.one('input:checked');
+            return checkedNode ? checkedNode.val() : undefined;
         },
         _setValue   : function (val) {
             var item = this.items[val];
@@ -506,12 +502,12 @@ KISSY.add('gallery/tsearch/1.1/radio-button',function (S) {
  * @author 舒克<shuke.cl@taobao.com>
  * @module tsearch
  **/
-KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
+KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder , LocalStorage , Common) {
     var Widgets = {
-        TripAutocomplete : TripAutocomplete,
-        Calendar : Calendar ,
-        Placeholder : Placeholder,
-        Tradio : Tradio
+        TripAutocomplete: TripAutocomplete,
+        Calendar        : Calendar,
+        Placeholder     : Placeholder,
+        Tradio          : Tradio
     };
     /**
      * 请修改组件描述
@@ -533,12 +529,11 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
                 S.log('TSearch:没有找到表单节点,初始化失败');
                 return;
             }
-            //this.get('storage') && this.setDefaultValue();
             this.fields = this.get('fields');
             S.each(this.fields, function (field, _id) {
                 var _node = this.form.one(_id);
                 if (!_node) {
-                    S.log(_id + "is not find..")
+                    S.log(_id + "is not find..");
                     return false;
                 }
                 field.node = _node;
@@ -551,6 +546,7 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
                 }
             }, this);
             this.bindEvent();
+            this.get('storage') && this._restoreStorageValue();
         },
         bindEvent      : function () {
             this.form.on('submit', this._doSubmit, this);
@@ -561,10 +557,10 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
             //绑定表单交换操作
             var swapper = this.get('swapper');
             if (swapper) {
-                S.Event.on(swapper.trigger, 'click', function (e) {
-                    e.halt();
+                S.Event.on(this.form.all(swapper.trigger), 'click', function (e) {
+                    e.preventDefault();
                     this.swap();
-                },  this)
+                },  this);
             }
         },
         addField       : function () {
@@ -578,38 +574,43 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
             var that = this;
             S.each(field.widgets, function (widget_config, widget_name) {
                 var Widget = Widgets[widget_name];
+                var finalTriggerSelector = '';
                 if (Widget) {
                     if(widget_name == 'TripAutocomplete'){//Autocomplete采用工厂模式
                         S.each(field.widgets[widget_name] , function (v , k){
+                            v.inputNode = (v.inputNode && that.form.one(v.inputNode));
+                            v.codeInputNode = (v.codeInputNode && that.form.one(v.codeInputNode));
                             field[widget_name] =  Widget[k](v);
-                        })
+                        });
+                        field.showTip = function (msg) {
+                            field.node[0].focus();
+                            field.TripAutocomplete.showMessage(msg);
+                        }
                     } else {
+                        widget_config.node && (widget_config.node = that.form.one(widget_config.node));
+                        widget_config.triggerNode && (widget_config.triggerNode = that.form.one(widget_config.triggerNode));
+                        finalTriggerSelector = widget_config.finalTriggerNode
+                        widget_config.finalTriggerNode && (widget_config.finalTriggerNode = that.form.one(widget_config.finalTriggerNode));
                         field[widget_name] = new Widget(widget_config);
                     }
-                    if (widget_name === 'Calendar' && widget_config.finalTriggerNode && that.fields[widget_config.finalTriggerNode]) { //hack for Calendar 出发和返程日期共用一个日历组件,将组件实力共享给返程表单对象
-                        that.fields[widget_config.finalTriggerNode][widget_name] = field[widget_name];
+                    if (widget_name === 'Calendar'){
+                        field.showTip = function (msg) {
+                            field.node[0].focus();
+                            field.Calendar.set('message' , msg);
+                            field.Calendar.showMessage(msg);
+                        };
+                        var finalFiled = that.fields[finalTriggerSelector];
+                        if(widget_config.finalTriggerNode && finalFiled) { //hack for Calendar 出发和返程日期共用一个日历组件,将组件实力共享给返程表单对象
+                            finalFiled[widget_name] = field[widget_name];
+                            finalFiled.showTip = function (msg) {
+                                finalFiled.node[0].focus();
+                                finalFiled.Calendar.set('message' , msg);
+                                finalFiled.Calendar.showMessage(msg);
+                            };
+                        }
                     }
                 }
             });
-            /**
-             * 把组件的showMessage方法进行适配，统一用showTip方式现实错误提示
-             * @type {*}
-             */
-            field.showTip = (function (field) {
-                if (field.TripAutocomplete) {
-                    return function (msg) {
-                        field.node[0].focus();
-                        field.TripAutocomplete.showMessage(msg);
-                    }
-                } else if (field.Calendar) {
-                    return function (msg) {
-                        field.node[0].focus();
-                        //field.Calendar.currentNode = field.node;
-                        field.Calendar.set('message' , msg);
-                        field.Calendar.showMessage(msg);
-                    }
-                }
-            })(field);
         },
         /**
          * 交换所有swapper配置里的值
@@ -638,7 +639,6 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
          * @param cur_field_id
          */
         setSwitchInput : function (cur_field_id) {
-            return false;//临时关闭自动切换
             var fields = this.fields;
             var cur_field = fields[cur_field_id];
             var switchToNext = function () {
@@ -649,7 +649,9 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
                     return this;
                 }
                 if (!next_field.disabled && next_field.node.val() == '') {//当前开关打开且下一个字段未填
-                    next_node[0].focus()
+                    setTimeout(function (){
+                        next_node[0].focus()
+                    },200);
                 }
             };
 
@@ -657,7 +659,7 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
                 cur_field.TripAutocomplete.on('select', switchToNext);
             } else if (cur_field.Calendar) {
                 cur_field.Calendar.on('dateclick', function () {
-                    if (this.currentNode.attr('id') === cur_field_id.replace('#', '')) {//当前触发dateclick事件为当前输入框绑定的日历控件时执行自动切换
+                    if (this.currentNode.hasClass(cur_field_id.replace('.', ''))) {//当前触发dateclick事件为当前输入框绑定的日历控件时执行自动切换
                         switchToNext();
                     }
                 });
@@ -672,7 +674,7 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
             var that = this,
                 config = this.get('switchSearchType'),
                 fields = this.fields,
-                back_container = S.one(config.back_container),
+                back_container = this.form.one(config.back_container),
                 back_input = fields[config.back_input].node;
             var Tradio = fields[config.trigger].Tradio;
             var Calendar = fields[config.go_input].Calendar;
@@ -695,7 +697,7 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
             });
             //选择返程日期时，自动切换为往返
             Calendar.on('dateclick', function (e) {
-                if (this.currentNode.attr('id') === config.back_input.replace('#', '')) {
+                if (this.currentNode.hasClass('J_EndDate')) {
                     Tradio.val('1');
                 }
             });
@@ -709,7 +711,7 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
         _setSearchType : function (val) {
             var config = this.get('switchSearchType'),
                 fields = this.fields,
-                back_container = S.one(config.back_container);
+                back_container = this.form.one(config.back_container);
             if (val === "1") {//开启往返
                 back_container.removeClass('disabled');
                 if (fields[config.go_input].autoSwitch) {
@@ -731,7 +733,78 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
                 form  : this.form,
                 fields: this.fields
             });
-            //this._storageForm();
+            this.get('storage') && this._storageForm();
+        },
+        /**
+         * 存储搜索数据岛本地
+         * @private
+         */
+        _storageForm: function () {
+            var fields = this.get('fields'),
+                storageArr = [],
+                itemStr = '';
+            S.each(fields , function (field , key) {
+                var node = field.node;
+                var attr = '';
+                var val  = '';
+                if (node.hasAttr('type')) {//是输入框
+                    attr = node.attr('type');
+                    val = node.val();
+                    if (attr == 'text' || attr == 'hidden') {//文本框
+                        if (node.val() != '' && !node.attr('disabled')) {
+                            itemStr = key + ':' + val;
+                            storageArr.push(itemStr);
+                        }
+                    }
+                }else if(key.indexOf('J_Radio') > -1){//是radio
+                    itemStr = key + ':' + field['Tradio'].val();
+                    storageArr.push(itemStr);
+                }
+            });
+            //保存到本地
+            if (this.form.hasAttr('id')) {//必须依赖form的id
+                var storage = new LocalStorage();
+                storage.setItem(this.form.attr('id'), storageArr.join(','));
+            }
+        },
+        /**
+         * 还原本地数据
+         * @private
+         */
+        _restoreStorageValue : function (){
+            var storage = new LocalStorage();
+            var fields = this.get('fields');
+            var defaultValue = '';
+            if (this.form.hasAttr('id') && storage.getItem(this.form.attr('id'))) {
+                defaultValue = storage.getItem(this.form.attr('id'));
+            }
+            S.each(defaultValue.split(','),function (item , i){
+                var field ;
+                item = item.split(':');
+                var dateVal=item[1];
+                if (field = fields[item[0]]) {
+                    if (item[0].indexOf('J_Radio') > -1) {
+                        field.Tradio && field.Tradio.val(item[1]);
+                    }else{
+                        if (item[0].indexOf('J_DepDate') > -1) {//出发日期
+                            dateVal = item[1];
+                            if (this._isResetDate(item[1])) {
+                                dateVal = this.getDate(1);
+                            }
+
+                        }else if(item[0].indexOf('J_EndDate') > -1){
+                            dateVal = item[1];
+                            if (this._isResetDate(item[1])) {
+                                dateVal = this.getDate(2);
+                            }
+
+                        }
+                        field.node.val(dateVal);
+                    }
+                }
+
+
+            },this);
         },
         /**
          * 日期检查,返回
@@ -740,7 +813,7 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
          */
         _isResetDate   : function (date) {
             date = date.split('-');
-            return new Date() > new Date(date[0], date[1] - 1, date[2]);
+            return this.get('time') > new Date(date[0], date[1] - 1, date[2]);
         },
         /*
          *获取指定日期的
@@ -758,7 +831,7 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
 
             num_date = num_date || 0;
             var _y, _m, _d;
-            var _T = new Date();
+            var _T = this.get('time');
             _T.setDate(_T.getDate() + num_date);
             _y = _T.getFullYear();
             _m = formatdate(_T.getMonth() + 1);
@@ -908,24 +981,180 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
          */
         validation_order: {
             value: null
+        },
+        time : {
+            value : new Date()
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './radio-button' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'node', 'base']});
-KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch){
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+KISSY.add('gallery/tsearch/1.1/hotel-search',function (S , Tsearch ,Common) {
+    var DESTINATION_SOURCE = {
+            cn        : 'http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}',
+            cnHot     : 'http://www.taobao.com/go/rgn/trip/hotelhotcityv2_jsonp.php',
+            oversea   : 'http://kezhan.trip.taobao.com/citysuggest.do?t=1&q={query}',
+            overseaHot: 'http://www.taobao.com/go/rgn/trip/hotoverseav2_jsonp.php'
+        };
+
+    var defaultInDate = Common.formatDate(Common.setDate(new Date(), 3)).yymmdd,
+        defaultEndDate = Common.formatDate(Common.setDate(new Date(), 4)).yymmdd;
+    var Thotelsearch = function (config) {
+        var fields = {};
+        if (config.radio) {
+            fields[config.radio] = {
+                widgets: {
+                    'Tradio': {
+                        node : config.radio,
+                        name : config.radioName
+                    }
+                }
+            };
+        }
+        fields[config.HotelToCity] = {
+            widgets   : {
+                'TripAutocomplete': {
+                    hotel : {
+                        inputNode        : config.HotelToCity,
+                        codeInputNode    : config.Omni
+                    }
+                },
+                'Placeholder'    : {
+                    node: config.HotelToCity
+                }
+            },
+            validation: [
+                {
+                    type: 'required',
+                    tip : '请填入住城市'
+                }
+            ]
+        };
+        fields[config.Omni] = {};
+        fields[config.HotelEndDate] = {
+            val       : defaultEndDate,
+            widgets   : {
+                'Placeholder': {
+                    node : config.HotelEndDate
+                }
+            },
+            validation: [
+                {
+                    type: 'required',
+                    tip : '请填写离店日期'
+                },
+                {
+                    type: 'dateformat',
+                    tip : '请输入正确的日期格式 如：2018-01-01'
+                },
+                {
+                    type   : 'mindate',
+                    minDate: config.HotelDepDate,
+                    tip    : '离店日期不能早于入住日期，请重新选择'
+                },
+                {
+                    type      : 'custom',
+                    tip       : '酒店预订时间不能超过28天，请重新选择',
+                    validateFn: function (arg, that) {
+                        return Common.getDateInterval(that.fields[config.HotelDepDate].node.val(), this.node.val()) <= 28
+                    }
+                }
+            ]
+        };
+        fields[config.HotelDepDate] = {
+            val       : defaultInDate,
+            widgets   : {
+                'Placeholder': {
+                    node: config.HotelDepDate
+                },
+                'Calendar'   : {
+                    triggerNode     : config.HotelDepDate,
+                    finalTriggerNode: config.HotelEndDate,
+                    minDate         : new Date(),
+                    isDateInfo      : 1,
+                    isDateIcon      : 1,
+                    isHoliday       : 1,
+                    isKeyup         : false,
+                    startDate       : defaultInDate,
+                    endDate         : defaultEndDate,
+                    afterDays       : 89
+                }
+            },
+            validation: [
+                {
+                    type: 'required',
+                    tip : '请填入住日期'
+                },
+                {
+                    type: 'dateformat',
+                    tip : '请输入正确的日期格式 如：2018-01-01'
+                },
+                {
+                    type   : 'mindate',
+                    minDate: new Date() - 86400000,
+                    tip    : '入住日期不能早于今天'
+                }
+            ],
+            autoSwitch: {
+                nextField: config.HotelEndDate
+            }
+        };
+        fields[config.HotelSearchKeywords] = {
+            widgets: {
+                'Placeholder': {
+                    node: config.HotelSearchKeywords
+                }
+            }
+        };
+        var hotelSearch = new Tsearch({
+            'form'            : config.form,
+            'fields'          : fields,
+            /**
+             * 表单校验顺序
+             */
+            'validation_order': [config.HotelToCity, config.HotelDepDate, config.HotelEndDate]
+        });
+        //酒店有radio时，绑定切换
+        var endDateField = hotelSearch.fields[config.HotelEndDate];
+        if (endDateField.Calendar) {//hack for calendar
+            endDateField.Calendar.currentNode = endDateField.node;
+            endDateField.Calendar._setDateInfo(endDateField.node.get('value'));
+        }
+        if (!config.radio) {
+            return hotelSearch;
+        }
+        var bindRadioSwitch = function () {
+            var Tradio = hotelSearch.fields[config.radio].Tradio;
+            var field = hotelSearch.get('fields')[config.HotelToCity],
+                Autocomplete = field.TripAutocomplete;
+            Tradio.on('afterValueChange', function (e) {
+                field.node.val('');
+                if (e.newVal === '0') {//国内
+                    Autocomplete.set('source', DESTINATION_SOURCE.cn);
+                    Autocomplete.set('hotSource', DESTINATION_SOURCE.cnHot);
+                } else {//海外
+                    Autocomplete.set('source', DESTINATION_SOURCE.oversea);
+                    Autocomplete.set('hotSource', DESTINATION_SOURCE.overseaHot);
+                }
+            });
+        };
+        bindRadioSwitch();
+        return hotelSearch;
+    };
+    return Thotelsearch;
+},{requires: ['./tsearch' , './common']});
+KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
     function initTabSearch(wapperId){
 
     };
     var TripSearch = {
-            createFlightSearch : function (){
+            createFlightSearch : function (cfg){
                 return new Tsearch({
-                            form            : '.J_FlightForm',
+                            form            : cfg.node ,
                             fields          : {
                                 '.J_Radio'        : {
                                     widgets: {
                                         'Tradio': {
-                                            node: '.J_Radio',
-                                            name: 'tripType'
+                                            node: '.J_Radio'
                                         }
                                     }
                                 },
@@ -967,6 +1196,9 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch){
                                         'Placeholder'    : {
                                             node: '.J_ArrCity'
                                         }
+                                    },
+                                    autoSwitch: {
+                                        nextField: '.J_DepDate'
                                     },
                                     validation: [
                                         {
@@ -1047,7 +1279,170 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch){
                             /**
                              * 表单校验顺序
                              */
-                            validation_order: ['.J_DepCity', '.J_ArrCity', '.J_DepDate' , '.J_ArrDate'],
+                            validation_order: ['.J_DepCity', '.J_ArrCity', '.J_DepDate' , '.J_EndDate'],
+                            /**
+                             * 出发到达城市切换配置
+                             * @param trigger 交换按钮ID
+                             * @param list 需要交换数据内容的容器列表 ,key 和 value 对应的inputNode 进行值的交换
+                             */
+                            swapper         : {
+                                trigger: '.J_Swap',
+                                list   : {
+                                    '.J_DepCity'     : '.J_ArrCity',
+                                    '.J_DepCityCode': '.J_ArrCityCode'
+                                }
+                            },
+                            /**
+                             * 机票专用:往返切换配置
+                             * @param trigger 触发往返切换的radio控件所在容器
+                             * @param back_container 返程输入框所在的容器
+                             * @param back_input 返程输入框
+                             */
+                            switchSearchType: {
+                                trigger       : '.J_Radio',
+                                back_container: '.J_EndField',
+                                go_input      : '.J_DepDate',
+                                back_input    : '.J_EndDate'
+                            },
+                            /**
+                             * 保存搜索历史记录开关  默认关闭
+                             */
+                            storage         : false
+                        });
+            },
+            createIflightSearch : function (cfg){
+                return new Tsearch({
+                            form            : cfg.node ,
+                            fields          : {
+                                '.J_Radio'        : {
+                                    widgets: {
+                                        'Tradio': {
+                                            node: '.J_Radio'
+                                        }
+                                    }
+                                },
+                                '.J_DepCity'     : {
+                                    val       : '',
+                                    widgets   : {
+                                        'TripAutocomplete': {
+                                            iflight: {
+                                                inputNode: '.J_DepCity',
+                                                codeInputNode : '.J_DepCityCode'
+                                            }
+                                        },
+                                        'Placeholder'    : {
+                                            node: '.J_DepCity'
+                                        }
+                                    },
+                                    autoSwitch: {
+                                        nextField: '.J_ArrCity'
+                                    },
+                                    validation: [
+                                        {
+                                            type: 'required',
+                                            when: 'blur',
+                                            tip : '请填写出发城市'
+                                        }
+                                    ]
+                                },
+                                '.J_DepCityCode': {
+
+                                },
+                                '.J_ArrCity'     : {
+                                    widgets   : {
+                                        'TripAutocomplete': {
+                                            iflight: {
+                                                inputNode : '.J_ArrCity',
+                                                codeInputNode : '.J_ArrCityCode'
+                                            }
+                                        },
+                                        'Placeholder'    : {
+                                            node: '.J_ArrCity'
+                                        }
+                                    },
+                                    autoSwitch: {
+                                        nextField: '.J_DepDate'
+                                    },
+                                    validation: [
+                                        {
+                                            type: 'required',
+                                            when: 'blur',
+                                            tip : '请填写到达城市'
+                                        },
+                                        {
+                                            type          : 'identical',
+                                            identicalWidth: '.J_DepCity',
+                                            tip           : '出发到达城市不能相同'
+                                        }
+                                    ]
+                                },
+                                '.J_ArrCityCode': {
+
+                                },
+                                '.J_DepDate': {
+                                    widgets   : {
+                                        'Placeholder': {
+                                            node: '.J_DepDate'
+                                        },
+                                        'Calendar'   : {
+                                            triggerNode     : '.J_DepDate',
+                                            finalTriggerNode: '.J_EndDate',
+                                            minDate         : new Date(),
+                                            isDateInfo      : 1,
+                                            isDateIcon      : 1,
+                                            afterDays       : 364,
+                                            isKeyup         : false,
+                                            isHoliday       : 1
+                                        }
+                                    },
+                                    validation: [
+                                        {
+                                            type: 'required',
+                                            tip : '请填写出发日期'
+                                        },
+                                        {
+                                            type: 'dateformat',
+                                            tip : '请输入正确的日期格式 如：2018-01-01'
+                                        },
+                                        {
+                                            type   : 'mindate',
+                                            minDate: new Date() - 86400000,
+                                            tip    : '出发日期不能早于今天'
+                                        }
+                                    ],
+                                    autoSwitch: {
+                                        active   : true,
+                                        nextField: '.J_EndDate'
+                                    }
+                                },
+                                '.J_EndDate'      : {
+                                    disabled  : true,
+                                    widgets   : {
+                                        'Placeholder': {
+                                            node: '.J_EndDate'
+                                        }
+                                    },
+                                    validation: [
+                                        {
+                                            type: 'required',
+                                            tip : '请填写返程日期'
+                                        },
+                                        {
+                                            type: 'dateformat',
+                                            tip : '请输入正确的日期格式 如：2018-01-01'
+                                        },
+                                        {
+                                            type   : 'mindate',
+                                            minDate: '.J_DepDate',
+                                            tip    : '返程日期不能早于出发日期'
+                                        }
+                                    ]
+                                }
+                            },
+                            /**
+                             * 表单校验顺序
+                             */
+                            validation_order: ['.J_DepCity', '.J_ArrCity', '.J_DepDate' , '.J_EndDate'],
                             /**
                              * 出发到达城市切换配置
                              * @param trigger 交换按钮ID
@@ -1078,181 +1473,18 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch){
                             storage         : true
                         });
             },
-            createIflightSearch : function (){
-                return new Tsearch({
-                    form            : '#J_Pi_Search_ijipiao_form',
-                    fields          : {
-                        '#J_Pi_Search_IFlightRadio'        : {
-                            widgets: {
-                                'Tradio': {
-                                    node: '#J_Pi_Search_IFlightRadio',
-                                    name: '_fmie.ie._0.t'
-                                }
-                            }
-                        },
-                        '#J_Pi_Search_ijipiao_depCity'     : {
-                            widgets   : {
-                                'TripAutocomplete': {
-                                    iflight : {
-                                        inputNode    : '#J_Pi_Search_ijipiao_depCity',
-                                        codeInputNode: '#J_Pi_Search_ijipiao_depCity_code',
-                                        hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php'//不指定及没有热门推荐
-                                    }
-                                },
-                                'Placeholder'    : {
-                                    node: '#J_Pi_Search_ijipiao_depCity'
-                                }
-                            },
-                            autoSwitch: {
-                                active   : true,
-                                nextField: '#J_Pi_Search_ijipiao_arrCity'
-                            },
-                            validation: [
-                                {
-                                    type: 'required',
-                                    when: 'blur',
-                                    tip : '请填写出发城市'
-                                }
-                            ]
-                        },
-                        '#J_Pi_Search_ijipiao_depCity_code': {
-
-                        },
-                        '#J_Pi_Search_ijipiao_arrCity'     : {
-                            widgets   : {
-                                'TripAutocomplete': {
-                                    iflight : {
-                                        inputNode    : '#J_Pi_Search_ijipiao_arrCity',
-                                        codeInputNode: '#J_Pi_Search_ijipiao_arrCity_code'
-                                    }
-                                },
-                                'Placeholder'    : {
-                                    node: '#J_Pi_Search_ijipiao_arrCity'
-                                }
-                            },
-                            validation: [
-                                {
-                                    type: 'required',
-                                    tip : '请填写到达城市'
-                                },
-                                {
-                                    type          : 'identical',
-                                    identicalWidth: '#J_Pi_Search_ijipiao_depCity',
-                                    tip           : '出发到达城市不能相同'
-                                }
-                            ]
-                        },
-                        '#J_Pi_Search_ijipiao_arrCity_code': {
-
-                        },
-                        '#J_Pi_Search_IFlightArrDate'      : {
-                            disabled  : true,
-                            widgets   : {
-                                'Placeholder': {
-                                    node: '#J_Pi_Search_IFlightArrDate'
-                                }
-                            },
-                            validation: [
-                                {
-                                    type: 'required',
-                                    tip : '请填写返程日期'
-                                },
-                                {
-                                    type: 'dateformat',
-                                    tip : '请输入正确的日期格式 如：2018-01-01'
-                                },
-                                {
-                                    type   : 'mindate',
-                                    minDate: '#J_Pi_Search_IFlightDepDate',
-                                    tip    : '返程日期不能早于出发日期'
-                                }
-                            ]
-                        },
-                        '#J_Pi_Search_IFlightDepDate'      : {
-                            widgets   : {
-                                'Placeholder': {
-                                    node: '#J_Pi_Search_IFlightDepDate'
-                                },
-                                'Calendar'   : {
-                                    triggerNode     : '#J_Pi_Search_IFlightDepDate',
-                                    finalTriggerNode: '#J_Pi_Search_IFlightArrDate',
-                                    minDate         : new Date(),
-                                    isDateInfo      : 1,
-                                    isDateIcon      : 1,
-                                    isKeyup         : false,
-                                    afterDays       : 364,
-                                    isHoliday       : 1
-                                }
-                            },
-                            validation: [
-                                {
-                                    type: 'required',
-                                    tip : '请填写出发日期'
-                                },
-                                {
-                                    type: 'dateformat',
-                                    tip : '请输入正确的日期格式 如：2018-01-01'
-                                },
-                                {
-                                    type   : 'mindate',
-                                    minDate: new Date() - 86400000,
-                                    tip    : '出发日期不能早于今天'
-                                }
-                            ],
-                            autoSwitch: {
-                                active   : true,
-                                nextField: '#J_Pi_Search_IFlightArrDate'
-                            }
-                        }
-                    },
-                    /**
-                     * 表单校验顺序
-                     */
-                    validation_order: ['#J_Pi_Search_ijipiao_depCity', '#J_Pi_Search_ijipiao_arrCity', '#J_Pi_Search_IFlightDepDate' , '#J_Pi_Search_IFlightArrDate'],
-                    /**
-                     * 出发到达城市切换配置
-                     * @param trigger 交换按钮ID
-                     * @param list 需要交换数据内容的容器列表 ,key 和 value 对应的inputNode 进行值的交换
-                     */
-                    swapper         : {
-                        trigger: '#J_Pi_Search_IFlightSwap',
-                        list   : {
-                            '#J_Pi_Search_ijipiao_depCity'     : '#J_Pi_Search_ijipiao_arrCity',
-                            '#J_Pi_Search_ijipiao_depCity_code': '#J_Pi_Search_ijipiao_arrCity_code'
-                        }
-                    },
-                    /**
-                     * 往返切换配置
-                     * @param trigger 触发往返切换的radio控件所在容器
-                     * @param back_container 返程输入框所在的容器
-                     * @param back_input 返程输入框
-                     */
-                    switchSearchType: {
-                        trigger       : '#J_Pi_Search_IFlightRadio',
-                        back_container: '#J_Pi_Search_IFlightBackField',
-                        go_input      : '#J_Pi_Search_IFlightDepDate',
-                        back_input    : '#J_Pi_Search_IFlightArrDate'
-                    },
-                    storage         : true
-
-                });
-            },
             createHotelSearch : function (){
-                S.use('gallery/tsearch/1.0/hotel-search', function (S , Thotelsearch) {
                     Thotelsearch({
                         form               : '#J_Pi_Search_HotelForm',
-                        radio              : '#J_Pi_Search_HotelLocationRadio',
-                        radioName          : '_fmd.h._0.r',
+                        radio              : '.J_Radio',
                         HotelToCity        : '#J_Pi_Search_HotelToCity',
                         HotelDepDate       : '#J_Pi_Search_HotelDepDate',
                         HotelEndDate       : '#J_Pi_Search_HotelEndDate',
                         Omni               : '#J_Pi_Search_OmniCode',
                         HotelSearchKeywords: '#J_Pi_Search_HotelSearchKeywords'
-                    })
                 });
             },
             createLodgeSearch : function() {
-                S.use('gallery/tsearch/1.0/hotel-search', function (S , Thotelsearch) {
                     Thotelsearch({
                         form               : '#J_Pi_Search_LodgeForm',
                         radioName          : '_fmd.h._0.r',
@@ -1261,7 +1493,6 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch){
                         HotelEndDate       : '#J_Pi_Search_LodgeEndDate',
                         Omni               : '#J_Pi_Search_LodgeOmniCode',
                         HotelSearchKeywords: '#J_Pi_Search_LodgeSearchKeywords'
-                    })
                 });
             },
             createTravelSearch : function() {
@@ -1346,10 +1577,126 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch){
                     validation_order: ['#J_Pi_Search_zuche_arrCity']
                 })
             },
+            createTrainSearch : function (cfg){
+            return new Tsearch({
+                        form            : cfg.node ,
+                        fields          : {
+                            '.J_DepCity'     : {
+                                val       : '',
+                                widgets   : {
+                                    'TripAutocomplete': {
+                                        city: {
+                                            inputNode: '.J_DepCity',
+                                            codeInputNode : '.J_DepCityCode'
+                                        }
+                                    },
+                                    'Placeholder'    : {
+                                        node: '.J_DepCity'
+                                    }
+                                },
+                                autoSwitch: {
+                                    nextField: '.J_ArrCity'
+                                },
+                                validation: [
+                                    {
+                                        type: 'required',
+                                        when: 'blur',
+                                        tip : '请填写出发城市'
+                                    }
+                                ]
+                            },
+                            '.J_DepCityCode': {
 
+                            },
+                            '.J_ArrCity'     : {
+                                widgets   : {
+                                    'TripAutocomplete': {
+                                        city: {
+                                            inputNode : '.J_ArrCity',
+                                            codeInputNode : '.J_ArrCityCode'
+                                        }
+                                    },
+                                    'Placeholder'    : {
+                                        node: '.J_ArrCity'
+                                    }
+                                },
+                                validation: [
+                                    {
+                                        type: 'required',
+                                        when: 'blur',
+                                        tip : '请填写到达城市'
+                                    },
+                                    {
+                                        type          : 'identical',
+                                        identicalWidth: '.J_DepCity',
+                                        tip           : '出发到达城市不能相同'
+                                    }
+                                ],
+                                autoSwitch: {
+                                    active   : true,
+                                    nextField: '.J_DepDate'
+                                }
+                            },
+                            '.J_ArrCityCode': {
+
+                            },
+                            '.J_DepDate': {
+                                widgets   : {
+                                    'Placeholder': {
+                                        node: '.J_DepDate'
+                                    },
+                                    'Calendar'   : {
+                                        triggerNode     : '.J_DepDate',
+                                        minDate         : new Date(),
+                                        isDateInfo      : 1,
+                                        isDateIcon      : 1,
+                                        afterDays       : 364,
+                                        isKeyup         : false,
+                                        isHoliday       : 1
+                                    }
+                                },
+                                validation: [
+                                    {
+                                        type: 'required',
+                                        tip : '请填写出发日期'
+                                    },
+                                    {
+                                        type: 'dateformat',
+                                        tip : '请输入正确的日期格式 如：2018-01-01'
+                                    },
+                                    {
+                                        type   : 'mindate',
+                                        minDate: new Date() - 86400000,
+                                        tip    : '出发日期不能早于今天'
+                                    }
+                                ]
+                            }
+                        },
+                        /**
+                         * 表单校验顺序
+                         */
+                        validation_order: ['.J_DepCity', '.J_ArrCity', '.J_DepDate'],
+                        /**
+                         * 出发到达城市切换配置
+                         * @param trigger 交换按钮ID
+                         * @param list 需要交换数据内容的容器列表 ,key 和 value 对应的inputNode 进行值的交换
+                         */
+                        swapper         : {
+                            trigger: '.J_Swap',
+                            list   : {
+                                '.J_DepCity'     : '.J_ArrCity',
+                                '.J_DepCityCode': '.J_ArrCityCode'
+                            }
+                        },
+                        /**
+                         * 保存搜索历史记录开关  默认关闭
+                         */
+                        storage         : true
+                    });
+        }
     };
     return TripSearch;
-} , {requires : ['./tsearch' , 'node' , 'event' , 'base']});
+} , {requires : ['./tsearch' , './hotel-search' , 'node' , 'event' , 'base']});
 KISSY.add('gallery/tsearch/1.1/template',function (S){
     return {
         searchTemplate : '<div class="mod-search" id="J_Pi_Search_SearchModule"><div class="search-hd"><div class="search-nav"><ul class="J_Pi_Search_SearchTabNav"><li class="swing-slice-indicator J_Pi_Search_NavItemFlight selected"><s class="search-nav-flight"></s><a href="http://trip.taobao.com/jipiao" hidefocus="true">国内机票</a></li><li class="swing-slice-indicator J_Pi_Search_NavItemIFlight"><s class="search-nav-iflight"></s><a href="http://trip.taobao.com/ijipiao" hidefocus="true">国际 &#8226 港澳台</a></li><li class="swing-slice-indicator J_Pi_Search_NavItemHotel"><s class="search-nav-hotel"></s><a href="http://trip.taobao.com/jiudian" hidefocus="true">酒店</a></li><li class="swing-slice-indicator J_Pi_Search_NavItemLodge"><s class="search-nav-lodge"></s><a href="http://trip.taobao.com/kezhan" hidefocus="true">客栈</a></li><li class="swing-slice-indicator J_Pi_Search_NavItemTicket"><s class="search-nav-ticket"></s><a href="http://trip.taobao.com/menpiao" hidefocus="true">景点门票</a></li><li class="swing-slice-indicator J_Pi_Search_NavItemTravel"><s class="search-nav-travel"></s><a href="http://trip.taobao.com/dujia" hidefocus="true">旅游度假</a></li><li class="swing-slice-indicator J_Pi_Search_NavItemCar"><s class="search-nav-car"></s><a href="http://trip.taobao.com/zuche" hidefocus="true">租车</a></li></ul></div></div><div class="search-bd"><div class="search-item swing-slice J_Pi_Search_TabPannel"><form method="get" target="_blank" action="http://s.jipiao.trip.taobao.com/flight_search_result.htm"class="search-form search-jipiao" id="J_Pi_Search_jipiao_form"><a href="javascript:void(0)" target="_self" class="search-trade" id="J_Pi_Search_FlightSwap">互换出发到达城市</a><fieldset><input type="hidden" name="spm" value="181.1113091.a1z0v.1"/><div class="search-field"><label class="search-item-intro search-tit">出发城市：</label><div class="search-inputarea"><input type="text" class="search-input required" name="depCityName" id="J_Pi_Search_jipiao_depCity" placeholder="城市名" value=""/><input name="depCity" type="hidden" id="J_Pi_Search_jipiao_depCity_code" data-trade="J_Pi_Search_jipiao_arrCity_code"/></div></div><div class="search-field"><label class="search-item-intro search-tit">到达城市：</label><div class="search-inputarea"><input type="text" class="search-input required" name="arrCityName"id="J_Pi_Search_jipiao_arrCity" placeholder="城市名" value="" data-description="到达城市"/><input name="arrCity" type="hidden" id="J_Pi_Search_jipiao_arrCity_code"/></div></div><div class="search-field"><label class="search-item-intro search-tit">航程类型：</label><div class="search-inputarea"><div class="search-radio" id="J_Pi_Search_FlightRadio"><label for="J_Pi_Search_jipiao_FlightTypeRadio_1" class="flight-type-radio first-label"><input type="radio" name="tripType" id="J_Pi_Search_jipiao_FlightTypeRadio_1" class="J_Pi_Search_type_radio" value="0" checked="checked"/>单程</label><label for="J_Pi_Search_jipiao_FlightTypeRadio_2" class="flight-type-radio last-label"><input type="radio" name="tripType" id="J_Pi_Search_jipiao_FlightTypeRadio_2" class="J_Pi_Search_type_radio" value="1"/>往返</label></div></div></div><div class="search-field"><label class="search-item-intro search-tit">出发日期：</label><div class="search-inputarea"><input type="text" class="search-input required dateformat J_Pi_Search_DateInput J_Pi_Search_depDate" name="depDate" id="J_Pi_Search_FlightDepDate" placeholder="yyyy-mm-dd" value="" autocomplete="off" /></div></div><div class="search-field disabled" id="J_Pi_Search_FlightBackField"><label class="search-item-intro search-tit">返程日期：</label><div class="search-inputarea"><input type="text" class="search-input J_Pi_Search_DateInput J_Pi_Search_endDate" name="arrDate" maxlength="10" id="J_Pi_Search_FlightArrDate" placeholder="yyyy-mm-dd" value="" autocomplete="off" /></div></div><div class="search-submitarea"><button type="submit" class="search-submit-btn">搜索</button></div></fieldset></form></div><div class="search-item swing-slice J_Pi_Search_TabPannel hidden"><form method="get" target="_blank" action="http://s.ijipiao.trip.taobao.com/ie/flight_search.htm"class="search-form search-jipiao" id="J_Pi_Search_ijipiao_form"><input type="hidden" name="spm" value="181.1113091.a1z0v.2"/><a href="javascript:void(0)" target="_self" class="search-trade" id="J_Pi_Search_IFlightSwap">互换出发到达城市</a><fieldset><div class="search-field"><label class="search-item-intro search-tit">出发城市：</label><div class="search-inputarea"><input type="text" class="search-input required" name="_fmie.ie._0.st"id="J_Pi_Search_ijipiao_depCity" placeholder="城市名" value=""data-trade="J_Pi_Search_ijipiao_arrCity" data-autotab="J_Pi_Search_ijipiao_arrCity"data-description="出发城市"/><input name="_fmie.ie._0.s" type="hidden" id="J_Pi_Search_ijipiao_depCity_code"data-trade="J_Pi_Search_ijipiao_arrCity_code"/></div></div><div class="search-field"><label class="search-item-intro search-tit">到达城市：</label><div class="search-inputarea"><input type="text" class="search-input required" name="_fmie.ie._0.en"id="J_Pi_Search_ijipiao_arrCity" placeholder="城市名" value="" data-description="到达城市"/><input name="_fmie.ie._0.e" type="hidden" id="J_Pi_Search_ijipiao_arrCity_code"/></div></div><div class="search-field"><label class="search-item-intro search-tit">航程类型：</label><div class="search-inputarea"><div class="search-radio" id="J_Pi_Search_IFlightRadio"><label for="J_Pi_Search_ijipiao_FlightTypeRadio_1" class="flight-type-radio first-label"><input type="radio" name="_fmie.ie._0.t" id="J_Pi_Search_ijipiao_FlightTypeRadio_1" class="J_Pi_Search_type_radio" value="0"/>单程</label><label for="J_Pi_Search_ijipiao_FlightTypeRadio_2" class="flight-type-radio last-label"><input type="radio" name="_fmie.ie._0.t" id="J_Pi_Search_ijipiao_FlightTypeRadio_2" class="J_Pi_Search_type_radio" value="1" checked="checked"/>往返</label></div></div></div><div class="search-field"><label class="search-item-intro search-tit">出发日期：</label><div class="search-inputarea"><input type="text" class="search-input required dateformat J_Pi_Search_DateInput J_Pi_Search_depDate" name="_fmie.ie._0.sta" id="J_Pi_Search_IFlightDepDate" placeholder="yyyy-mm-dd" value="" autocomplete="off" /></div></div><div class="search-field" id="J_Pi_Search_IFlightBackField"><label class="search-item-intro search-tit">返程日期：</label><div class="search-inputarea"><input type="text" class="search-input J_Pi_Search_DateInput J_Pi_Search_endDate J_Pi_Search_ieEndDate required" name="_fmie.ie._0.end" id="J_Pi_Search_IFlightArrDate" placeholder="yyyy-mm-dd" value="" autocomplete="off" /></div></div><div class="search-submitarea"><button type="submit" class="search-submit-btn">搜索</button></div></fieldset></form></div><div class="search-item swing-slice J_Pi_Search_TabPannel hidden"><form method="get" target="_blank" id="J_Pi_Search_HotelForm" action="http://kezhan.trip.taobao.com/hotel_list2.htm" class="search-form search-jiudian"><input type="hidden" name="spm" value="181.1113091.a1z0v.3"/><input type="hidden" id="J_Pi_Search_HotelSearchAction" name="action" value="hotel_list_action2"/><input type="hidden" id="J_Pi_Search_HotelSearchDoSearch" name="event_submit_do_search" value="submit"/><fieldset><div class="search-field"><div class="search-radio" id="J_Pi_Search_HotelLocationRadio"><label for="J_Pi_Search_HotelLocal" class="first-label"><input id="J_Pi_Search_HotelLocal" type="radio" value="0" name="_fmd.h._0.r" checked="checked" class="flight-type-radio">国内/港澳台</label><label for="J_Pi_Search_HotelInternational" class="last-label"><input id="J_Pi_Search_HotelInternational" type="radio" value="1" name="_fmd.h._0.r" class="flight-type-radio">海外</label></div></div><div class="search-field"><label class="search-item-intro search-tit J_Pi_Search_HotelToPlaceIndicator">目的城市：</label><div class="search-inputarea"><input type="text" class="search-input required" id="J_Pi_Search_HotelToCity"placeholder="城市名" name="city" value="" data-description="目的城市"/><input name="c" type="hidden" id="J_Pi_Search_OmniCode" value=""/></div></div><div class="search-field"><label class="search-item-intro search-tit">入住日期：</label><div class="search-inputarea"><div id="J_Pi_Search_jiudian_depDateBox" class="cal-input"><input type="text" class="search-input required dateformat J_Pi_Search_depDate"name="_fmd.h._0.ch" id="J_Pi_Search_HotelDepDate" placeholder="yyyy-mm-dd"value="" autocomplete="off"/></div></div></div><div class="search-field"><label class="search-item-intro search-tit">离店日期：</label><div class="search-inputarea"><div id="J_Pi_Search_jiudian_endDateBox" class="cal-input"><input type="text" class="search-input required dateformat J_Pi_Search_endDate"name="_fmd.h._0.che" id="J_Pi_Search_HotelEndDate" placeholder="yyyy-mm-dd"value="" autocomplete="off"/></div></div></div><div class="search-field"><label class="search-item-intro search-tit">　关键字：</label><div class="search-inputarea"><input type="text" class="search-input" name="_fmd.h._0.n" id="J_Pi_Search_HotelSearchKeywords" placeholder="输入酒店名、商圈、地标等" value=""/></div></div><div class="search-submitarea"><button type="submit" class="J_Pi_Search_HotelListSearch search-submit-btn">搜索</button></div></fieldset></form></div><div class="search-item swing-slice J_Pi_Search_TabPannel hidden"><form method="get" target="_blank" id="J_Pi_Search_LodgeForm" action="http://kezhan.trip.taobao.com/hotel_list2.htm" class="search-form search-jiudian"><input type="hidden" name="spm" value="181.1113091.a1z0v.4"/><input type="hidden" id="J_Pi_Search_LodgeSearchAction" name="action" value="hotel_list_action2"/><input type="hidden" id="J_Pi_Search_LodgeSearchDoSearch" name="event_submit_do_search" value="submit"/><input type="hidden" name="from" value="kezhan"/><input type="hidden" name="searchBy" value="trip-kezhan"/><input type="hidden" name="_fmd.h._0.l" value="0"/><fieldset><div class="search-field"><label class="search-item-intro search-tit J_Pi_Search_HotelToPlaceIndicator">目的城市：</label><div class="search-inputarea"><input type="text" class="search-input required" id="J_Pi_Search_LodgeToCity"placeholder="城市名" name="city" value="" data-description="目的城市"/><input name="c" type="hidden" id="J_Pi_Search_LodgeOmniCode" value=""/><input type="text" class="search-input required hidden" id="J_Pi_Search_LodgeToOversea"placeholder="城市名" value="" data-description="目的城市"/></div></div><div class="search-field"><label class="search-item-intro search-tit">入住日期：</label><div class="search-inputarea"><div id="J_Pi_Search_LodgeDepDateBox" class="cal-input"><input type="text" class="search-input required dateformat J_Pi_Search_depDate"name="_fmd.h._0.ch" id="J_Pi_Search_LodgeDepDate" placeholder="yyyy-mm-dd"value="" data-autotab="J_Pi_Search_LodgeEndDate" autocomplete="off"/></div></div></div><div class="search-field"><label class="search-item-intro search-tit">离店日期：</label><div class="search-inputarea"><div id="J_Pi_Search_LodgeEndDateBox" class="cal-input"><input type="text" class="search-input required dateformat J_Pi_Search_endDate"name="_fmd.h._0.che" id="J_Pi_Search_LodgeEndDate" placeholder="yyyy-mm-dd"value="" autocomplete="off"/></div></div></div><div class="search-field"><label class="search-item-intro search-tit">　关键字：</label><div class="search-inputarea"><input type="text" class="search-input" name="_fmd.h._0.n" id="J_Pi_Search_LodgeSearchKeywords" placeholder="输入酒店名、商圈、地标等" value=""/></div></div><div class="search-submitarea"><button type="submit" class="J_Pi_Search_HotelListSearch search-submit-btn">搜索</button></div></fieldset></form></div><div class="search-item swing-slice J_Pi_Search_TabPannel hidden"><form method="get" action="http://s.taobao.com/search?commend=all&tab=coefp&cd=false&ssid=s5-e&fs=1&bcoffset=2&cat=50037979&from=compass&navlog=compass-1-c-50037979" class="search-form search-menpiao" target="_blank" id="J_Pi_Search_menpiao_form"><fieldset><input type="hidden" name="cat" value="50037979"/><input type="hidden" name="spm" value="181.1113091.a1z0v.5"/><div class="search-field"><label class="search-tit">搜索门票：</label><div class="search-inputarea"><input type="text" class="search-input required" name="q" id="J_Pi_Search_menpiao_arrCity" placeholder="景点名或城市名" value=""/></div></div><div class="search-submitarea"><button type="submit" class="search-submit-btn">搜索</button></div></fieldset></form></div><div class="search-item swing-slice J_Pi_Search_TabPannel hidden"><form method="get" target="_blank" id="J_Pi_Search_dujia_form" action="http://dujia.trip.taobao.com/search.htm"class="search-form search-dujia"><fieldset><input type="hidden" name="spm" value="181.1113091.a1z0v.6"/><div class="search-field"><label class="search-item-intro search-tit">出发城市：</label><div class="search-inputarea"><input type="text" class="search-input required" name="cq" id="J_Pi_Search_dujia_depCity"placeholder="城市名" value=""/></div></div><div class="search-field"><label class="search-item-intro search-tit">　目的地：</label><div class="search-inputarea"><input type="text" class="search-input required" name="mq" id="J_Pi_Search_dujia_arrCity"placeholder="景点名或城市名" value=""/></div></div><div class="search-submitarea"><button type="submit" class="search-submit-btn">搜索</button></div></fieldset></form></div><div class="search-item swing-slice J_Pi_Search_TabPannel hidden"><form method="get" action="http://s.taobao.com/search?commend=all&tab=coefp&cd=false&ssid=s5-e&fs=1&bcoffset=1&bcoffset=2&cat=50036351&from=compass&navlog=compass-7-c-50036351" class="search-form search-zuche" target="_blank" id="J_Pi_Search_zuche_form"><fieldset><input type="hidden" name="cat" value="50036351"/><input type="hidden" name="spm" value="181.1113091.a1z0v.7"/><div class="search-field"><div class="search-inputarea"><label class="search-item-intro search-tit" for="J_Pi_Search_zuche_arrCity">租车城市：</label><input type="text" class="search-input required" name="q" id="J_Pi_Search_zuche_arrCity"placeholder="城市名" value=""/></div></div><div class="search-submitarea"><button type="submit" class="search-submit-btn">搜索</button></div></fieldset></form></div></div></div>'

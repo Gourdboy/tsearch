@@ -3,12 +3,12 @@
  * @author 舒克<shuke.cl@taobao.com>
  * @module tsearch
  **/
-KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
+KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder , LocalStorage , Common) {
     var Widgets = {
-        TripAutocomplete : TripAutocomplete,
-        Calendar : Calendar ,
-        Placeholder : Placeholder,
-        Tradio : Tradio
+        TripAutocomplete: TripAutocomplete,
+        Calendar        : Calendar,
+        Placeholder     : Placeholder,
+        Tradio          : Tradio
     };
     /**
      * 请修改组件描述
@@ -30,12 +30,11 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                 S.log('TSearch:没有找到表单节点,初始化失败');
                 return;
             }
-            //this.get('storage') && this.setDefaultValue();
             this.fields = this.get('fields');
             S.each(this.fields, function (field, _id) {
                 var _node = this.form.one(_id);
                 if (!_node) {
-                    S.log(_id + "is not find..")
+                    S.log(_id + "is not find..");
                     return false;
                 }
                 field.node = _node;
@@ -48,6 +47,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                 }
             }, this);
             this.bindEvent();
+            this.get('storage') && this._restoreStorageValue();
         },
         bindEvent      : function () {
             this.form.on('submit', this._doSubmit, this);
@@ -58,10 +58,10 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             //绑定表单交换操作
             var swapper = this.get('swapper');
             if (swapper) {
-                S.Event.on(swapper.trigger, 'click', function (e) {
-                    e.halt();
+                S.Event.on(this.form.all(swapper.trigger), 'click', function (e) {
+                    e.preventDefault();
                     this.swap();
-                },  this)
+                },  this);
             }
         },
         addField       : function () {
@@ -75,38 +75,43 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             var that = this;
             S.each(field.widgets, function (widget_config, widget_name) {
                 var Widget = Widgets[widget_name];
+                var finalTriggerSelector = '';
                 if (Widget) {
                     if(widget_name == 'TripAutocomplete'){//Autocomplete采用工厂模式
                         S.each(field.widgets[widget_name] , function (v , k){
+                            v.inputNode = (v.inputNode && that.form.one(v.inputNode));
+                            v.codeInputNode = (v.codeInputNode && that.form.one(v.codeInputNode));
                             field[widget_name] =  Widget[k](v);
-                        })
+                        });
+                        field.showTip = function (msg) {
+                            field.node[0].focus();
+                            field.TripAutocomplete.showMessage(msg);
+                        }
                     } else {
+                        widget_config.node && (widget_config.node = that.form.one(widget_config.node));
+                        widget_config.triggerNode && (widget_config.triggerNode = that.form.one(widget_config.triggerNode));
+                        finalTriggerSelector = widget_config.finalTriggerNode
+                        widget_config.finalTriggerNode && (widget_config.finalTriggerNode = that.form.one(widget_config.finalTriggerNode));
                         field[widget_name] = new Widget(widget_config);
                     }
-                    if (widget_name === 'Calendar' && widget_config.finalTriggerNode && that.fields[widget_config.finalTriggerNode]) { //hack for Calendar 出发和返程日期共用一个日历组件,将组件实力共享给返程表单对象
-                        that.fields[widget_config.finalTriggerNode][widget_name] = field[widget_name];
+                    if (widget_name === 'Calendar'){
+                        field.showTip = function (msg) {
+                            field.node[0].focus();
+                            field.Calendar.set('message' , msg);
+                            field.Calendar.showMessage(msg);
+                        };
+                        var finalFiled = that.fields[finalTriggerSelector];
+                        if(widget_config.finalTriggerNode && finalFiled) { //hack for Calendar 出发和返程日期共用一个日历组件,将组件实力共享给返程表单对象
+                            finalFiled[widget_name] = field[widget_name];
+                            finalFiled.showTip = function (msg) {
+                                finalFiled.node[0].focus();
+                                finalFiled.Calendar.set('message' , msg);
+                                finalFiled.Calendar.showMessage(msg);
+                            };
+                        }
                     }
                 }
             });
-            /**
-             * 把组件的showMessage方法进行适配，统一用showTip方式现实错误提示
-             * @type {*}
-             */
-            field.showTip = (function (field) {
-                if (field.TripAutocomplete) {
-                    return function (msg) {
-                        field.node[0].focus();
-                        field.TripAutocomplete.showMessage(msg);
-                    }
-                } else if (field.Calendar) {
-                    return function (msg) {
-                        field.node[0].focus();
-                        //field.Calendar.currentNode = field.node;
-                        field.Calendar.set('message' , msg);
-                        field.Calendar.showMessage(msg);
-                    }
-                }
-            })(field);
         },
         /**
          * 交换所有swapper配置里的值
@@ -135,7 +140,6 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
          * @param cur_field_id
          */
         setSwitchInput : function (cur_field_id) {
-            return false;//临时关闭自动切换
             var fields = this.fields;
             var cur_field = fields[cur_field_id];
             var switchToNext = function () {
@@ -146,7 +150,9 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                     return this;
                 }
                 if (!next_field.disabled && next_field.node.val() == '') {//当前开关打开且下一个字段未填
-                    next_node[0].focus()
+                    setTimeout(function (){
+                        next_node[0].focus()
+                    },200);
                 }
             };
 
@@ -154,7 +160,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                 cur_field.TripAutocomplete.on('select', switchToNext);
             } else if (cur_field.Calendar) {
                 cur_field.Calendar.on('dateclick', function () {
-                    if (this.currentNode.attr('id') === cur_field_id.replace('#', '')) {//当前触发dateclick事件为当前输入框绑定的日历控件时执行自动切换
+                    if (this.currentNode.hasClass(cur_field_id.replace('.', ''))) {//当前触发dateclick事件为当前输入框绑定的日历控件时执行自动切换
                         switchToNext();
                     }
                 });
@@ -169,7 +175,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             var that = this,
                 config = this.get('switchSearchType'),
                 fields = this.fields,
-                back_container = S.one(config.back_container),
+                back_container = this.form.one(config.back_container),
                 back_input = fields[config.back_input].node;
             var Tradio = fields[config.trigger].Tradio;
             var Calendar = fields[config.go_input].Calendar;
@@ -192,7 +198,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
             });
             //选择返程日期时，自动切换为往返
             Calendar.on('dateclick', function (e) {
-                if (this.currentNode.attr('id') === config.back_input.replace('#', '')) {
+                if (this.currentNode.hasClass('J_EndDate')) {
                     Tradio.val('1');
                 }
             });
@@ -206,7 +212,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
         _setSearchType : function (val) {
             var config = this.get('switchSearchType'),
                 fields = this.fields,
-                back_container = S.one(config.back_container);
+                back_container = this.form.one(config.back_container);
             if (val === "1") {//开启往返
                 back_container.removeClass('disabled');
                 if (fields[config.go_input].autoSwitch) {
@@ -228,7 +234,78 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
                 form  : this.form,
                 fields: this.fields
             });
-            //this._storageForm();
+            this.get('storage') && this._storageForm();
+        },
+        /**
+         * 存储搜索数据岛本地
+         * @private
+         */
+        _storageForm: function () {
+            var fields = this.get('fields'),
+                storageArr = [],
+                itemStr = '';
+            S.each(fields , function (field , key) {
+                var node = field.node;
+                var attr = '';
+                var val  = '';
+                if (node.hasAttr('type')) {//是输入框
+                    attr = node.attr('type');
+                    val = node.val();
+                    if (attr == 'text' || attr == 'hidden') {//文本框
+                        if (node.val() != '' && !node.attr('disabled')) {
+                            itemStr = key + ':' + val;
+                            storageArr.push(itemStr);
+                        }
+                    }
+                }else if(key.indexOf('J_Radio') > -1){//是radio
+                    itemStr = key + ':' + field['Tradio'].val();
+                    storageArr.push(itemStr);
+                }
+            });
+            //保存到本地
+            if (this.form.hasAttr('id')) {//必须依赖form的id
+                var storage = new LocalStorage();
+                storage.setItem(this.form.attr('id'), storageArr.join(','));
+            }
+        },
+        /**
+         * 还原本地数据
+         * @private
+         */
+        _restoreStorageValue : function (){
+            var storage = new LocalStorage();
+            var fields = this.get('fields');
+            var defaultValue = '';
+            if (this.form.hasAttr('id') && storage.getItem(this.form.attr('id'))) {
+                defaultValue = storage.getItem(this.form.attr('id'));
+            }
+            S.each(defaultValue.split(','),function (item , i){
+                var field ;
+                item = item.split(':');
+                var dateVal=item[1];
+                if (field = fields[item[0]]) {
+                    if (item[0].indexOf('J_Radio') > -1) {
+                        field.Tradio && field.Tradio.val(item[1]);
+                    }else{
+                        if (item[0].indexOf('J_DepDate') > -1) {//出发日期
+                            dateVal = item[1];
+                            if (this._isResetDate(item[1])) {
+                                dateVal = this.getDate(1);
+                            }
+
+                        }else if(item[0].indexOf('J_EndDate') > -1){
+                            dateVal = item[1];
+                            if (this._isResetDate(item[1])) {
+                                dateVal = this.getDate(2);
+                            }
+
+                        }
+                        field.node.val(dateVal);
+                    }
+                }
+
+
+            },this);
         },
         /**
          * 日期检查,返回
@@ -237,7 +314,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
          */
         _isResetDate   : function (date) {
             date = date.split('-');
-            return new Date() > new Date(date[0], date[1] - 1, date[2]);
+            return this.get('time') > new Date(date[0], date[1] - 1, date[2]);
         },
         /*
          *获取指定日期的
@@ -255,7 +332,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
 
             num_date = num_date || 0;
             var _y, _m, _d;
-            var _T = new Date();
+            var _T = this.get('time');
             _T.setDate(_T.getDate() + num_date);
             _y = _T.getFullYear();
             _m = formatdate(_T.getMonth() + 1);
@@ -405,7 +482,10 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder) {
          */
         validation_order: {
             value: null
+        },
+        time : {
+            value : new Date()
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './radio-button' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
