@@ -58,7 +58,7 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder , 
             //绑定表单交换操作
             var swapper = this.get('swapper');
             if (swapper) {
-                S.Event.on(swapper.trigger, 'click', function (e) {
+                S.Event.on(this.form.all(swapper.trigger), 'click', function (e) {
                     e.preventDefault();
                     this.swap();
                 },  this);
