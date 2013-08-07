@@ -84,8 +84,9 @@ module.exports = function(grunt) {
                 name       : '<%= pkg.name %>',
                 description: '<%= pkg.description %>',
                 version    : '<%= pkg.version %>',
+                logo: "http://yuilibrary.com/img/yui-logo.png",
                 options    : {
-                    paths : '<%= pkg.version %>/',
+                    paths : '<%= pkg.version %>/src/',
                     outdir: '<%= pkg.version %>/guide/docs/'
                 }
             }
