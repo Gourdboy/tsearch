@@ -10,7 +10,7 @@ KISSY.add(function (S , Tsearch ,Common) {
         defaultEndDate = Common.formatDate(Common.setDate(new Date(), 4)).yymmdd;
     var Thotelsearch = function (config) {
         var fields = {};
-        if ('.J_Radio') {
+        if (!config.isLodge) {
             fields['.J_Radio'] = {
                 widgets: {
                     'Tradio': {
@@ -24,7 +24,7 @@ KISSY.add(function (S , Tsearch ,Common) {
                 'TripAutocomplete': {
                     hotel : {
                         inputNode        : '.J_ArrCity',
-                        codeInputNode    : config.Omni
+                        codeInputNode    : '.J_ArrCityCode'
                     }
                 },
                 'Placeholder'    : {
@@ -128,7 +128,7 @@ KISSY.add(function (S , Tsearch ,Common) {
             endDateField.Calendar.currentNode = endDateField.node;
             endDateField.Calendar._setDateInfo(endDateField.node.val());
         }
-        if (!'.J_Radio') {
+        if (config.isLodge) {
             return hotelSearch;
         }
         var bindRadioSwitch = function () {

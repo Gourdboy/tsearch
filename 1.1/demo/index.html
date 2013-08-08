@@ -195,11 +195,11 @@
             </form>
             <!--iflight search end-->
         </div>
-        <div class="search-item swing-slice J_TabPannel">
+        <div class="search-item swing-slice J_TabPannel hidden">
             <!--hotel search start-->
             <form method="get" target="_blank" id="J_HotelForm"
                   action="http://kezhan.trip.taobao.com/hotel_list.htm"
-                  class="search-form search-jiudian">
+                  class="search-form">
                 <fieldset>
                     <div class="search-field">
                         <div class="search-radio J_HotelLocationRadio J_Radio">
@@ -233,7 +233,7 @@
                     <div class="search-field">
                         <label class="search-item-intro search-tit">离店日期：</label>
                         <div class="search-inputarea">
-                            <div id="J_jiudian_endDateBox" class="cal-input">
+                            <div class="cal-input">
                                 <input type="text"  class="search-input J_EndDate" name="checkOut" placeholder="yyyy-mm-dd" value="" autocomplete="off"/>
                             </div>
                         </div>
@@ -260,37 +260,25 @@
             <!--lodge search start-->
             <form method="get" target="_blank" id="J_LodgeForm"
                   action="http://kezhan.trip.taobao.com/hotel_list.htm"
-                  class="search-form search-jiudian">
-                <input type="hidden" name="spm" value="181.1113091.a1z0v.4"/>
+                  class="search-form">
                 <input type="hidden" name="searchBy" value="trip-kezhan"/>
                 <input type="hidden" name="dangcis" value="D0"/>
+                <input type="hidden" name="isall" value="1"/>
                 <fieldset>
                     <div class="search-field">
                         <label class="search-item-intro search-tit J_HotelToPlaceIndicator">目的城市：</label>
-
                         <div class="search-inputarea">
-                            <input type="text" class="search-input required"
-                                   id="J_LodgeToCity"
-                                   placeholder="城市名" name="cityName" value=""
-                                   data-description="目的城市"/>
-                            <input name="city" type="hidden" id="J_LodgeOmniCode"
-                                   value=""/>
-                            <input type="text" class="search-input required hidden"
-                                   id="J_LodgeToOversea"
-                                   placeholder="城市名" value="" data-description="目的城市"/>
+                            <input type="text" class="search-input J_ArrCity" placeholder="城市名" name="cityName" value=""/>
+                            <input name="city" type="hidden" class="J_ArrCityCode"  value=""/>
+                            <input type="text" class="search-input hidden" placeholder="城市名" value="" />
                         </div>
                     </div>
                     <div class="search-field">
                         <label class="search-item-intro search-tit">入住日期：</label>
 
                         <div class="search-inputarea">
-                            <div id="J_LodgeDepDateBox" class="cal-input">
-                                <input type="text"
-                                       class="search-input required dateformat J_depDate"
-                                       name="checkIn" id="J_LodgeDepDate"
-                                       placeholder="yyyy-mm-dd"
-                                       value="" data-autotab="J_LodgeEndDate"
-                                       autocomplete="off"/>
+                            <div class="cal-input">
+                                <input type="text" class="search-input J_DepDate" name="checkIn" placeholder="yyyy-mm-dd" value=""  autocomplete="off"/>
                             </div>
                         </div>
                     </div>
@@ -299,29 +287,21 @@
 
                         <div class="search-inputarea">
                             <div id="J_LodgeEndDateBox" class="cal-input">
-                                <input type="text"
-                                       class="search-input required dateformat J_endDate"
-                                       name="checkOut" id="J_LodgeEndDate"
-                                       placeholder="yyyy-mm-dd"
-                                       value="" autocomplete="off"/>
+                                <input type="text" class="search-input J_EndDate"  name="checkOut"  placeholder="yyyy-mm-dd" value="" autocomplete="off"/>
                             </div>
                         </div>
                     </div>
                     <div class="search-field">
                         <label class="search-item-intro search-tit">　关键字：</label>
-
                         <div class="search-inputarea">
-                            <input type="text" class="search-input" name="keywords"
-                                   id="J_LodgeSearchKeywords" placeholder="输入酒店名、商圈、地标等"
-                                   value=""/>
+                            <input type="text" class="search-input J_Keywords" name="keywords" placeholder="输入酒店名、商圈、地标等" value=""/>
                         </div>
                     </div>
                     <div class="search-submitarea">
                         <span class="search-mobile"><s></s><a
                                 href="http://trip.taobao.com/mobile/?ad_id=&am_id=1301048171cc7249876f&cm_id=&pm_id=">淘宝旅行客户端升级!
                             立即下载</a></span>
-                        <button type="submit"
-                                class="J_HotelListSearch search-submit-btn">搜索
+                        <button type="submit"   class="search-submit-btn">搜索
                         </button>
                     </div>
                 </fieldset>
@@ -332,19 +312,15 @@
             <!--ticket start-->
             <form method="get"
                   action="http://s.taobao.com/search?commend=all&tab=coefp&cd=false&ssid=s5-e&fs=1&bcoffset=2&cat=50037979&from=compass&navlog=compass-1-c-50037979"
-                  class="search-form search-menpiao" target="_blank"
-                  id="J_menpiao_form">
+                  class="search-form" target="_blank"
+                  id="J_TicketForm">
                 <fieldset>
                     <input type="hidden" name="cat" value="50037979"/>
-                    <input type="hidden" name="spm" value="181.1113091.a1z0v.5"/>
-
                     <div class="search-field">
                         <label class="search-tit">搜索门票：</label>
 
                         <div class="search-inputarea">
-                            <input type="text" class="search-input required" name="q"
-                                   id="J_menpiao_arrCity" placeholder="景点名或城市名"
-                                   value=""/>
+                            <input type="text" class="search-input J_ArrCity" name="q" placeholder="景点名或城市名" value=""/>
                         </div>
                     </div>
                     <!-- 门票热门城市开始 /rgn/trip2011/fp/ticket_hot_city.html -->
@@ -392,28 +368,21 @@
         </div>
         <div class="search-item swing-slice J_TabPannel hidden">
             <!--travel start-->
-            <form method="get" target="_blank" id="J_dujia_form"
+            <form method="get" target="_blank" id="J_TravelForm"
                   action="http://dujia.trip.taobao.com/search.htm"
-                  class="search-form search-dujia">
+                  class="search-form" >
                 <fieldset>
-                    <input type="hidden" name="spm" value="181.1113091.a1z0v.6"/>
                     <!-- 度假国外热门城市结束 -->
                     <div class="search-field">
                         <label class="search-item-intro search-tit">出发城市：</label>
-
                         <div class="search-inputarea">
-                            <input type="text" class="search-input required" name="cq"
-                                   id="J_dujia_depCity"
-                                   placeholder="城市名" value=""/>
+                            <input type="text" class="search-input J_DepCity" name="cq" placeholder="城市名" value=""/>
                         </div>
                     </div>
                     <div class="search-field">
                         <label class="search-item-intro search-tit">　目的地：</label>
-
                         <div class="search-inputarea">
-                            <input type="text" class="search-input required" name="mq"
-                                   id="J_dujia_arrCity"
-                                   placeholder="景点名或城市名" value=""/>
+                            <input type="text" class="search-input J_ArrCity" name="mq"  placeholder="景点名或城市名" value=""/>
                         </div>
                     </div>
                     <dl class="search-hot search-hot-first clearfix">
@@ -451,22 +420,17 @@
 
             <!--travel end-->
         </div>
-        <div class="search-item swing-slice J_TabPannel hidden">
+        <div class="search-item swing-slice J_TabPannel">
             <!--car start-->
-            <form method="get"
-                  action="http://s.taobao.com/search?commend=all&tab=coefp&cd=false&ssid=s5-e&fs=1&bcoffset=1&bcoffset=2&cat=50036351&from=compass&navlog=compass-7-c-50036351"
-                  class="search-form search-zuche" target="_blank" id="J_zuche_form">
+            <form method="get" action="http://s.taobao.com/search?commend=all&tab=coefp&cd=false&ssid=s5-e&fs=1&bcoffset=1&bcoffset=2&cat=50036351&from=compass&navlog=compass-7-c-50036351" class="search-form" target="_blank" id="J_CarForm">
                 <fieldset>
                     <input type="hidden" name="cat" value="50036351"/>
                     <input type="hidden" name="spm" value="181.1113091.a1z0v.7"/>
 
                     <div class="search-field">
                         <div class="search-inputarea">
-                            <label class="search-item-intro search-tit"
-                                   for="J_zuche_arrCity">租车城市：</label>
-                            <input type="text" class="search-input required" name="q"
-                                   id="J_zuche_arrCity"
-                                   placeholder="城市名" value=""/>
+                            <label class="search-item-intro search-tit">租车城市：</label>
+                            <input type="text" class="search-input J_ArrCity" name="q"  placeholder="城市名" value=""/>
                         </div>
                     </div>
                     <dl class="search-hot search-hot-first clearfix">
@@ -547,17 +511,37 @@
             }
         ]
     });
-    S.use('pi/tsearch/1.1/index', function (S, TripSearch, Slide) {
+    S.use('pi/tsearch/1.1/index , gallery/slide/1.1/index', function (S, TripSearch, Slide) {
         /*TripSearch.createFlightSearch({
             node : S.one('#J_FlightForm')
         });*/
-        TripSearch.createHotelSearch({
-            node : '#J_HotelForm'
+
+        var slide = new Slide('J_SearchModule', { // 直接指定id，也可以指定选择器，比如："#id .className"
+            navClass    : 'J_SearchTabNav',
+            contentClass: 'search-bd',
+            pannelClass : 'J_TabPannel',
+            eventype    : 'click' //通过点击页签来切换Tab
         });
 
-        /*TripSearch.createHotelSearch({
-            node : '#J_HotelForm'
-        });*/
+        var NavMap = [
+            'createFlightSearch',
+            'createIflightSearch',
+            'createHotelSearch',
+            'createLodgeSearch',
+            'createTicketSearch',
+            'createTravelSearch',
+            'createCarSearch'
+        ];
+        slide.on('switch', function (e) {
+            var methodName = NavMap[e.index];
+            if (methodName != '') {
+                TripSearch[methodName].call(this,{form: e.pannelnode.one('form')});
+                NavMap[e.index] = '';
+            }
+        },this);
+        TripSearch.createFlightSearch({
+            form : '#J_FlightForm'
+        });
     })
 </script>
 
@@ -609,8 +593,7 @@
         });
         search.on('submit' , function (e){
             e.srcEvent.preventDefault();
-            alert(1);
-            debugger;
+            alert('阻止了默认提交');
         });
     })
 </script>
