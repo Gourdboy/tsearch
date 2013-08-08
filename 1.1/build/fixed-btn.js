@@ -1001,7 +1001,7 @@ KISSY.add('gallery/tsearch/1.1/hotel-search',function (S , Tsearch ,Common) {
         defaultEndDate = Common.formatDate(Common.setDate(new Date(), 4)).yymmdd;
     var Thotelsearch = function (config) {
         var fields = {};
-        if ('.J_Radio') {
+        if (!config.isLodge) {
             fields['.J_Radio'] = {
                 widgets: {
                     'Tradio': {
@@ -1015,7 +1015,7 @@ KISSY.add('gallery/tsearch/1.1/hotel-search',function (S , Tsearch ,Common) {
                 'TripAutocomplete': {
                     hotel : {
                         inputNode        : '.J_ArrCity',
-                        codeInputNode    : config.Omni
+                        codeInputNode    : '.J_ArrCityCode'
                     }
                 },
                 'Placeholder'    : {
@@ -1119,7 +1119,7 @@ KISSY.add('gallery/tsearch/1.1/hotel-search',function (S , Tsearch ,Common) {
             endDateField.Calendar.currentNode = endDateField.node;
             endDateField.Calendar._setDateInfo(endDateField.node.val());
         }
-        if (!'.J_Radio') {
+        if (config.isLodge) {
             return hotelSearch;
         }
         var bindRadioSwitch = function () {
@@ -1145,7 +1145,7 @@ KISSY.add('gallery/tsearch/1.1/hotel-search',function (S , Tsearch ,Common) {
 KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
     var TripSearch = {
             createFlightSearch : function (cfg){
-                return new Tsearch({
+                return new Tsearch(S.merge({
                             form            : cfg.node ,
                             fields          : {
                                 '.J_Radio'        : {
@@ -1304,11 +1304,12 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                             /**
                              * 保存搜索历史记录开关  默认关闭
                              */
-                            storage         : false
-                        });
+                            storage         :  cfg.storage
+                        } , cfg));
             },
             createIflightSearch : function (cfg){
-                return new Tsearch({
+                cfg.storage = cfg.storage || false;
+                return new Tsearch(S.merge({
                             form            : cfg.node ,
                             fields          : {
                                 '.J_Radio'        : {
@@ -1467,41 +1468,42 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                             /**
                              * 保存搜索历史记录开关  默认关闭
                              */
-                            storage         : true
-                        });
+                            storage         :  cfg.storage
+                        } , cfg));
             },
             createHotelSearch : function (cfg){
-                    Thotelsearch({
+                    Thotelsearch(S.merge({
                         form               : cfg.node
-                });
+                },cfg));
             },
-            createLodgeSearch : function() {
-                    Thotelsearch({
-                        form               : cfg.node
-                });
+            createLodgeSearch : function(cfg) {
+                    Thotelsearch(S.merge({
+                        form               : cfg.node,
+                        isLodge : true
+                },cfg));
             },
-            createTravelSearch : function() {
+            createTravelSearch : function(cfg) {
 
-                return new Tsearch({
-                    form            : '#J_Pi_Search_dujia_form',
+                return new Tsearch(S.merge({
+                    form            : cfg.node,
                     fields          : {
-                        '#J_Pi_Search_dujia_depCity': {
+                        '.J_DepCity': {
                             widgets: {
                                 'Placeholder'    : {
-                                    node: '#J_Pi_Search_dujia_depCity'
+                                    node: '.J_DepCity'
                                 },
                                 'TripAutocomplete': {
-                                    travel : {inputNode : '#J_Pi_Search_dujia_depCity'}
+                                    travel : {inputNode : '.J_DepCity'}
                                 }
                             }
                         },
-                        '#J_Pi_Search_dujia_arrCity': {
+                        '.J_ArrCity': {
                             widgets   : {
                                 'Placeholder'    : {
-                                    node: '#J_Pi_Search_dujia_arrCity'
+                                    node: '.J_ArrCity'
                                 },
                                 'TripAutocomplete': {
-                                    travel : {inputNode      : '#J_Pi_Search_dujia_arrCity'}
+                                    travel : {inputNode      : '.J_ArrCity'}
                                 }
                             },
                             validation: [
@@ -1512,17 +1514,17 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                             ]
                         }
                     },
-                    validation_order: ['#J_Pi_Search_dujia_arrCity']
-                })
+                    validation_order: ['.J_ArrCity']
+                },cfg));
             },
-            createTicketSearch : function() {
-                    return new Tsearch({
-                        form            : '#J_Pi_Search_menpiao_form',
+            createTicketSearch : function(cfg) {
+                    return new Tsearch(S.merge({
+                        form            : cfg.node,
                         fields          : {
-                            '#J_Pi_Search_menpiao_arrCity': {
+                            '.J_ArrCity': {
                                 widgets   : {
                                     'Placeholder': {
-                                        node: '#J_Pi_Search_menpiao_arrCity'
+                                        node: '.J_ArrCity'
                                     }
                                 },
                                 validation: [
@@ -1535,20 +1537,20 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                                 ]
                             }
                         },
-                        validation_order: ['#J_Pi_Search_menpiao_arrCity']
-                    })
+                        validation_order: ['.J_ArrCity']
+                    },cfg));
                 },
-            createCarSearch : function() {
-                return new Tsearch({
-                    form            : '#J_Pi_Search_zuche_form',
+            createCarSearch : function(cfg) {
+                return new Tsearch(S.merge({
+                    form            : cfg.node,
                     fields          : {
-                        '#J_Pi_Search_zuche_arrCity': {
+                        '.J_ArrCity': {
                             widgets   : {
                                 'Placeholder'    : {
-                                    node : '#J_Pi_Search_zuche_arrCity'
+                                    node : '.J_ArrCity'
                                 },
                                 'TripAutocomplete': {
-                                    city :{inputNode : '#J_Pi_Search_zuche_arrCity'}
+                                    city :{inputNode : '.J_ArrCity'}
                                 }
                             },
                             validation: [
@@ -1559,11 +1561,11 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                             ]
                         }
                     },
-                    validation_order: ['#J_Pi_Search_zuche_arrCity']
-                })
+                    validation_order: ['.J_ArrCity']
+                },cfg));
             },
             createTrainSearch : function (cfg){
-            return new Tsearch({
+            return new Tsearch(S.merge({
                         form            : cfg.node ,
                         fields          : {
                             '.J_DepCity'     : {
@@ -1677,7 +1679,7 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                          * 保存搜索历史记录开关  默认关闭
                          */
                         storage         : true
-                    });
+                    },cfg));
         }
     };
     return TripSearch;
