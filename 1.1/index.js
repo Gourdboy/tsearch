@@ -1,7 +1,4 @@
 KISSY.add(function (S , Tsearch , Thotelsearch){
-    function initTabSearch(wapperId){
-
-    };
     var TripSearch = {
             createFlightSearch : function (cfg){
                 return new Tsearch({
@@ -329,26 +326,14 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                             storage         : true
                         });
             },
-            createHotelSearch : function (){
+            createHotelSearch : function (cfg){
                     Thotelsearch({
-                        form               : '#J_Pi_Search_HotelForm',
-                        radio              : '.J_Radio',
-                        HotelToCity        : '#J_Pi_Search_HotelToCity',
-                        HotelDepDate       : '#J_Pi_Search_HotelDepDate',
-                        HotelEndDate       : '#J_Pi_Search_HotelEndDate',
-                        Omni               : '#J_Pi_Search_OmniCode',
-                        HotelSearchKeywords: '#J_Pi_Search_HotelSearchKeywords'
+                        form               : cfg.node
                 });
             },
             createLodgeSearch : function() {
                     Thotelsearch({
-                        form               : '#J_Pi_Search_LodgeForm',
-                        radioName          : '_fmd.h._0.r',
-                        HotelToCity        : '#J_Pi_Search_LodgeToCity',
-                        HotelDepDate       : '#J_Pi_Search_LodgeDepDate',
-                        HotelEndDate       : '#J_Pi_Search_LodgeEndDate',
-                        Omni               : '#J_Pi_Search_LodgeOmniCode',
-                        HotelSearchKeywords: '#J_Pi_Search_LodgeSearchKeywords'
+                        form               : cfg.node
                 });
             },
             createTravelSearch : function() {
@@ -506,7 +491,7 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                         minDate         : new Date(),
                                         isDateInfo      : 1,
                                         isDateIcon      : 1,
-                                        afterDays       : 364,
+                                        afterDays       : 20,
                                         isKeyup         : false,
                                         isHoliday       : 1
                                     }

@@ -232,7 +232,8 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder , 
             }
             this.fire('submit', {
                 form  : this.form,
-                fields: this.fields
+                fields: this.fields,
+                srcEvent : e
             });
             this.get('storage') && this._storageForm();
         },

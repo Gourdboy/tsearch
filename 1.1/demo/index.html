@@ -127,7 +127,7 @@
             </form>
             <!--flight search end-->
         </div>
-        <div class="search-item swing-slice J_TabPannel">
+        <div class="search-item swing-slice J_TabPannel hidden">
             <!--iflight search start-->
             <form method="get" target="_blank"
                   action="http://s.ijipiao.trip.taobao.com/ie/flight_search.htm"
@@ -195,14 +195,14 @@
             </form>
             <!--iflight search end-->
         </div>
-        <div class="search-item swing-slice J_TabPannel hidden">
+        <div class="search-item swing-slice J_TabPannel">
             <!--hotel search start-->
             <form method="get" target="_blank" id="J_HotelForm"
                   action="http://kezhan.trip.taobao.com/hotel_list.htm"
                   class="search-form search-jiudian">
                 <fieldset>
                     <div class="search-field">
-                        <div class="search-radio J_HotelLocationRadio">
+                        <div class="search-radio J_HotelLocationRadio J_Radio">
                             <label class="first-label">
                                 <input type="radio" value="0"  name="_fmd.h._0.r" checked="checked" class="flight-type-radio">国内/港澳台
                             </label>
@@ -214,8 +214,8 @@
                     <div class="search-field">
                         <label class="search-item-intro search-tit J_HotelToPlaceIndicator">目的城市：</label>
                         <div class="search-inputarea">
-                            <input type="text" class="search-input J_HotelToCity" placeholder="城市名" name="cityName" value="" />
-                            <input name="city" type="hidden" class="J_OmniCode" value=""/>
+                            <input type="text" class="search-input J_ArrCity" placeholder="城市名" name="cityName" value="" />
+                            <input name="city" type="hidden" class="J_OmniCode J_ArrCityCode" value=""/>
                         </div>
                     </div>
                     <div class="search-field">
@@ -223,7 +223,7 @@
                         <div class="search-inputarea">
                             <div class="J_jiudian_depDateBox" class="cal-input">
                                 <input type="text"
-                                       class="search-input J_DepDate  J_depDate"
+                                       class="search-input J_DepDate"
                                        name="checkIn" id=""
                                        placeholder="yyyy-mm-dd"
                                        value="" autocomplete="off"/>
@@ -234,14 +234,14 @@
                         <label class="search-item-intro search-tit">离店日期：</label>
                         <div class="search-inputarea">
                             <div id="J_jiudian_endDateBox" class="cal-input">
-                                <input type="text"  class="search-input J_EndDate J_endDate" name="checkOut" placeholder="yyyy-mm-dd" value="" autocomplete="off"/>
+                                <input type="text"  class="search-input J_EndDate" name="checkOut" placeholder="yyyy-mm-dd" value="" autocomplete="off"/>
                             </div>
                         </div>
                     </div>
                     <div class="search-field">
                         <label class="search-item-intro search-tit">　关键字：</label>
                         <div class="search-inputarea">
-                            <input type="text" class="search-input J_HotelSearchKeywords" name="keywords" placeholder="输入酒店名、商圈、地标等" value=""/>
+                            <input type="text" class="search-input J_Keywords" name="keywords" placeholder="输入酒店名、商圈、地标等" value=""/>
                         </div>
                     </div>
                     <div class="search-submitarea">
@@ -547,12 +547,12 @@
             }
         ]
     });
-    S.use('gallery/tsearch/1.1/index', function (S, TripSearch, Slide) {
+    S.use('pi/tsearch/1.1/index', function (S, TripSearch, Slide) {
         /*TripSearch.createFlightSearch({
             node : S.one('#J_FlightForm')
         });*/
-        TripSearch.createIflightSearch({
-            node : '#J_IFlightForm'
+        TripSearch.createHotelSearch({
+            node : '#J_HotelForm'
         });
 
         /*TripSearch.createHotelSearch({
@@ -603,9 +603,14 @@
 </div>
 <script type="text/javascript">
 
-    S.use('gallery/tsearch/1.1/index', function (S, TripSearch) {
-        TripSearch.createTrainSearch({
+    S.use('pi/tsearch/1.1/index', function (S, TripSearch) {
+        var search = TripSearch.createTrainSearch({
             node : '#J_TrainForm'
+        });
+        search.on('submit' , function (e){
+            e.srcEvent.preventDefault();
+            alert(1);
+            debugger;
         });
     })
 </script>
