@@ -10,26 +10,25 @@ KISSY.add(function (S , Tsearch ,Common) {
         defaultEndDate = Common.formatDate(Common.setDate(new Date(), 4)).yymmdd;
     var Thotelsearch = function (config) {
         var fields = {};
-        if (config.radio) {
-            fields[config.radio] = {
+        if ('.J_Radio') {
+            fields['.J_Radio'] = {
                 widgets: {
                     'Tradio': {
-                        node : config.radio,
-                        name : config.radioName
+                        node :'.J_Radio'
                     }
                 }
             };
         }
-        fields[config.HotelToCity] = {
+        fields['.J_ArrCity'] = {
             widgets   : {
                 'TripAutocomplete': {
                     hotel : {
-                        inputNode        : config.HotelToCity,
+                        inputNode        : '.J_ArrCity',
                         codeInputNode    : config.Omni
                     }
                 },
                 'Placeholder'    : {
-                    node: config.HotelToCity
+                    node: '.J_ArrCity'
                 }
             },
             validation: [
@@ -39,12 +38,12 @@ KISSY.add(function (S , Tsearch ,Common) {
                 }
             ]
         };
-        fields[config.Omni] = {};
-        fields[config.HotelEndDate] = {
+        fields['.J_ArrCityCode'] = {};
+        fields['.J_EndDate'] = {
             val       : defaultEndDate,
             widgets   : {
                 'Placeholder': {
-                    node : config.HotelEndDate
+                    node : '.J_EndDate'
                 }
             },
             validation: [
@@ -58,27 +57,27 @@ KISSY.add(function (S , Tsearch ,Common) {
                 },
                 {
                     type   : 'mindate',
-                    minDate: config.HotelDepDate,
+                    minDate: '.J_DepDate',
                     tip    : '离店日期不能早于入住日期，请重新选择'
                 },
                 {
                     type      : 'custom',
                     tip       : '酒店预订时间不能超过28天，请重新选择',
                     validateFn: function (arg, that) {
-                        return Common.getDateInterval(that.fields[config.HotelDepDate].node.val(), this.node.val()) <= 28
+                        return Common.getDateInterval(that.fields['.J_DepDate'].node.val(), this.node.val()) <= 28
                     }
                 }
             ]
         };
-        fields[config.HotelDepDate] = {
+        fields['.J_DepDate'] = {
             val       : defaultInDate,
             widgets   : {
                 'Placeholder': {
-                    node: config.HotelDepDate
+                    node: '.J_DepDate'
                 },
                 'Calendar'   : {
-                    triggerNode     : config.HotelDepDate,
-                    finalTriggerNode: config.HotelEndDate,
+                    triggerNode     : '.J_DepDate',
+                    finalTriggerNode: '.J_EndDate',
                     minDate         : new Date(),
                     isDateInfo      : 1,
                     isDateIcon      : 1,
@@ -105,13 +104,13 @@ KISSY.add(function (S , Tsearch ,Common) {
                 }
             ],
             autoSwitch: {
-                nextField: config.HotelEndDate
+                nextField: '.J_EndDate'
             }
         };
-        fields[config.HotelSearchKeywords] = {
+        fields['.J_Keywords'] = {
             widgets: {
                 'Placeholder': {
-                    node: config.HotelSearchKeywords
+                    node: '.J_Keywords'
                 }
             }
         };
@@ -121,20 +120,20 @@ KISSY.add(function (S , Tsearch ,Common) {
             /**
              * 表单校验顺序
              */
-            'validation_order': [config.HotelToCity, config.HotelDepDate, config.HotelEndDate]
+            'validation_order': ['.J_ArrCity', '.J_DepDate' ,'.J_EndDate']
         });
         //酒店有radio时，绑定切换
-        var endDateField = hotelSearch.fields[config.HotelEndDate];
+        var endDateField = hotelSearch.fields['.J_EndDate'];
         if (endDateField.Calendar) {//hack for calendar
             endDateField.Calendar.currentNode = endDateField.node;
-            endDateField.Calendar._setDateInfo(endDateField.node.get('value'));
+            endDateField.Calendar._setDateInfo(endDateField.node.val());
         }
-        if (!config.radio) {
+        if (!'.J_Radio') {
             return hotelSearch;
         }
         var bindRadioSwitch = function () {
-            var Tradio = hotelSearch.fields[config.radio].Tradio;
-            var field = hotelSearch.get('fields')[config.HotelToCity],
+            var Tradio = hotelSearch.fields['.J_Radio'].Tradio;
+            var field = hotelSearch.get('fields')['.J_ArrCity'],
                 Autocomplete = field.TripAutocomplete;
             Tradio.on('afterValueChange', function (e) {
                 field.node.val('');
