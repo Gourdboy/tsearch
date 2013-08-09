@@ -29,31 +29,31 @@
 <div class="search-hd">
     <div class="search-nav">
         <ul class="J_SearchTabNav">
-            <li class="swing-slice-indicator J_NavItemFlight selected"><s
+            <li class="J_NavItemFlight selected"><s
                     class="search-nav-flight"></s><a
                     href="http://trip.taobao.com/jipiao"
                     hidefocus="true">国内机票</a></li>
-            <li class="swing-slice-indicator J_NavItemIFlight"><s
+            <li class="J_NavItemIFlight"><s
                     class="search-nav-iflight"></s><a
                     href="http://trip.taobao.com/ijipiao" hidefocus="true">国际
                 &#8226 港澳台</a></li>
-            <li class="swing-slice-indicator J_NavItemHotel"><s
+            <li class="J_NavItemHotel"><s
                     class="search-nav-hotel"></s><a
                     href="http://trip.taobao.com/jiudian"
                     hidefocus="true">酒店</a></li>
-            <li class="swing-slice-indicator J_NavItemLodge"><s
+            <li class="J_NavItemLodge"><s
                     class="search-nav-lodge"></s><a
                     href="http://trip.taobao.com/kezhan" hidefocus="true">客栈</a>
             </li>
-            <li class="swing-slice-indicator J_NavItemTicket"><s
+            <li class="J_NavItemTicket"><s
                     class="search-nav-ticket"></s><a
                     href="http://trip.taobao.com/menpiao"
                     hidefocus="true">景点门票</a></li>
-            <li class="swing-slice-indicator J_NavItemTravel"><s
+            <li class="J_NavItemTravel"><s
                     class="search-nav-travel"></s><a
                     href="http://trip.taobao.com/dujia"
                     hidefocus="true">旅游度假</a></li>
-            <li class="swing-slice-indicator J_NavItemCar"><s
+            <li class="J_NavItemCar"><s
                     class="search-nav-car"></s><a
                     href="http://trip.taobao.com/zuche" hidefocus="true">租车</a>
             </li>
@@ -61,7 +61,7 @@
     </div>
 </div>
     <div class="search-bd">
-        <div class="search-item swing-slice J_TabPannel hidden">
+        <div class="search-item J_TabPannel hidden">
             <!--flight search start-->
             <form method="get" target="_blank"
                   action="http://s.jipiao.trip.taobao.com/flight_search_result.htm"
@@ -127,7 +127,7 @@
             </form>
             <!--flight search end-->
         </div>
-        <div class="search-item swing-slice J_TabPannel hidden">
+        <div class="search-item  J_TabPannel hidden">
             <!--iflight search start-->
             <form method="get" target="_blank"
                   action="http://s.ijipiao.trip.taobao.com/ie/flight_search.htm"
@@ -195,7 +195,7 @@
             </form>
             <!--iflight search end-->
         </div>
-        <div class="search-item swing-slice J_TabPannel hidden">
+        <div class="search-item  J_TabPannel hidden">
             <!--hotel search start-->
             <form method="get" target="_blank" id="J_HotelForm"
                   action="http://kezhan.trip.taobao.com/hotel_list.htm"
@@ -256,7 +256,7 @@
             </form>
             <!--hotel search end-->
         </div>
-        <div class="search-item swing-slice J_TabPannel hidden">
+        <div class="search-item  J_TabPannel hidden">
             <!--lodge search start-->
             <form method="get" target="_blank" id="J_LodgeForm"
                   action="http://kezhan.trip.taobao.com/hotel_list.htm"
@@ -308,7 +308,7 @@
             </form>
             <!--hotel search end-->
         </div>
-        <div class="search-item swing-slice J_TabPannel hidden">
+        <div class="search-item  J_TabPannel hidden">
             <!--ticket start-->
             <form method="get"
                   action="http://s.taobao.com/search?commend=all&tab=coefp&cd=false&ssid=s5-e&fs=1&bcoffset=2&cat=50037979&from=compass&navlog=compass-1-c-50037979"
@@ -366,7 +366,7 @@
             </form>
             <!--ticket end-->
         </div>
-        <div class="search-item swing-slice J_TabPannel hidden">
+        <div class="search-item  J_TabPannel hidden">
             <!--travel start-->
             <form method="get" target="_blank" id="J_TravelForm"
                   action="http://dujia.trip.taobao.com/search.htm"
@@ -420,7 +420,7 @@
 
             <!--travel end-->
         </div>
-        <div class="search-item swing-slice J_TabPannel">
+        <div class="search-item  J_TabPannel">
             <!--car start-->
             <form method="get" action="http://s.taobao.com/search?commend=all&tab=coefp&cd=false&ssid=s5-e&fs=1&bcoffset=1&bcoffset=2&cat=50036351&from=compass&navlog=compass-7-c-50036351" class="search-form" target="_blank" id="J_CarForm">
                 <fieldset>
@@ -511,7 +511,7 @@
             }
         ]
     });
-    S.use('pi/tsearch/1.1/index , gallery/slide/1.1/index', function (S, TripSearch, Slide) {
+    S.use('gallery/tsearch/1.1/index , gallery/slide/1.1/index', function (S, TripSearch, Slide) {
         /*TripSearch.createFlightSearch({
             node : S.one('#J_FlightForm')
         });*/
@@ -587,7 +587,7 @@
 </div>
 <script type="text/javascript">
 
-    S.use('pi/tsearch/1.1/index', function (S, TripSearch) {
+    S.use('gallery/tsearch/1.1/index', function (S, TripSearch) {
         var search = TripSearch.createTrainSearch({
             node : '#J_TrainForm'
         });
