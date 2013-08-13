@@ -495,9 +495,11 @@
 
 <script>
     var S = KISSY;
+    var galleryName = "gallery";
     var srcPath = "http://a.tbcdn.cn/g/trip/pi/";
     if (S.Config.debug) {
         srcPath = "../../../";
+        galleryName = "pi";
     }
 
     srcPath = "../../../";
@@ -511,7 +513,7 @@
             }
         ]
     });
-    S.use('gallery/tsearch/1.1/index , gallery/slide/1.1/index', function (S, TripSearch, Slide) {
+    S.use(galleryName + '/tsearch/1.1/index , gallery/slide/1.1/index', function (S, TripSearch, Slide) {
         /*TripSearch.createFlightSearch({
             node : S.one('#J_FlightForm')
         });*/
@@ -587,7 +589,7 @@
 </div>
 <script type="text/javascript">
 
-    S.use('gallery/tsearch/1.1/index', function (S, TripSearch) {
+    S.use(galleryName + '/tsearch/1.1/index', function (S, TripSearch) {
         var search = TripSearch.createTrainSearch({
             node : '#J_TrainForm'
         });

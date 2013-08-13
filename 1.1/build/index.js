@@ -1635,7 +1635,7 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                                         minDate         : new Date(),
                                         isDateInfo      : 1,
                                         isDateIcon      : 1,
-                                        afterDays       : 20,
+                                        afterDays       : 19,
                                         isKeyup         : false,
                                         isHoliday       : 1
                                     }
@@ -1676,7 +1676,7 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                         /**
                          * 保存搜索历史记录开关  默认关闭
                          */
-                        storage         : true
+                        storage         : false
                     },cfg));
         }
     };
