@@ -167,10 +167,11 @@ KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
             adjustY: true
         }
     };
+    var DOMAIN = location.href.indexOf('ac-daily') > -1? 'daily.taobao.net' : 'taobao.com';
     return  {
         flight : function (cfg) {
             var default_cfg = {
-                source           : 'http://s.jipiao.trip.taobao.com/city_search.do?lines={maxResults}&q={query}',
+                source           : 'http://s.jipiao.trip.' + DOMAIN +'/city_search.do?lines={maxResults}&q={query}',
                 resultListLocator: function (results) {
                     results = results.result;
                     var filtedData = [];
@@ -193,7 +194,7 @@ KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
                 resultTextLocator: 'cityName',//指定文本内容
                 activeFirstItem  : true,
                 align            : ALIGH,
-                hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php',//不指定及没有热门推荐
+                hotSource        : 'http://www.' + DOMAIN +'/go/rgn/trip/chinahotcity_jsonp.php',//不指定及没有热门推荐
                 resultFormatter  : function (query, results) {//对展示进行格式化
                     var result = [];
                     var tmpl = '<div class="ks-ac-item-inner"><span class="ks-ac-name">{cityname}</span><span class="ks-ac-intro">{py}</span></div>';
@@ -240,12 +241,12 @@ KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
         },
         iflight: function (cfg) {
             var default_cfg = {
-                source       : 'http://ijipiao.trip.taobao.com/ie/remote/auto_complete.do?flag=4&count=10&callback={callback}&q={query}',
+                source       : 'http://ijipiao.trip.' + DOMAIN +'/ie/remote/auto_complete.do?flag=4&count=10&callback={callback}&q={query}',
                 resultListLocator:'result',//指定返回数据里的数组位置
                 resultTextLocator: 'cityName',//指定文本内容
                 activeFirstItem  : true,
                 align            : ALIGH ,
-                hotSource    : 'http://www.taobao.com/go/rgn/trip/international_jsonp.php'
+                hotSource    : 'http://www.' + DOMAIN +'/go/rgn/trip/international_jsonp.php'
             };
             cfg = S.merge(default_cfg, cfg);
             var acInstance = new Ac(cfg);
@@ -291,8 +292,8 @@ KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
                 resultListLocator: hotelCityListLocator,
                 resultFormatter  : hotelCityFormatter,
                 resultTextLocator: 'cityName',//指定文本内容
-                source           : 'http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}',
-                hotSource        : 'http://www.taobao.com/go/rgn/trip/hotelhotcityv2_jsonp.php'
+                source           : 'http://kezhan.trip.' + DOMAIN +'/citysuggest.do?t=0&q={query}',
+                hotSource        : 'http://www.' + DOMAIN +'/go/rgn/trip/hotelhotcityv2_jsonp.php'
             };
             cfg = S.merge(default_cfg, cfg);
             var acInstance = new Ac(cfg);
@@ -306,8 +307,8 @@ KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
         travel : function (cfg) {
             var isDaily = document.domain.indexOf('daily.taobao.net') > 1,
                 _resultTmpl = '<div class="ks-ac-item-inner"><span class="ks-ac-name">{first}</span><span class="ks-ac-intro" style="color:#999;float:left;">{second}</span></div>',
-                _citycodeUrl = (isDaily ? 'http://go.daily.taobao.net/' : 'http://go.taobao.com/') + 'data/areaTrip.htm?sn=1'; //城市联想接口
-            _dep_citycodeUrl = (isDaily ? 'http://dujia.trip.daily.taobao.net/' : 'http://dujia.trip.taobao.com/') + 'sell/ajax/get_sug_city.htm?max=10'; //城市联想接口
+                _citycodeUrl = (isDaily ? 'http://go.daily.taobao.net/' : 'http://go.' + DOMAIN +'/') + 'data/areaTrip.htm?sn=1'; //城市联想接口
+            _dep_citycodeUrl = (isDaily ? 'http://dujia.trip.daily.taobao.net/' : 'http://dujia.trip.' + DOMAIN +'/') + 'sell/ajax/get_sug_city.htm?max=10'; //城市联想接口
 
 
             function highLight(str, key) {
@@ -333,7 +334,7 @@ KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
                 resultTextLocator: 'cityName',
                 resultFormatter: _acFormatter,
                 source         : _dep_citycodeUrl + '&q={query}',
-                hotSource      : 'http://www.taobao.com/go/rgn/trip/dujiadephotcity_jsonp.php'
+                hotSource      : 'http://www.' + DOMAIN +'/go/rgn/trip/dujiadephotcity_jsonp.php'
             };
             cfg = S.merge(default_cfg, cfg);
             var acInstance = new Ac(cfg);
@@ -344,14 +345,27 @@ KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
             });
             return acInstance;
         },
+        train : function (cfg){
+            var default_cfg = {
+                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                resultListLocator: 'results',//指定返回数据里的数组位置
+                resultTextLocator: 'stationName',//指定文本内容
+                activeFirstItem  : true,
+                align            : ALIGH,
+                hotSource        : 'http://www.' + DOMAIN + '/go/rgn/trip/chinahotcity_jsonp.php'
+            };
+            cfg = S.merge(default_cfg, cfg);
+            var acInstance = new Ac(cfg);
+            return acInstance;
+        },
         city : function (cfg){
             var default_cfg = {
-                source           : 'http://s.jipiao.trip.taobao.com/city_search.do?lines={maxResults}&q={query}',
+                source           : 'http://s.jipiao.trip.' + DOMAIN +'/city_search.do?lines={maxResults}&q={query}',
                 resultListLocator: 'result',
                 resultTextLocator: 'cityName',//指定文本内容
                 activeFirstItem  : true,
                 align            : ALIGH,
-                hotSource        : 'http://www.taobao.com/go/rgn/trip/chinahotcity_jsonp.php'//不指定及没有热门推荐
+                hotSource        : 'http://www.' + DOMAIN +'/go/rgn/trip/chinahotcity_jsonp.php'//不指定及没有热门推荐
             };
             cfg = S.merge(default_cfg , cfg);
             var acInstance = new Ac(cfg);
@@ -1142,6 +1156,7 @@ KISSY.add('gallery/tsearch/1.1/hotel-search',function (S , Tsearch ,Common) {
 },{requires: ['./tsearch' , './common']});
 KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
     var TripSearch = {
+            time : new Date(),
             createFlightSearch : function (cfg){
                 return new Tsearch(S.merge({
                             form            : cfg.node ,
@@ -1219,7 +1234,7 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                                         'Calendar'   : {
                                             triggerNode     : '.J_DepDate',
                                             finalTriggerNode: '.J_EndDate',
-                                            minDate         : new Date(),
+                                            minDate         : TripSearch.time,
                                             isDateInfo      : 1,
                                             isDateIcon      : 1,
                                             afterDays       : 364,
@@ -1238,7 +1253,7 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                                         },
                                         {
                                             type   : 'mindate',
-                                            minDate: new Date() - 86400000,
+                                            minDate: TripSearch.time - 86400000,
                                             tip    : '出发日期不能早于今天'
                                         }
                                     ],
@@ -1383,7 +1398,7 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                                         'Calendar'   : {
                                             triggerNode     : '.J_DepDate',
                                             finalTriggerNode: '.J_EndDate',
-                                            minDate         : new Date(),
+                                            minDate         : TripSearch.time,
                                             isDateInfo      : 1,
                                             isDateIcon      : 1,
                                             afterDays       : 364,
@@ -1402,7 +1417,7 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                                         },
                                         {
                                             type   : 'mindate',
-                                            minDate: new Date() - 86400000,
+                                            minDate: TripSearch.time - 86400000,
                                             tip    : '出发日期不能早于今天'
                                         }
                                     ],
@@ -1570,7 +1585,7 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                                 val       : '',
                                 widgets   : {
                                     'TripAutocomplete': {
-                                        city: {
+                                        train: {
                                             inputNode: '.J_DepCity',
                                             codeInputNode : '.J_DepCityCode'
                                         }
@@ -1596,7 +1611,7 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                             '.J_ArrCity'     : {
                                 widgets   : {
                                     'TripAutocomplete': {
-                                        city: {
+                                        train: {
                                             inputNode : '.J_ArrCity',
                                             codeInputNode : '.J_ArrCityCode'
                                         }
@@ -1632,7 +1647,7 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                                     },
                                     'Calendar'   : {
                                         triggerNode     : '.J_DepDate',
-                                        minDate         : new Date(),
+                                        minDate         : TripSearch.time,
                                         isDateInfo      : 1,
                                         isDateIcon      : 1,
                                         afterDays       : 19,

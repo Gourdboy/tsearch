@@ -1,5 +1,6 @@
 KISSY.add(function (S , Tsearch , Thotelsearch){
     var TripSearch = {
+            time : new Date(),
             createFlightSearch : function (cfg){
                 return new Tsearch(S.merge({
                             form            : cfg.node ,
@@ -77,7 +78,7 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                         'Calendar'   : {
                                             triggerNode     : '.J_DepDate',
                                             finalTriggerNode: '.J_EndDate',
-                                            minDate         : new Date(),
+                                            minDate         : TripSearch.time,
                                             isDateInfo      : 1,
                                             isDateIcon      : 1,
                                             afterDays       : 364,
@@ -96,7 +97,7 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                         },
                                         {
                                             type   : 'mindate',
-                                            minDate: new Date() - 86400000,
+                                            minDate: TripSearch.time - 86400000,
                                             tip    : '出发日期不能早于今天'
                                         }
                                     ],
@@ -241,7 +242,7 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                         'Calendar'   : {
                                             triggerNode     : '.J_DepDate',
                                             finalTriggerNode: '.J_EndDate',
-                                            minDate         : new Date(),
+                                            minDate         : TripSearch.time,
                                             isDateInfo      : 1,
                                             isDateIcon      : 1,
                                             afterDays       : 364,
@@ -260,7 +261,7 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                         },
                                         {
                                             type   : 'mindate',
-                                            minDate: new Date() - 86400000,
+                                            minDate: TripSearch.time - 86400000,
                                             tip    : '出发日期不能早于今天'
                                         }
                                     ],
@@ -428,7 +429,7 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                 val       : '',
                                 widgets   : {
                                     'TripAutocomplete': {
-                                        city: {
+                                        train: {
                                             inputNode: '.J_DepCity',
                                             codeInputNode : '.J_DepCityCode'
                                         }
@@ -454,7 +455,7 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                             '.J_ArrCity'     : {
                                 widgets   : {
                                     'TripAutocomplete': {
-                                        city: {
+                                        train: {
                                             inputNode : '.J_ArrCity',
                                             codeInputNode : '.J_ArrCityCode'
                                         }
@@ -490,7 +491,7 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                     },
                                     'Calendar'   : {
                                         triggerNode     : '.J_DepDate',
-                                        minDate         : new Date(),
+                                        minDate         : TripSearch.time,
                                         isDateInfo      : 1,
                                         isDateIcon      : 1,
                                         afterDays       : 19,
