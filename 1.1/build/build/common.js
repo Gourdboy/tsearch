@@ -1,13 +1,13 @@
 /*
 combined files : 
 
-gallery/tsearch/1.1/common
+gallery/tsearch/1.1/build/common
 
 */
 /**
  * 旅行公共函数库
  */
-KISSY.add('gallery/tsearch/1.1/common',function (S){
+KISSY.add('gallery/tsearch/1.1/build/common',function (S){
     var Common = {
         /**
          * 截取指定长度的字符串

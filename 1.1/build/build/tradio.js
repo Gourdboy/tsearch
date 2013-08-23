@@ -1,7 +1,7 @@
 /*
 combined files : 
 
-gallery/tsearch/1.1/tradio
+gallery/tsearch/1.1/build/tradio
 
 */
 /**
@@ -10,7 +10,7 @@ gallery/tsearch/1.1/tradio
  * @module Radiobutton
  * @submodule
  **/
-KISSY.add('gallery/tsearch/1.1/tradio',function (S) {
+KISSY.add('gallery/tsearch/1.1/build/tradio',function (S) {
     /**
      * Radiobutton
      * @class Radiobutton

@@ -1,17 +1,17 @@
 /*
 combined files : 
 
-gallery/tsearch/1.1/common
-gallery/tsearch/1.1/trip-autocomplete
-gallery/tsearch/1.1/tradio
-gallery/tsearch/1.1/tsearch
-gallery/tsearch/1.1/hotel-search
+gallery/tsearch/1.1/build/common
+gallery/tsearch/1.1/build/trip-autocomplete
+gallery/tsearch/1.1/build/tradio
+gallery/tsearch/1.1/build/tsearch
+gallery/tsearch/1.1/build/hotel-search
 
 */
 /**
  * 旅行公共函数库
  */
-KISSY.add('gallery/tsearch/1.1/common',function (S){
+KISSY.add('gallery/tsearch/1.1/build/common',function (S){
     var Common = {
         /**
          * 截取指定长度的字符串
@@ -157,7 +157,7 @@ KISSY.add('gallery/tsearch/1.1/common',function (S){
     };
     return Common;
 });
-KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
+KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common) {
     var ALIGH = {
         node    : null,
         points  : ['bl', 'tl'],
@@ -383,7 +383,7 @@ KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
  * @module Radiobutton
  * @submodule
  **/
-KISSY.add('gallery/tsearch/1.1/tradio',function (S) {
+KISSY.add('gallery/tsearch/1.1/build/tradio',function (S) {
     /**
      * Radiobutton
      * @class Radiobutton
@@ -513,7 +513,7 @@ KISSY.add('gallery/tsearch/1.1/tradio',function (S) {
  * @author 舒克<shuke.cl@taobao.com>
  * @module tsearch
  **/
-KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder , LocalStorage , Common) {
+KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder , LocalStorage , Common) {
     var Widgets = {
         TripAutocomplete: TripAutocomplete,
         Calendar        : Calendar,
@@ -1000,7 +1000,7 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
     }});
     return Tsearch;
 }, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
-KISSY.add('gallery/tsearch/1.1/hotel-search',function (S , Tsearch ,Common) {
+KISSY.add('gallery/tsearch/1.1/build/hotel-search',function (S , Tsearch ,Common) {
     var DESTINATION_SOURCE = {
             cn        : 'http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}',
             cnHot     : 'http://www.taobao.com/go/rgn/trip/hotelhotcityv2_jsonp.php',

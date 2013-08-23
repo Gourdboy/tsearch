@@ -1,17 +1,17 @@
 /*
 combined files : 
 
-gallery/tsearch/1.1/common
-gallery/tsearch/1.1/trip-autocomplete
-gallery/tsearch/1.1/tradio
-gallery/tsearch/1.1/tsearch
-gallery/tsearch/1.1/hotel-search
+gallery/tsearch/1.1/build/common
+gallery/tsearch/1.1/build/trip-autocomplete
+gallery/tsearch/1.1/build/tradio
+gallery/tsearch/1.1/build/tsearch
+gallery/tsearch/1.1/build/hotel-search-min
 
 */
 /**
  * 旅行公共函数库
  */
-KISSY.add('gallery/tsearch/1.1/common',function (S){
+KISSY.add('gallery/tsearch/1.1/build/common',function (S){
     var Common = {
         /**
          * 截取指定长度的字符串
@@ -157,7 +157,7 @@ KISSY.add('gallery/tsearch/1.1/common',function (S){
     };
     return Common;
 });
-KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
+KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common) {
     var ALIGH = {
         node    : null,
         points  : ['bl', 'tl'],
@@ -383,7 +383,7 @@ KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
  * @module Radiobutton
  * @submodule
  **/
-KISSY.add('gallery/tsearch/1.1/tradio',function (S) {
+KISSY.add('gallery/tsearch/1.1/build/tradio',function (S) {
     /**
      * Radiobutton
      * @class Radiobutton
@@ -513,7 +513,7 @@ KISSY.add('gallery/tsearch/1.1/tradio',function (S) {
  * @author 舒克<shuke.cl@taobao.com>
  * @module tsearch
  **/
-KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder , LocalStorage , Common) {
+KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder , LocalStorage , Common) {
     var Widgets = {
         TripAutocomplete: TripAutocomplete,
         Calendar        : Calendar,
@@ -1000,156 +1000,6 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
     }});
     return Tsearch;
 }, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
-KISSY.add('gallery/tsearch/1.1/hotel-search',function (S , Tsearch ,Common) {
-    var DESTINATION_SOURCE = {
-            cn        : 'http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}',
-            cnHot     : 'http://www.taobao.com/go/rgn/trip/hotelhotcityv2_jsonp.php',
-            oversea   : 'http://kezhan.trip.taobao.com/citysuggest.do?t=1&q={query}',
-            overseaHot: 'http://www.taobao.com/go/rgn/trip/hotoverseav2_jsonp.php'
-        };
-
-    var defaultInDate = Common.formatDate(Common.setDate(new Date(), 3)).yymmdd,
-        defaultEndDate = Common.formatDate(Common.setDate(new Date(), 4)).yymmdd;
-    var Thotelsearch = function (config) {
-        var fields = {};
-        if (!config.isLodge) {
-            fields['.J_Radio'] = {
-                widgets: {
-                    'Tradio': {
-                        node :'.J_Radio'
-                    }
-                }
-            };
-        }
-        fields['.J_ArrCity'] = {
-            widgets   : {
-                'TripAutocomplete': {
-                    hotel : {
-                        inputNode        : '.J_ArrCity',
-                        codeInputNode    : '.J_ArrCityCode'
-                    }
-                },
-                'Placeholder'    : {
-                    node: '.J_ArrCity'
-                }
-            },
-            validation: [
-                {
-                    type: 'required',
-                    tip : '请填入住城市'
-                }
-            ]
-        };
-        fields['.J_ArrCityCode'] = {};
-        fields['.J_EndDate'] = {
-            val       : defaultEndDate,
-            widgets   : {
-                'Placeholder': {
-                    node : '.J_EndDate'
-                }
-            },
-            validation: [
-                {
-                    type: 'required',
-                    tip : '请填写离店日期'
-                },
-                {
-                    type: 'dateformat',
-                    tip : '请输入正确的日期格式 如：2018-01-01'
-                },
-                {
-                    type   : 'mindate',
-                    minDate: '.J_DepDate',
-                    tip    : '离店日期不能早于入住日期，请重新选择'
-                },
-                {
-                    type      : 'custom',
-                    tip       : '酒店预订时间不能超过28天，请重新选择',
-                    validateFn: function (arg, that) {
-                        return Common.getDateInterval(that.fields['.J_DepDate'].node.val(), this.node.val()) <= 28
-                    }
-                }
-            ]
-        };
-        fields['.J_DepDate'] = {
-            val       : defaultInDate,
-            widgets   : {
-                'Placeholder': {
-                    node: '.J_DepDate'
-                },
-                'Calendar'   : {
-                    triggerNode     : '.J_DepDate',
-                    finalTriggerNode: '.J_EndDate',
-                    minDate         : new Date(),
-                    isDateInfo      : 1,
-                    isDateIcon      : 1,
-                    isHoliday       : 1,
-                    isKeyup         : false,
-                    startDate       : defaultInDate,
-                    endDate         : defaultEndDate,
-                    afterDays       : 89
-                }
-            },
-            validation: [
-                {
-                    type: 'required',
-                    tip : '请填入住日期'
-                },
-                {
-                    type: 'dateformat',
-                    tip : '请输入正确的日期格式 如：2018-01-01'
-                },
-                {
-                    type   : 'mindate',
-                    minDate: new Date() - 86400000,
-                    tip    : '入住日期不能早于今天'
-                }
-            ],
-            autoSwitch: {
-                nextField: '.J_EndDate'
-            }
-        };
-        fields['.J_Keywords'] = {
-            widgets: {
-                'Placeholder': {
-                    node: '.J_Keywords'
-                }
-            }
-        };
-        var hotelSearch = new Tsearch({
-            'form'            : config.form,
-            'fields'          : fields,
-            /**
-             * 表单校验顺序
-             */
-            'validation_order': ['.J_ArrCity', '.J_DepDate' ,'.J_EndDate']
-        });
-        //酒店有radio时，绑定切换
-        var endDateField = hotelSearch.fields['.J_EndDate'];
-        if (endDateField.Calendar) {//hack for calendar
-            endDateField.Calendar.currentNode = endDateField.node;
-            endDateField.Calendar._setDateInfo(endDateField.node.val());
-        }
-        if (config.isLodge) {
-            return hotelSearch;
-        }
-        var bindRadioSwitch = function () {
-            var Tradio = hotelSearch.fields['.J_Radio'].Tradio;
-            var field = hotelSearch.get('fields')['.J_ArrCity'],
-                Autocomplete = field.TripAutocomplete;
-            Tradio.on('afterValueChange', function (e) {
-                field.node.val('');
-                if (e.newVal === '0') {//国内
-                    Autocomplete.set('source', DESTINATION_SOURCE.cn);
-                    Autocomplete.set('hotSource', DESTINATION_SOURCE.cnHot);
-                } else {//海外
-                    Autocomplete.set('source', DESTINATION_SOURCE.oversea);
-                    Autocomplete.set('hotSource', DESTINATION_SOURCE.overseaHot);
-                }
-            });
-        };
-        bindRadioSwitch();
-        return hotelSearch;
-    };
-    return Thotelsearch;
-},{requires: ['./tsearch' , './common']});
+/*! tsearch - v1.1 - 2013-08-19 11:04:50 AM
+* Copyright (c) 2013 舒克; Licensed  */
+KISSY.add('gallery/tsearch/1.1/build/hotel-search-min',function(a,b,c){var d={cn:"http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}",cnHot:"http://www.taobao.com/go/rgn/trip/hotelhotcityv2_jsonp.php",oversea:"http://kezhan.trip.taobao.com/citysuggest.do?t=1&q={query}",overseaHot:"http://www.taobao.com/go/rgn/trip/hotoverseav2_jsonp.php"},e=c.formatDate(c.setDate(new Date,3)).yymmdd,f=c.formatDate(c.setDate(new Date,4)).yymmdd,g=function(a){var g={};a.isLodge||(g[".J_Radio"]={widgets:{Tradio:{node:".J_Radio"}}}),g[".J_ArrCity"]={widgets:{TripAutocomplete:{hotel:{inputNode:".J_ArrCity",codeInputNode:".J_ArrCityCode"}},Placeholder:{node:".J_ArrCity"}},validation:[{type:"required",tip:"\u8bf7\u586b\u5165\u4f4f\u57ce\u5e02"}]},g[".J_ArrCityCode"]={},g[".J_EndDate"]={val:f,widgets:{Placeholder:{node:".J_EndDate"}},validation:[{type:"required",tip:"\u8bf7\u586b\u5199\u79bb\u5e97\u65e5\u671f"},{type:"dateformat",tip:"\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u65e5\u671f\u683c\u5f0f \u5982\uff1a2018-01-01"},{type:"mindate",minDate:".J_DepDate",tip:"\u79bb\u5e97\u65e5\u671f\u4e0d\u80fd\u65e9\u4e8e\u5165\u4f4f\u65e5\u671f\uff0c\u8bf7\u91cd\u65b0\u9009\u62e9"},{type:"custom",tip:"\u9152\u5e97\u9884\u8ba2\u65f6\u95f4\u4e0d\u80fd\u8d85\u8fc728\u5929\uff0c\u8bf7\u91cd\u65b0\u9009\u62e9",validateFn:function(a,b){return c.getDateInterval(b.fields[".J_DepDate"].node.val(),this.node.val())<=28}}]},g[".J_DepDate"]={val:e,widgets:{Placeholder:{node:".J_DepDate"},Calendar:{triggerNode:".J_DepDate",finalTriggerNode:".J_EndDate",minDate:new Date,isDateInfo:1,isDateIcon:1,isHoliday:1,isKeyup:!1,startDate:e,endDate:f,afterDays:89}},validation:[{type:"required",tip:"\u8bf7\u586b\u5165\u4f4f\u65e5\u671f"},{type:"dateformat",tip:"\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u65e5\u671f\u683c\u5f0f \u5982\uff1a2018-01-01"},{type:"mindate",minDate:new Date-864e5,tip:"\u5165\u4f4f\u65e5\u671f\u4e0d\u80fd\u65e9\u4e8e\u4eca\u5929"}],autoSwitch:{nextField:".J_EndDate"}},g[".J_Keywords"]={widgets:{Placeholder:{node:".J_Keywords"}}};var h=new b({form:a.form,fields:g,validation_order:[".J_ArrCity",".J_DepDate",".J_EndDate"]}),i=h.fields[".J_EndDate"];if(i.Calendar&&(i.Calendar.currentNode=i.node,i.Calendar._setDateInfo(i.node.val())),a.isLodge)return h;var j=function(){var a=h.fields[".J_Radio"].Tradio,b=h.get("fields")[".J_ArrCity"],c=b.TripAutocomplete;a.on("afterValueChange",function(a){b.node.val(""),"0"===a.newVal?(c.set("source",d.cn),c.set("hotSource",d.cnHot)):(c.set("source",d.oversea),c.set("hotSource",d.overseaHot))})};return j(),h};return g},{requires:["./tsearch","./common"]});
