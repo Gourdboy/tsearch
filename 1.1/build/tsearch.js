@@ -998,4 +998,4 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
