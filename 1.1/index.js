@@ -469,11 +469,6 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                         type: 'required',
                                         when: 'blur',
                                         tip : '请填写到达城市'
-                                    },
-                                    {
-                                        type          : 'identical',
-                                        identicalWidth: '.J_DepCity',
-                                        tip           : '出发到达城市不能相同'
                                     }
                                 ],
                                 autoSwitch: {
