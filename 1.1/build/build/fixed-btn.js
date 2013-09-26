@@ -1157,9 +1157,18 @@ KISSY.add('gallery/tsearch/1.1/build/hotel-search',function (S , Tsearch ,Common
     return Thotelsearch;
 },{requires: ['./tsearch' , './common']});
 KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch){
+    var global_cfg = {
+        allowCreateIcon : true,
+        storage : false
+    };
+    function parseDefaultCfg(cfg){
+        cfg = S.merge(global_cfg , cfg);
+        return cfg;
+    }
     var TripSearch = {
             time : new Date(),
             createFlightSearch : function (cfg){
+                cfg = parseDefaultCfg(cfg);
                 return new Tsearch(S.merge({
                             form            : cfg.node ,
                             fields          : {
@@ -1176,7 +1185,8 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                                         'TripAutocomplete': {
                                             flight: {
                                                 inputNode: '.J_DepCity',
-                                                codeInputNode : '.J_DepCityCode'
+                                                codeInputNode : '.J_DepCityCode',
+                                                allowCreateIcon : cfg.allowCreateIcon
                                             }
                                         },
                                         'Placeholder'    : {
@@ -1202,7 +1212,8 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                                         'TripAutocomplete': {
                                             flight: {
                                                 inputNode : '.J_ArrCity',
-                                                codeInputNode : '.J_ArrCityCode'
+                                                codeInputNode : '.J_ArrCityCode',
+                                                allowCreateIcon : cfg.allowCreateIcon
                                             }
                                         },
                                         'Placeholder'    : {
@@ -1238,7 +1249,7 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                                             finalTriggerNode: '.J_EndDate',
                                             minDate         : TripSearch.time,
                                             isDateInfo      : 1,
-                                            isDateIcon      : 1,
+                                            isDateIcon      : cfg.allowCreateIcon,
                                             afterDays       : 364,
                                             isKeyup         : false,
                                             isHoliday       : 1
@@ -1324,6 +1335,7 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
             },
             createIflightSearch : function (cfg){
                 cfg.storage = cfg.storage || false;
+                cfg = parseDefaultCfg(cfg);
                 return new Tsearch(S.merge({
                             form            : cfg.node ,
                             fields          : {
@@ -1340,7 +1352,8 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                                         'TripAutocomplete': {
                                             iflight: {
                                                 inputNode: '.J_DepCity',
-                                                codeInputNode : '.J_DepCityCode'
+                                                codeInputNode : '.J_DepCityCode',
+                                                allowCreateIcon : cfg.allowCreateIcon
                                             }
                                         },
                                         'Placeholder'    : {
@@ -1366,7 +1379,8 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                                         'TripAutocomplete': {
                                             iflight: {
                                                 inputNode : '.J_ArrCity',
-                                                codeInputNode : '.J_ArrCityCode'
+                                                codeInputNode : '.J_ArrCityCode',
+                                                allowCreateIcon : cfg.allowCreateIcon
                                             }
                                         },
                                         'Placeholder'    : {
@@ -1402,7 +1416,7 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                                             finalTriggerNode: '.J_EndDate',
                                             minDate         : TripSearch.time,
                                             isDateInfo      : 1,
-                                            isDateIcon      : 1,
+                                            isDateIcon      : cfg.allowCreateIcon,
                                             afterDays       : 364,
                                             isKeyup         : false,
                                             isHoliday       : 1
@@ -1487,18 +1501,20 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                         } , cfg));
             },
             createHotelSearch : function (cfg){
+                cfg = parseDefaultCfg(cfg);
                     Thotelsearch(S.merge({
                         form               : cfg.node
                 },cfg));
             },
             createLodgeSearch : function(cfg) {
+                cfg = parseDefaultCfg(cfg);
                     Thotelsearch(S.merge({
                         form               : cfg.node,
                         isLodge : true
                 },cfg));
             },
             createTravelSearch : function(cfg) {
-
+                parseDefaultCfg(cfg);
                 return new Tsearch(S.merge({
                     form            : cfg.node,
                     fields          : {
@@ -1580,7 +1596,8 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                 },cfg));
             },
             createTrainSearch : function (cfg){
-            return new Tsearch(S.merge({
+             cfg = parseDefaultCfg(cfg);
+             return new Tsearch(S.merge({
                         form            : cfg.node ,
                         fields          : {
                             '.J_DepCity'     : {
@@ -1589,7 +1606,8 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                                     'TripAutocomplete': {
                                         train: {
                                             inputNode: '.J_DepCity',
-                                            codeInputNode : '.J_DepCityCode'
+                                            codeInputNode : '.J_DepCityCode',
+                                            allowCreateIcon : cfg.allowCreateIcon
                                         }
                                     },
                                     'Placeholder'    : {
@@ -1615,7 +1633,8 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                                     'TripAutocomplete': {
                                         train: {
                                             inputNode : '.J_ArrCity',
-                                            codeInputNode : '.J_ArrCityCode'
+                                            codeInputNode : '.J_ArrCityCode',
+                                            allowCreateIcon : cfg.allowCreateIcon
                                         }
                                     },
                                     'Placeholder'    : {
@@ -1646,7 +1665,7 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                                         triggerNode     : '.J_DepDate',
                                         minDate         : TripSearch.time,
                                         isDateInfo      : 1,
-                                        isDateIcon      : 1,
+                                        isDateIcon      : cfg.allowCreateIcon,
                                         afterDays       : 19,
                                         isKeyup         : false,
                                         isHoliday       : 1

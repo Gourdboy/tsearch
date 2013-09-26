@@ -710,7 +710,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
             return acInstance;
         }
     };
-}, {requires: ['gallery/autocomplete/1.1/index' , './common', 'node' , 'event' , 'base']});
+}, {requires: ['gallery/autocomplete/1.2/index' , './common', 'node' , 'event' , 'base']});
 
 
 /*
@@ -1398,7 +1398,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
             return acInstance;
         }
     };
-}, {requires: ['gallery/autocomplete/1.1/index' , './common', 'node' , 'event' , 'base']});
+}, {requires: ['gallery/autocomplete/1.2/index' , './common', 'node' , 'event' , 'base']});
 
 /*
 combined files : 
@@ -1915,7 +1915,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
             return acInstance;
         }
     };
-}, {requires: ['gallery/autocomplete/1.1/index' , './common', 'node' , 'event' , 'base']});
+}, {requires: ['gallery/autocomplete/1.2/index' , './common', 'node' , 'event' , 'base']});
 /**
  * RadioButton组件
  *
@@ -3082,7 +3082,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
             return acInstance;
         }
     };
-}, {requires: ['gallery/autocomplete/1.1/index' , './common', 'node' , 'event' , 'base']});
+}, {requires: ['gallery/autocomplete/1.2/index' , './common', 'node' , 'event' , 'base']});
 
 /*
 combined files : 
@@ -3599,7 +3599,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
             return acInstance;
         }
     };
-}, {requires: ['gallery/autocomplete/1.1/index' , './common', 'node' , 'event' , 'base']});
+}, {requires: ['gallery/autocomplete/1.2/index' , './common', 'node' , 'event' , 'base']});
 /**
  * RadioButton组件
  *
@@ -4602,7 +4602,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
             return acInstance;
         }
     };
-}, {requires: ['gallery/autocomplete/1.1/index' , './common', 'node' , 'event' , 'base']});
+}, {requires: ['gallery/autocomplete/1.2/index' , './common', 'node' , 'event' , 'base']});
 /**
  * RadioButton组件
  *
@@ -5923,7 +5923,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
             return acInstance;
         }
     };
-}, {requires: ['gallery/autocomplete/1.1/index' , './common', 'node' , 'event' , 'base']});
+}, {requires: ['gallery/autocomplete/1.2/index' , './common', 'node' , 'event' , 'base']});
 
 /*
 combined files : 
@@ -6440,7 +6440,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
             return acInstance;
         }
     };
-}, {requires: ['gallery/autocomplete/1.1/index' , './common', 'node' , 'event' , 'base']});
+}, {requires: ['gallery/autocomplete/1.2/index' , './common', 'node' , 'event' , 'base']});
 /**
  * RadioButton组件
  *
@@ -7443,7 +7443,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
             return acInstance;
         }
     };
-}, {requires: ['gallery/autocomplete/1.1/index' , './common', 'node' , 'event' , 'base']});
+}, {requires: ['gallery/autocomplete/1.2/index' , './common', 'node' , 'event' , 'base']});
 /**
  * RadioButton组件
  *
@@ -8600,7 +8600,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
             return acInstance;
         }
     };
-}, {requires: ['gallery/autocomplete/1.1/index' , './common', 'node' , 'event' , 'base']});
+}, {requires: ['gallery/autocomplete/1.2/index' , './common', 'node' , 'event' , 'base']});
 /**
  * RadioButton组件
  *
