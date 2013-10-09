@@ -4816,7 +4816,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 
 
 
@@ -8403,7 +8403,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 
 
 
@@ -10946,7 +10946,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 
 
 /*
@@ -12630,7 +12630,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 
 /*
 combined files : 
@@ -13633,7 +13633,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 KISSY.add('gallery/tsearch/1.1/build/hotel-search',function (S , Tsearch ,Common) {
     var DESTINATION_SOURCE = {
             cn        : 'http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}',
@@ -17374,7 +17374,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 
 
 
@@ -19917,7 +19917,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 
 
 /*
@@ -21601,7 +21601,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 
 /*
 combined files : 
@@ -22604,7 +22604,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 KISSY.add('gallery/tsearch/1.1/build/hotel-search',function (S , Tsearch ,Common) {
     var DESTINATION_SOURCE = {
             cn        : 'http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}',
@@ -25301,7 +25301,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 
 
 /*
@@ -26985,7 +26985,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 
 /*
 combined files : 
@@ -27988,7 +27988,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 KISSY.add('gallery/tsearch/1.1/build/hotel-search',function (S , Tsearch ,Common) {
     var DESTINATION_SOURCE = {
             cn        : 'http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}',
@@ -29826,7 +29826,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 
 /*
 combined files : 
@@ -30829,7 +30829,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 KISSY.add('gallery/tsearch/1.1/build/hotel-search',function (S , Tsearch ,Common) {
     var DESTINATION_SOURCE = {
             cn        : 'http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}',
@@ -31986,7 +31986,7 @@ KISSY.add('gallery/tsearch/1.1/build/tsearch',function (S,Base, TripAutocomplete
         }
     }});
     return Tsearch;
-}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.1/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
+}, {requires: ['base','./trip-autocomplete' , './tradio' , 'gallery/calendar/1.2/index' , 'gallery/placeholder/1.0/index' , 'gallery/offline/1.1/index' ,'./common' , 'node', 'base']});
 KISSY.add('gallery/tsearch/1.1/build/hotel-search',function (S , Tsearch ,Common) {
     var DESTINATION_SOURCE = {
             cn        : 'http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}',
