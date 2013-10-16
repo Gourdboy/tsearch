@@ -1251,6 +1251,7 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                                             isDateInfo      : 1,
                                             isDateIcon      : cfg.allowCreateIcon,
                                             afterDays       : 364,
+                                            isSameDate      : true,
                                             isKeyup         : false,
                                             isHoliday       : 1
                                         }
@@ -1418,6 +1419,7 @@ KISSY.add('gallery/tsearch/1.1/index',function (S , Tsearch , Thotelsearch){
                                             isDateInfo      : 1,
                                             isDateIcon      : cfg.allowCreateIcon,
                                             afterDays       : 364,
+                                            isSameDate      : true,
                                             isKeyup         : false,
                                             isHoliday       : 1
                                         }

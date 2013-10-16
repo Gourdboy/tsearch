@@ -93,6 +93,7 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                             isDateInfo      : 1,
                                             isDateIcon      : cfg.allowCreateIcon,
                                             afterDays       : 364,
+                                            isSameDate      : true,
                                             isKeyup         : false,
                                             isHoliday       : 1
                                         }
@@ -260,6 +261,7 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                             isDateInfo      : 1,
                                             isDateIcon      : cfg.allowCreateIcon,
                                             afterDays       : 364,
+                                            isSameDate      : true,
                                             isKeyup         : false,
                                             isHoliday       : 1
                                         }

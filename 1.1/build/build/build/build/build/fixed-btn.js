@@ -859,7 +859,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -1725,7 +1725,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -2413,7 +2413,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -2930,7 +2930,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -4268,7 +4268,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -4956,7 +4956,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -5473,7 +5473,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -6640,7 +6640,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -7157,7 +7157,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -8160,7 +8160,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -9652,7 +9652,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -10340,7 +10340,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -10857,7 +10857,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -12024,7 +12024,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -12541,7 +12541,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -13544,7 +13544,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -14865,7 +14865,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -15382,7 +15382,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -16385,7 +16385,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -17542,7 +17542,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -18820,11 +18820,6 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                                         type: 'required',
                                         when: 'blur',
                                         tip : '请填写到达城市'
-                                    },
-                                    {
-                                        type          : 'identical',
-                                        identicalWidth: '.J_DepCity',
-                                        tip           : '出发到达城市不能相同'
                                     }
                                 ],
                                 autoSwitch: {
@@ -19605,7 +19600,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -20293,7 +20288,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -20810,7 +20805,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -21977,7 +21972,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -22494,7 +22489,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -23497,7 +23492,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -24818,7 +24813,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -25335,7 +25330,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -26338,7 +26333,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -27495,7 +27490,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -28773,11 +28768,6 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                                         type: 'required',
                                         when: 'blur',
                                         tip : '请填写到达城市'
-                                    },
-                                    {
-                                        type          : 'identical',
-                                        identicalWidth: '.J_DepCity',
-                                        tip           : '出发到达城市不能相同'
                                     }
                                 ],
                                 autoSwitch: {
@@ -29380,7 +29370,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -29897,7 +29887,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -30900,7 +30890,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -32057,7 +32047,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -33335,11 +33325,6 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                                         type: 'required',
                                         when: 'blur',
                                         tip : '请填写到达城市'
-                                    },
-                                    {
-                                        type          : 'identical',
-                                        identicalWidth: '.J_DepCity',
-                                        tip           : '出发到达城市不能相同'
                                     }
                                 ],
                                 autoSwitch: {
@@ -33771,7 +33756,7 @@ KISSY.add('gallery/tsearch/1.1/build/trip-autocomplete',function (S, Ac , Common
         },
         train : function (cfg){
             var default_cfg = {
-                source           : 'http://s.train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
+                source           : 'http://train.trip.' + DOMAIN + '/station_suggestion.htm?lines={maxResults}&callback={callback}&q={query}',
                 resultListLocator: 'results',//指定返回数据里的数组位置
                 resultTextLocator: 'stationName',//指定文本内容
                 activeFirstItem  : true,
@@ -35049,11 +35034,6 @@ KISSY.add('gallery/tsearch/1.1/build/index',function (S , Tsearch , Thotelsearch
                                         type: 'required',
                                         when: 'blur',
                                         tip : '请填写到达城市'
-                                    },
-                                    {
-                                        type          : 'identical',
-                                        identicalWidth: '.J_DepCity',
-                                        tip           : '出发到达城市不能相同'
                                     }
                                 ],
                                 autoSwitch: {
