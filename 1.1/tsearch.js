@@ -230,10 +230,11 @@ KISSY.add(function (S,Base, TripAutocomplete ,Tradio , Calendar , Placeholder , 
                 e.preventDefault();
                 return false;
             }
+
             this.fire('submit', {
                 form  : this.form,
                 fields: this.fields,
-                srcEvent : e
+                srcEvent : e    //要阻止默认的表单提交可以调用e.srcEvent.preventDefault()
             });
             this.get('storage') && this._storageForm();
         },

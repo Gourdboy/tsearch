@@ -83,9 +83,6 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                 },
                                 '.J_DepDate': {
                                     widgets   : {
-                                        'Placeholder': {
-                                            node: '.J_DepDate'
-                                        },
                                         'Calendar'   : {
                                             triggerNode     : '.J_DepDate',
                                             finalTriggerNode: '.J_EndDate',
@@ -96,6 +93,9 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                             isSameDate      : true,
                                             isKeyup         : false,
                                             isHoliday       : 1
+                                        },
+                                        'Placeholder': {
+                                            node: '.J_DepDate'
                                         }
                                     },
                                     validation: [
@@ -251,9 +251,6 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                 },
                                 '.J_DepDate': {
                                     widgets   : {
-                                        'Placeholder': {
-                                            node: '.J_DepDate'
-                                        },
                                         'Calendar'   : {
                                             triggerNode     : '.J_DepDate',
                                             finalTriggerNode: '.J_EndDate',
@@ -264,6 +261,9 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                             isSameDate      : true,
                                             isKeyup         : false,
                                             isHoliday       : 1
+                                        },
+                                        'Placeholder': {
+                                            node: '.J_DepDate'
                                         }
                                     },
                                     validation: [
@@ -502,9 +502,6 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                             },
                             '.J_DepDate': {
                                 widgets   : {
-                                    'Placeholder': {
-                                        node: '.J_DepDate'
-                                    },
                                     'Calendar'   : {
                                         triggerNode     : '.J_DepDate',
                                         minDate         : TripSearch.time,
@@ -513,6 +510,9 @@ KISSY.add(function (S , Tsearch , Thotelsearch){
                                         afterDays       : 19,
                                         isKeyup         : false,
                                         isHoliday       : 1
+                                    },
+                                    'Placeholder': {
+                                        node: '.J_DepDate'
                                     }
                                 },
                                 validation: [

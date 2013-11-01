@@ -740,10 +740,11 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
                 e.preventDefault();
                 return false;
             }
+
             this.fire('submit', {
                 form  : this.form,
                 fields: this.fields,
-                srcEvent : e
+                srcEvent : e    //要阻止默认的表单提交可以调用e.srcEvent.preventDefault()
             });
             this.get('storage') && this._storageForm();
         },
@@ -1003,7 +1004,7 @@ KISSY.add('gallery/tsearch/1.1/tsearch',function (S,Base, TripAutocomplete ,Trad
 KISSY.add('gallery/tsearch/1.1/hotel-search',function (S , Tsearch ,Common) {
     var DESTINATION_SOURCE = {
             cn        : 'http://kezhan.trip.taobao.com/citysuggest.do?t=0&q={query}',
-            cnHot     : 'http://www.taobao.com/go/rgn/trip/hotelhotcityv2_jsonp.php',
+            cnHot     : 'http://www.taobao.com/go/rgn/trip/jsonp/hotel.php',
             oversea   : 'http://kezhan.trip.taobao.com/citysuggest.do?t=1&q={query}',
             overseaHot: 'http://www.taobao.com/go/rgn/trip/hotoverseav2_jsonp.php'
         };
