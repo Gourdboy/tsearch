@@ -295,7 +295,7 @@ KISSY.add('gallery/tsearch/1.1/trip-autocomplete',function (S, Ac , Common) {
                 resultFormatter  : hotelCityFormatter,
                 resultTextLocator: 'cityName',//指定文本内容
                 source           : 'http://kezhan.trip.' + DOMAIN +'/citysuggest.do?t=0&q={query}',
-                hotSource        : 'http://www.' + DOMAIN +'/go/rgn/trip/hotelhotcityv2_jsonp.php'
+                hotSource        : 'http://www.'+ DOMAIN +'/go/rgn/trip/jsonp/hotel.php'
             };
             cfg = S.merge(default_cfg, cfg);
             var acInstance = new Ac(cfg);
